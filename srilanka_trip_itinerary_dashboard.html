@@ -1,0 +1,2316 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sri Lanka Expedition 2026 | Interactive Travel Dashboard</title>
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --primary-light: #e0f2fe;
+      --accent: #0d9488;
+      --accent-warm: #f59e0b;
+      --slate-900: #0f172a;
+      --slate-800: #1e293b;
+      --slate-700: #334155;
+      --slate-600: #475569;
+      --slate-500: #64748b;
+      --slate-200: #e2e8f0;
+      --slate-100: #f1f5f9;
+      --slate-50: #f8fafc;
+      --white: #ffffff;
+      --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --card-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+      --radius: 12px;
+    }
+
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f4f6f9;
+      color: var(--slate-800);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+
+    /* Top Navigation Header */
+    .top-nav {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: var(--white);
+      padding: 1.25rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.3rem;
+      box-shadow: 0 2px 8px rgba(14, 165, 233, 0.4);
+    }
+
+
+    .brand h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+
+    .brand p {
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+
+
+    .nav-actions {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.55rem 1.1rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+
+    .btn-primary {
+      background: #0284c7;
+      color: white;
+    }
+
+
+    .btn-primary:hover {
+      background: #0369a1;
+    }
+
+
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+
+    /* Sub-header / Summary Banner */
+    .hero-strip {
+      background: #ffffff;
+      border-bottom: 1px solid var(--slate-200);
+      padding: 1rem 2rem;
+    }
+
+
+    .hero-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+
+    .trip-meta-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+
+    .meta-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.4rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      background-color: var(--slate-100);
+      color: var(--slate-700);
+    }
+
+
+    .meta-pill.highlight {
+      background-color: #f0fdf4;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+
+    .meta-pill.accent {
+      background-color: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+    }
+
+
+    /* Main Tab Navigation Bar */
+    .tab-bar-wrapper {
+      background: #ffffff;
+      border-bottom: 1px solid var(--slate-200);
+      position: sticky;
+      top: 73px;
+      z-index: 990;
+    }
+
+
+    .tab-bar {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      overflow-x: auto;
+      padding: 0 1rem;
+      gap: 0.5rem;
+      scrollbar-width: none;
+    }
+
+
+    .tab-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+
+    .tab-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.9rem 1.25rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--slate-600);
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+
+    .tab-btn:hover {
+      color: var(--primary);
+    }
+
+
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+
+    /* Content Area */
+    .main-content {
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+      min-height: 70vh;
+    }
+
+
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+
+    .tab-pane.active {
+      display: block;
+    }
+
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+
+    /* Card System */
+    .card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--slate-200);
+      box-shadow: var(--card-shadow);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid var(--slate-100);
+    }
+
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--slate-900);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+
+    /* Grid Layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+
+    /* Stat Cards */
+    .stat-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--slate-200);
+      box-shadow: var(--card-shadow);
+      padding: 1.25rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--card-shadow-lg);
+    }
+
+
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      flex-shrink: 0;
+    }
+
+
+    .stat-val {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--slate-900);
+      line-height: 1.2;
+    }
+
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--slate-500);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-top: 0.2rem;
+    }
+
+
+    .stat-subtext {
+      font-size: 0.78rem;
+      color: var(--slate-600);
+      margin-top: 0.25rem;
+    }
+
+
+    /* Visual Journey Flow Map */
+    .journey-timeline {
+      position: relative;
+      padding: 1.5rem 0 0.5rem 0;
+    }
+
+
+    .journey-track {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      position: relative;
+    }
+
+
+    .journey-stop {
+      flex: 1 1 200px;
+      background: var(--slate-50);
+      border: 1px solid var(--slate-200);
+      border-radius: 10px;
+      padding: 1rem;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+
+
+    .journey-stop:hover {
+      border-color: var(--primary);
+      background: #ffffff;
+      box-shadow: var(--card-shadow);
+    }
+
+
+    .journey-badge {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      border-radius: 6px;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      margin-bottom: 0.5rem;
+    }
+
+
+    .journey-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--slate-800);
+    }
+
+
+    .journey-desc {
+      font-size: 0.8rem;
+      color: var(--slate-600);
+      margin-top: 0.35rem;
+    }
+
+
+    /* Day Accordion / Interactive Timeline */
+    .day-selector-bar {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding-bottom: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+
+    .day-chip {
+      padding: 0.5rem 1rem;
+      background: var(--white);
+      border: 1px solid var(--slate-200);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--slate-600);
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+
+    .day-chip:hover, .day-chip.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+
+    .itinerary-day-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--slate-200);
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      transition: all 0.2s ease;
+    }
+
+
+    .itinerary-day-card.active-highlight {
+      border-left: 5px solid var(--primary);
+    }
+
+
+    .day-card-header {
+      background: var(--slate-50);
+      padding: 1.15rem 1.5rem;
+      border-bottom: 1px solid var(--slate-200);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      cursor: pointer;
+    }
+
+
+    .day-card-header:hover {
+      background: #f8fafc;
+    }
+
+
+    .day-tag {
+      background: var(--slate-900);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      margin-right: 0.6rem;
+    }
+
+
+    .day-title-group h3 {
+      font-size: 1.1rem;
+      color: var(--slate-900);
+      display: inline-flex;
+      align-items: center;
+    }
+
+
+    .day-date-sub {
+      font-size: 0.82rem;
+      color: var(--slate-500);
+      margin-left: 0.5rem;
+    }
+
+
+    .day-body {
+      padding: 1.5rem;
+    }
+
+
+    .timeline-segments {
+      position: relative;
+      padding-left: 1.75rem;
+    }
+
+
+    .timeline-segments::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 10px;
+      bottom: 10px;
+      width: 2px;
+      background: var(--slate-200);
+    }
+
+
+    .time-slot {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+
+    .time-slot:last-child {
+      margin-bottom: 0;
+    }
+
+
+    .time-dot {
+      position: absolute;
+      left: -1.75rem;
+      top: 3px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 3px solid var(--primary);
+    }
+
+
+    .time-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      background: var(--primary-light);
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      margin-bottom: 0.3rem;
+    }
+
+
+    .slot-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--slate-800);
+    }
+
+
+    .slot-desc {
+      font-size: 0.87rem;
+      color: var(--slate-600);
+      margin-top: 0.25rem;
+    }
+
+
+    .logistics-callout {
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      margin-top: 0.5rem;
+      font-size: 0.82rem;
+      color: var(--slate-700);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+
+    /* Tables */
+    .data-table-container {
+      overflow-x: auto;
+    }
+
+
+    table.styled-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+
+    table.styled-table th {
+      background: var(--slate-100);
+      color: var(--slate-700);
+      text-align: left;
+      padding: 0.85rem 1rem;
+      font-weight: 600;
+      border-bottom: 2px solid var(--slate-200);
+    }
+
+
+    table.styled-table td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--slate-100);
+      color: var(--slate-700);
+    }
+
+
+    table.styled-table tr:hover {
+      background: #fdfdfd;
+    }
+
+
+    .table-badge {
+      display: inline-block;
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+
+    .badge-flight { background: #dbeafe; color: #1e40af; }
+    .badge-hotel { background: #fef3c7; color: #92400e; }
+    .badge-train { background: #dcfce7; color: #166534; }
+    .badge-cab { background: #f3e8ff; color: #6b21a8; }
+    .badge-cash { background: #ffedd5; color: #9a3412; }
+
+
+    /* Budget Breakdown Progress Bars */
+    .budget-bar-group {
+      margin-bottom: 1.25rem;
+    }
+
+
+    .budget-bar-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+    }
+
+
+    .progress-track {
+      height: 10px;
+      background: var(--slate-100);
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 9999px;
+      transition: width 0.5s ease;
+    }
+
+
+    /* Transit Cards */
+    .transit-card {
+      border: 1px solid var(--slate-200);
+      border-radius: 10px;
+      padding: 1.25rem;
+      background: var(--white);
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+    }
+
+
+    .transit-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+
+    .transit-route {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin: 1rem 0;
+    }
+
+
+    .transit-endpoint {
+      flex: 1;
+    }
+
+
+    .endpoint-code {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--slate-900);
+    }
+
+
+    .endpoint-time {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+
+    .endpoint-city {
+      font-size: 0.78rem;
+      color: var(--slate-500);
+    }
+
+
+    .transit-divider {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: var(--slate-400);
+      font-size: 0.75rem;
+      font-weight: 600;
+      min-width: 100px;
+    }
+
+
+    .transit-line {
+      width: 100%;
+      height: 2px;
+      background: #cbd5e1;
+      position: relative;
+      margin: 4px 0;
+    }
+
+
+    .transit-line::after {
+      content: '✈';
+      position: absolute;
+      top: -9px;
+      left: 45%;
+      font-size: 12px;
+      color: var(--primary);
+    }
+
+
+    .transit-line.train::after {
+      content: '🚂';
+      top: -10px;
+    }
+
+
+    .transit-line.car::after {
+      content: '🚕';
+      top: -10px;
+    }
+
+
+    /* Hotel Showcase Cards */
+    .hotel-card {
+      border: 1px solid var(--slate-200);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--white);
+      margin-bottom: 1.5rem;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+    }
+
+
+    @media (min-width: 768px) {
+      .hotel-card {
+        flex-direction: row;
+      }
+      .hotel-card-aside {
+        width: 300px;
+        background: var(--slate-50);
+        border-right: 1px solid var(--slate-200);
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .hotel-card-main {
+        flex: 1;
+        padding: 1.5rem;
+      }
+    }
+
+
+    .hotel-pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 0.85rem 0;
+    }
+
+
+    .amenity-chip {
+      background: var(--slate-100);
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--slate-700);
+      padding: 0.25rem 0.55rem;
+      border-radius: 6px;
+    }
+
+
+    /* Checklist & Widget Components */
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--slate-100);
+      cursor: pointer;
+    }
+
+
+    .check-item:last-child {
+      border-bottom: none;
+    }
+
+
+    .check-item input[type="checkbox"] {
+      margin-top: 0.25rem;
+      width: 17px;
+      height: 17px;
+      cursor: pointer;
+      accent-color: var(--primary);
+    }
+
+
+    .check-text {
+      font-size: 0.9rem;
+      color: var(--slate-700);
+      flex: 1;
+    }
+
+
+    .check-text strong {
+      color: var(--slate-900);
+      display: block;
+      margin-bottom: 0.15rem;
+    }
+
+
+    /* Calculator Widget */
+    .calc-box {
+      background: #f8fafc;
+      border: 1px solid var(--slate-200);
+      border-radius: 10px;
+      padding: 1.25rem;
+    }
+
+
+    .calc-input {
+      width: 100%;
+      padding: 0.6rem 0.75rem;
+      border-radius: 6px;
+      border: 1px solid var(--slate-300);
+      font-size: 0.95rem;
+      margin-top: 0.35rem;
+      margin-bottom: 0.75rem;
+    }
+
+
+    .calc-res {
+      background: var(--white);
+      border: 1px solid #cbd5e1;
+      padding: 0.75rem;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--primary-dark);
+      text-align: center;
+    }
+
+
+    /* Print styling */
+    @media print {
+      .top-nav, .tab-bar-wrapper, .btn, .day-selector-bar {
+        display: none !important;
+      }
+      .tab-pane {
+        display: block !important;
+        page-break-after: always;
+      }
+      body {
+        background: white;
+      }
+      .card, .hotel-card, .itinerary-day-card {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+
+  <!-- Header -->
+  <header class="top-nav">
+    <div class="nav-container">
+      <div class="brand">
+        <div class="brand-icon">🌴</div>
+        <div>
+          <h1>Sri Lanka Coastal & Cultural Itinerary</h1>
+          <p>8 Days / 7 Nights • 2 Adults • Amritsar ⇄ Delhi ⇄ Colombo ⇄ Weligama</p>
+        </div>
+      </div>
+      <div class="nav-actions">
+        <button class="btn btn-outline" onclick="window.print()">
+          <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+          Print / Save PDF
+        </button>
+        <button class="btn btn-primary" onclick="switchTab('budget')">
+          <span>₹2,20,443 Total Est.</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+
+  <!-- Hero Quick Info Strip -->
+  <div class="hero-strip">
+    <div class="hero-container">
+      <div class="trip-meta-pills">
+        <span class="meta-pill highlight">
+          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+          <strong>Dates:</strong> Nov 21 – Nov 28, 2026
+        </span>
+        <span class="meta-pill">
+          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+          <strong>Travelers:</strong> 2 Adults
+        </span>
+        <span class="meta-pill accent">
+          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <strong>Route:</strong> Colombo (1N) ➔ Weligama/Mirissa (4N) ➔ Colombo (2N)
+        </span>
+        <span class="meta-pill">
+          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <strong>Pre-Booked Total:</strong> ₹1,70,443
+        </span>
+      </div>
+      <div>
+        <span style="font-size: 0.85rem; color: #64748b;">Buffer Allowance: <strong>₹50,000</strong></span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Interactive Navigation Tab Bar -->
+  <div class="tab-bar-wrapper">
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('overview')">
+        📊 Overview & Highlights
+      </button>
+      <button class="tab-btn" onclick="switchTab('itinerary')">
+        🗓️ Day-by-Day Itinerary
+      </button>
+      <button class="tab-btn" onclick="switchTab('budget')">
+        💰 Expense Bifurcation
+      </button>
+      <button class="tab-btn" onclick="switchTab('transit')">
+        ✈️ Flights & Transit Hub
+      </button>
+      <button class="tab-btn" onclick="switchTab('hotels')">
+        🏨 Accommodations (3 Stays)
+      </button>
+      <button class="tab-btn" onclick="switchTab('guide')">
+        🧳 Trip Guide & Checklist
+      </button>
+    </div>
+  </div>
+
+
+  <!-- Main Content Wrapper -->
+  <main class="main-content">
+
+
+    <!-- ==============================================
+         TAB 1: OVERVIEW & HIGHLIGHTS
+         ============================================== -->
+    <div id="tab-overview" class="tab-pane active">
+      
+      <!-- Top 4 Metric KPI Cards -->
+      <div class="grid-4" style="margin-bottom: 1.5rem;">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#eff6ff; color:#2563eb;">💳</div>
+          <div>
+            <div class="stat-val">₹2,20,443</div>
+            <div class="stat-label">Total Trip Budget</div>
+            <div class="stat-subtext">₹1,10,222 per adult all-inclusive</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#ecfdf5; color:#059669;">📑</div>
+          <div>
+            <div class="stat-val">₹1,70,443</div>
+            <div class="stat-label">Fixed Bookings</div>
+            <div class="stat-subtext">Flights, Stays, Intercity Transit</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#fffbeb; color:#d97706;">💵</div>
+          <div>
+            <div class="stat-val">₹50,000</div>
+            <div class="stat-label">On-Ground Cash</div>
+            <div class="stat-subtext">Dining, entry tickets, local cabs</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#faf5ff; color:#7c3aed;">🏖️</div>
+          <div>
+            <div class="stat-val">8D / 7N</div>
+            <div class="stat-label">Trip Length</div>
+            <div class="stat-subtext">3 Nights Colombo + 4 Nights Coast</div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Route Flow Journey Map -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+            Complete Travel Circuit & Route Sequence
+          </h2>
+          <span style="font-size:0.8rem; color:#64748b; font-weight:600;">Seamless Multi-Modal Transit</span>
+        </div>
+        <div class="journey-track">
+          <div class="journey-stop">
+            <span class="journey-badge">STAGE 1 • NOV 21</span>
+            <div class="journey-title">Amritsar ➔ Delhi</div>
+            <div class="journey-desc">Vande Bharat Express to New Delhi Station. Comfortable morning transfer to IGI Airport (₹3,000).</div>
+          </div>
+          <div class="journey-stop">
+            <span class="journey-badge">STAGE 2 • NOV 21</span>
+            <div class="journey-title">Delhi ➔ Colombo</div>
+            <div class="journey-desc">SriLankan Airlines UL 196 non-stop (18:40 - 22:15). Airport cab (₹700) to Grand Oriental Hotel.</div>
+          </div>
+          <div class="journey-stop">
+            <span class="journey-badge">STAGE 3 • NOV 22</span>
+            <div class="journey-title">Coastal Train to Weligama</div>
+            <div class="journey-desc">World-famous oceanline rail journey from Colombo Fort Station down to Weligama / Matara ($32/pax = ₹6,300).</div>
+          </div>
+          <div class="journey-stop">
+            <span class="journey-badge">STAGE 4 • NOV 22–26</span>
+            <div class="journey-title">Weligama & Mirissa (4N)</div>
+            <div class="journey-desc">Outpost Weligama Beachfront (Deluxe Oceanfront). Surfing, Coconut Tree Hill, Whale Watching, Galle Fort.</div>
+          </div>
+          <div class="journey-stop">
+            <span class="journey-badge">STAGE 5 • NOV 26</span>
+            <div class="journey-title">Weligama ➔ Colombo</div>
+            <div class="journey-desc">Private Uber cab via Southern Expressway (E01) back to Granbell Hotel Colombo Marine Drive (₹6,130).</div>
+          </div>
+          <div class="journey-stop">
+            <span class="journey-badge">STAGE 6 • NOV 26–28</span>
+            <div class="journey-title">Colombo Stay (2N)</div>
+            <div class="journey-desc">Granbell Hotel Colombo Superior Sea View. Rooftop pool, Gangaramaya temple, Dutch Hospital, shopping.</div>
+          </div>
+          <div class="journey-stop">
+            <span class="journey-badge">STAGE 7 • NOV 28</span>
+            <div class="journey-title">Colombo ➔ DEL ➔ ASR</div>
+            <div class="journey-desc">UL 195 (14:00-17:35) to Delhi, smooth layover, then Air India AI 479 (21:55-23:10) to Amritsar.</div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Two-Column Overview Cards -->
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">🌟 Key Trip Highlights</h3>
+          </div>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.85rem; font-size: 0.9rem;">
+            <li style="display: flex; gap: 0.65rem; align-items: flex-start;">
+              <span style="font-size: 1.1rem;">🌊</span>
+              <div><strong>Iconic Coastal Railway:</strong> Ride alongside crashing waves from Colombo to Weligama on Sri Lanka's historic coastal track.</div>
+            </li>
+            <li style="display: flex; gap: 0.65rem; align-items: flex-start;">
+              <span style="font-size: 1.1rem;">🏄</span>
+              <div><strong>Weligama Surf Bay:</strong> One of Asia's finest beginner-to-intermediate surf breaks right at your doorstep at Outpost Weligama.</div>
+            </li>
+            <li style="display: flex; gap: 0.65rem; align-items: flex-start;">
+              <span style="font-size: 1.1rem;">🐋</span>
+              <div><strong>Mirissa Ocean Wonders:</strong> Witness migrating Blue Whales off Dondra Point and catch golden hour on Coconut Tree Hill.</div>
+            </li>
+            <li style="display: flex; gap: 0.65rem; align-items: flex-start;">
+              <span style="font-size: 1.1rem;">🏰</span>
+              <div><strong>UNESCO Galle Fort:</strong> Explore 400-year-old cobblestone streets, colonial lighthouses, and chic gelato cafes.</div>
+            </li>
+            <li style="display: flex; gap: 0.65rem; align-items: flex-start;">
+              <span style="font-size: 1.1rem;">🏙️</span>
+              <div><strong>Granbell Rooftop & Marine Drive:</strong> Unwind in the 27th-floor open-air infinity pool gazing over the Indian Ocean.</div>
+            </li>
+          </ul>
+        </div>
+
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">💡 Travel Advisory & Weather (Late Nov)</h3>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.88rem; color: #475569;">
+            <div style="background: #f0fdf4; border-left: 4px solid #16a34a; padding: 0.75rem 1rem; border-radius: 4px;">
+              <strong style="color:#166534;">Ideal Transition Season:</strong> Late November marks the opening of the peak dry season on the Southern and Western coasts. Warm tropical weather (28°C–31°C) with calm ocean conditions in Weligama Bay.
+            </div>
+            <p>• <strong>Visa (ETA):</strong> Apply online prior to travel for standard Tourist ETA or take advantage of current fee exemptions for Indian nationals at arrivals.</p>
+            <p>• <strong>Train Booking Tip:</strong> Coastal Train seats ($32/person) open 30 days prior. Aim for 1st Class Observation or 2nd Class reserved window on the <em>right side</em> southbound for unobstructed ocean panoramas.</p>
+            <p>• <strong>Expressway Uber:</strong> The Weligama-to-Colombo transfer via the E01 Southern Expressway is fast (~2h 15m), air-conditioned, and takes tolls into account.</p>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+
+
+    <!-- ==============================================
+         TAB 2: DAY-BY-DAY ITINERARY
+         ============================================== -->
+    <div id="tab-itinerary" class="tab-pane">
+      
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <div>
+          <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--slate-900);">Day-by-Day Master Schedule</h2>
+          <p style="font-size: 0.85rem; color: var(--slate-500);">Interactive schedule from Amritsar departure to Colombo, Weligama, and back</p>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+          <button class="day-chip active" onclick="filterDay('all')">Show All Days</button>
+        </div>
+      </div>
+
+
+      <!-- Day Filter Chips -->
+      <div class="day-selector-bar">
+        <button class="day-chip" onclick="filterDay('day1')">Day 1: Nov 21 (ASR ➔ CMB)</button>
+        <button class="day-chip" onclick="filterDay('day2')">Day 2: Nov 22 (Train to Weligama)</button>
+        <button class="day-chip" onclick="filterDay('day3')">Day 3: Nov 23 (Weligama & Mirissa)</button>
+        <button class="day-chip" onclick="filterDay('day4')">Day 4: Nov 24 (Whale Safari & Galle Fort)</button>
+        <button class="day-chip" onclick="filterDay('day5')">Day 5: Nov 25 (Turtles & Coast)</button>
+        <button class="day-chip" onclick="filterDay('day6')">Day 6: Nov 26 (Expressway to Colombo)</button>
+        <button class="day-chip" onclick="filterDay('day7')">Day 7: Nov 27 (Colombo City Life)</button>
+        <button class="day-chip" onclick="filterDay('day8')">Day 8: Nov 28 (CMB ➔ DEL ➔ ASR)</button>
+      </div>
+
+
+      <!-- DAY 1 -->
+      <div class="itinerary-day-card active-highlight" id="card-day1">
+        <div class="day-card-header">
+          <div class="day-title-group">
+            <span class="day-tag">DAY 1</span>
+            <h3>Transit Day: Amritsar ➔ New Delhi ➔ Colombo</h3>
+            <span class="day-date-sub">Saturday, 21 November 2026</span>
+          </div>
+          <span class="table-badge badge-flight">Flights & Rail</span>
+        </div>
+        <div class="day-body">
+          <div class="timeline-segments">
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">MORNING</span>
+              <div class="slot-title">Amritsar to Delhi via Vande Bharat Express</div>
+              <div class="slot-desc">Depart Amritsar early on the Vande Bharat Express to New Delhi Railway Station. Premium high-speed rail transfer with onboard breakfast and scenic views through Punjab and Haryana.</div>
+              <div class="logistics-callout">
+                <span>🚆 Transit: Vande Bharat (₹3,000 for 2 adults) • Transfer from NDLS to IGI Airport T3 via Airport Express Metro / Pre-paid cab</span>
+              </div>
+            </div>
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">15:30 – 18:40</span>
+              <div class="slot-title">IGI Terminal 3 Airport Check-in & Departure</div>
+              <div class="slot-desc">Arrive at Delhi T3 3 hours prior to departure. Complete baggage drop and immigration for SriLankan Airlines flight UL 196. Enjoy duty-free browsing or lounge access.</div>
+            </div>
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">18:40 – 22:15</span>
+              <div class="slot-title">Flight UL 196 (DEL ➔ CMB Non-stop)</div>
+              <div class="slot-desc">Take off aboard SriLankan Airlines UL 196. Flight duration 3 hours 35 minutes. Non-stop evening flight directly south into Bandaranaike International Airport (CMB).</div>
+            </div>
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">22:15 – LATE</span>
+              <div class="slot-title">Arrival in Sri Lanka & Check-in at Grand Oriental Hotel</div>
+              <div class="slot-desc">Touchdown at CMB. Clear immigration, pick up local tourist SIM (Dialog / Mobitel) or activate roaming. Pre-booked air-conditioned taxi (₹700) directly to Grand Oriental Hotel in historic Colombo Fort. Rest after transit.</div>
+              <div class="logistics-callout">
+                <span>🏨 Stay: Grand Oriental Hotel (₹5,135/night) • Overlooking Colombo Port • 10 mins from Fort Railway Station</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- DAY 2 -->
+      <div class="itinerary-day-card" id="card-day2">
+        <div class="day-card-header">
+          <div class="day-title-group">
+            <span class="day-tag">DAY 2</span>
+            <h3>Scenic Coastal Rail Journey to Weligama Beachfront</h3>
+            <span class="day-date-sub">Sunday, 22 November 2026</span>
+          </div>
+          <span class="table-badge badge-train">Coastal Rail</span>
+        </div>
+        <div class="day-body">
+          <div class="timeline-segments">
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">08:30 – 11:00</span>
+              <div class="slot-title">Colonial Breakfast & Morning Harbor Views</div>
+              <div class="slot-desc">Enjoy breakfast at Grand Oriental Hotel overlooking the busy commercial harbor. Take a brief stroll through Colombo Fort's colonial architecture before checking out by 11:00 AM.</div>
+            </div>
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">MIDDAY</span>
+              <div class="slot-title">Colombo Fort to Weligama / Matara Coastal Train</div>
+              <div class="slot-desc">Board the world-famous coastal train departing Colombo Fort. The railway tracks run right beside the breaking surf of the Indian Ocean through Mount Lavinia, Bentota, Hikkaduwa, and Galle. Unmatched views and ocean breeze.</div>
+              <div class="logistics-callout">
+                <span>🚂 Train Booking: Reserved 1st / 2nd Class ($32/person = ₹6,300 for 2) • Right-side window seats for best ocean views</span>
+              </div>
+            </div>
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">AFTERNOON</span>
+              <div class="slot-title">Check-in at Outpost Weligama Beachfront</div>
+              <div class="slot-desc">Arrive at Weligama Railway Station, take a 5-minute tuk-tuk to Outpost Weligama Beachfront. Settle into the Deluxe Double Room Oceanfront. Direct panoramic views of Weligama Bay.</div>
+              <div class="logistics-callout">
+                <span>🏨 Stay: Outpost Weligama Beachfront (Deluxe Oceanfront, 4 Nights: Nov 22–26, ₹57,550 total)</span>
+              </div>
+            </div>
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">EVENING</span>
+              <div class="slot-title">Sunset on Weligama Bay & Beachfront Welcome Dinner</div>
+              <div class="slot-desc">Dip your toes in the Indian Ocean, watch local surfers catch the last swells of the day, and enjoy a tropical dinner at an open-air beachfront cafe.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- DAY 3 -->
+      <div class="itinerary-day-card" id="card-day3">
+        <div class="day-card-header">
+          <div class="day-title-group">
+            <span class="day-tag">DAY 3</span>
+            <h3>Weligama Surf Culture & Mirissa Sunset Peaks</h3>
+            <span class="day-date-sub">Monday, 23 November 2026</span>
+          </div>
+          <span class="table-badge badge-hotel">Beach & Adventure</span>
+        </div>
+        <div class="day-body">
+          <div class="timeline-segments">
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">08:00 – 11:30</span>
+              <div class="slot-title">Morning Surf Session & Beach Lounge</div>
+              <div class="slot-desc">Weligama is celebrated as one of the world's most forgiving learn-to-surf breaks with soft sand bottoms. Take an introductory 1-on-1 surf lesson or relax on sun loungers right outside Outpost with fresh King Coconuts (Thambili).</div>
+            </div>
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">12:30 – 15:30</span>
+              <div class="slot-title">Artisan Cafes & Mirissa Bay Exploration</div>
+              <div class="slot-desc">Lunch at one of Weligama's famed bohemian cafes (Ceylon Sliders, Nomad Cafe, or Moochie's). Take a quick 10-minute tuk-tuk ride around the bay to Mirissa.</div>
+            </div>
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">16:30 – 18:30</span>
+              <div class="slot-title">Climbing Coconut Tree Hill & Parrot Rock</div>
+              <div class="slot-desc">Visit Coconut Tree Hill, a picturesque red-cliff promontory studded with towering palm trees overlooking the Indian Ocean. Capture sunset photos, then walk over to Parrot Rock for views of the curving bay.</div>
+            </div>
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">19:30 – LATE</span>
+              <div class="slot-title">Candlelit Seafood Dinner on Mirissa Beach</div>
+              <div class="slot-desc">Mirissa beach transforms at night with candlelit tables set right on the sand. Choose freshly caught jumbo prawns, red snapper, or calamari grilled to order with garlic butter and island spices.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- DAY 4 -->
+      <div class="itinerary-day-card" id="card-day4">
+        <div class="day-card-header">
+          <div class="day-title-group">
+            <span class="day-tag">DAY 4</span>
+            <h3>Mirissa Blue Whale Safari & UNESCO Galle Fort</h3>
+            <span class="day-date-sub">Tuesday, 24 November 2026</span>
+          </div>
+          <span class="table-badge badge-hotel">Wildlife & Heritage</span>
+        </div>
+        <div class="day-body">
+          <div class="timeline-segments">
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">06:15 – 10:30</span>
+              <div class="slot-title">Early Morning Whale Watching Boat Excursion</div>
+              <div class="slot-desc">Mirissa is the premier global hub for spotting the mighty Blue Whale, the largest creature on Earth, alongside pods of spinner dolphins. Board an early morning catamaran cruise from Mirissa harbor with onboard breakfast.</div>
+            </div>
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">13:00 – 17:30</span>
+              <div class="slot-title">Half-Day Tour of UNESCO Galle Dutch Fort</div>
+              <div class="slot-desc">Take a 40-minute scenic coastal drive to Galle. Walk along the 17th-century granite ramparts built by Portuguese and Dutch colonizers. Admire the iconic Galle Lighthouse, Meeran Mosque, Dutch Reformed Church, and browse high-end boutique stores for Ceylon gems and handmade linen.</div>
+            </div>
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">17:30 – 20:30</span>
+              <div class="slot-title">Sunset Rampart Walk & Heritage Dinner</div>
+              <div class="slot-desc">Watch cliff divers and the crimson sun sink behind the sea walls from the Flag Rock bastion. Savor gourmet fusion dinner in a restored Dutch courtyard or artisan gelato on Pedlar Street before returning to Weligama.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- DAY 5 -->
+      <div class="itinerary-day-card" id="card-day5">
+        <div class="day-card-header">
+          <div class="day-title-group">
+            <span class="day-tag">DAY 5</span>
+            <h3>Swimming with Sea Turtles & Secret Beach Sanctuary</h3>
+            <span class="day-date-sub">Wednesday, 25 November 2026</span>
+          </div>
+          <span class="table-badge badge-hotel">Recreation</span>
+        </div>
+        <div class="day-body">
+          <div class="timeline-segments">
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">09:00 – 12:00</span>
+              <div class="slot-title">Snorkeling with Giant Sea Turtles at Polhena / Madiha</div>
+              <div class="slot-desc">Head over to Polhena Beach or Turtle Bay where giant green sea turtles swim in shallow, reef-protected waters. Rent a mask and snorkel to swim peacefully alongside these gentle giants just meters from the shore.</div>
+            </div>
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">13:00 – 16:30</span>
+              <div class="slot-title">Secluded Bliss at Mirissa Secret Beach & Ayurvedic Spa</div>
+              <div class="slot-desc">Tucked behind coconut groves lies Secret Beach, a tranquil cove with crystal-clear lagoon swimming. In the afternoon, treat yourself to a traditional Sri Lankan herbal oil Ayurvedic massage.</div>
+            </div>
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">18:00 – LATE</span>
+              <div class="slot-title">Final Farewell Coastal Sunset at Outpost Weligama</div>
+              <div class="slot-desc">Celebrate your last evening in the Southern Province with cocktails at the beach deck, listening to the rhythmic surf and ambient acoustic live music.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- DAY 6 -->
+      <div class="itinerary-day-card" id="card-day6">
+        <div class="day-card-header">
+          <div class="day-title-group">
+            <span class="day-tag">DAY 6</span>
+            <h3>Southern Highway to Colombo & Luxury at Granbell Hotel</h3>
+            <span class="day-date-sub">Thursday, 26 November 2026</span>
+          </div>
+          <span class="table-badge badge-cab">Express Highway</span>
+        </div>
+        <div class="day-body">
+          <div class="timeline-segments">
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">09:00 – 12:00</span>
+              <div class="slot-title">Leisure Morning & Check-out from Outpost Weligama</div>
+              <div class="slot-desc">Enjoy your final oceanfront breakfast. Take a morning swim or relaxed coffee session. Complete hotel check-out at 12:00 PM.</div>
+            </div>
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">12:30 – 15:00</span>
+              <div class="slot-title">Private Uber Cab to Colombo via Southern Expressway</div>
+              <div class="slot-desc">Your pre-arranged private Uber cab picks you up directly at Outpost Weligama. Cruise smoothly along Sri Lanka's Southern Expressway (E01), reaching Colombo in ~2.5 hours in air-conditioned comfort.</div>
+              <div class="logistics-callout">
+                <span>🚕 Cab Booking: Private Uber Cab Weligama ➔ Colombo (₹6,130) • Door-to-door highway transit</span>
+              </div>
+            </div>
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">15:30</span>
+              <div class="slot-title">Check-in at Granbell Hotel Colombo (Superior Double Sea View)</div>
+              <div class="slot-desc">Arrive at Granbell Hotel Colombo on Marine Drive. Check into your Superior Sea View room with panoramic floor-to-ceiling windows overlooking the Indian Ocean and the railway line.</div>
+              <div class="logistics-callout">
+                <span>🏨 Stay: Granbell Hotel Colombo (2 Nights: Nov 26–28, ₹17,452 total) • Modern Japanese luxury</span>
+              </div>
+            </div>
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">17:00 – 21:00</span>
+              <div class="slot-title">27th Floor Rooftop Infinity Pool & Minori Dining</div>
+              <div class="slot-desc">Head up to the 27th floor open-air rooftop infinity pool and outdoor jacuzzi. Watch the coastal train rumble below against a spectacular ocean sunset. Dine at Minori Japanese restaurant or the hotel's rooftop cocktail lounge.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- DAY 7 -->
+      <div class="itinerary-day-card" id="card-day7">
+        <div class="day-card-header">
+          <div class="day-title-group">
+            <span class="day-tag">DAY 7</span>
+            <h3>Colombo Cultural Odyssey, Fine Tea & High-End Shopping</h3>
+            <span class="day-date-sub">Friday, 27 November 2026</span>
+          </div>
+          <span class="table-badge badge-hotel">City Exploration</span>
+        </div>
+        <div class="day-body">
+          <div class="timeline-segments">
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">09:00 – 12:30</span>
+              <div class="slot-title">Gangaramaya Temple, Beira Lake & Independence Square</div>
+              <div class="slot-desc">Visit Colombo's most renowned spiritual complex, Gangaramaya Temple, housing exquisite artifacts, sacred relics, and the serene Seema Malaka water pavilion designed by Geoffrey Bawa. Continue to Independence Memorial Hall and Victoria Park.</div>
+            </div>
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">13:30 – 17:00</span>
+              <div class="slot-title">Shopping: Ceylon Spices, Pure Silks & One Galle Face</div>
+              <div class="slot-desc">Indulge in retail therapy across Colombo's top spots: Barefoot for handwoven textiles and art books, Dilmah t-Lounge for premium single-origin tea tastings, Odel for fashion, and the grand One Galle Face oceanfront mall.</div>
+            </div>
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">18:00 – 21:30</span>
+              <div class="slot-title">Galle Face Green Sunset & Dutch Hospital Heritage Dinner</div>
+              <div class="slot-desc">Join locals along Galle Face Green promenade as the sky turns purple over the ocean. Try spicy Isso Wade (prawn fritters). Finish the evening with a celebratory feast in the 17th-century Old Dutch Hospital complex (Ministry of Crab, Colombo Fort Cafe, or Taprobane).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- DAY 8 -->
+      <div class="itinerary-day-card" id="card-day8">
+        <div class="day-card-header">
+          <div class="day-title-group">
+            <span class="day-tag">DAY 8</span>
+            <h3>Homeward Journey: Colombo ➔ New Delhi ➔ Amritsar</h3>
+            <span class="day-date-sub">Saturday, 28 November 2026</span>
+          </div>
+          <span class="table-badge badge-flight">Return Flight</span>
+        </div>
+        <div class="day-body">
+          <div class="timeline-segments">
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">08:00 – 10:30</span>
+              <div class="slot-title">Breakfast by the Sea & Hotel Checkout</div>
+              <div class="slot-desc">Savor an exquisite buffet breakfast at Granbell Hotel. Pack bags, complete express check-out, and meet your pre-booked cab driver at the hotel lobby.</div>
+            </div>
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">10:30 – 11:30</span>
+              <div class="slot-title">Cab to Bandaranaike International Airport (CMB)</div>
+              <div class="slot-desc">Smooth 40-minute drive north to CMB Airport via the Katunayake Expressway (₹700 airport cab segment). Arrive 2.5 hours prior to flight departure.</div>
+            </div>
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">14:00 – 17:35</span>
+              <div class="slot-title">Flight UL 195 (Colombo ➔ New Delhi Non-stop)</div>
+              <div class="slot-desc">Board SriLankan Airlines UL 195. Departure at 14:00. 3 hours 35 minutes non-stop flight back into New Delhi Indira Gandhi International Airport (DEL T3), arriving at 17:35.</div>
+            </div>
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">17:35 – 21:55</span>
+              <div class="slot-title">Transit at Delhi IGI Airport (4h 20m layover)</div>
+              <div class="slot-desc">Clear Indian immigration and customs at T3. Collect checked luggage and check in for your Air India domestic connection to Amritsar. Relax and have dinner at Delhi Airport.</div>
+            </div>
+            <div class="time-slot">
+              <div class="time-dot"></div>
+              <span class="time-badge">21:55 – 23:10</span>
+              <div class="slot-title">Flight AI 479 (DEL ➔ ATQ) & Safe Return Home</div>
+              <div class="slot-desc">Board Air India AI 479 departing Delhi at 21:55. 1 hour 15 minutes quick flight touchdown at Sri Guru Ram Dass Jee International Airport, Amritsar (ATQ) at 23:10. Trip completed with unforgettable memories!</div>
+              <div class="logistics-callout">
+                <span>✈️ Booking: Air India AI 479 (DEL-ATQ, ₹9,538 for 2 adults) • Economy Value</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+
+
+    <!-- ==============================================
+         TAB 3: BUDGET & EXPENSE BIFURCATION
+         ============================================== -->
+    <div id="tab-budget" class="tab-pane">
+      
+      <!-- Top Budget Summary Box -->
+      <div class="card" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: white;">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem;">
+          <div>
+            <span style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; font-weight: 600;">Trip Financial Blueprint (2 Adults)</span>
+            <h2 style="font-size: 2rem; font-weight: 800; margin-top: 0.2rem; color: #38bdf8;">₹2,20,443 <span style="font-size: 1rem; font-weight: 500; color: #cbd5e1;">Grand Estimated Total</span></h2>
+            <p style="font-size: 0.9rem; color: #94a3b8; margin-top: 0.25rem;">Includes all flights, stays, trains, highway cabs, plus ₹50,000 liquid spending buffer.</p>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 0.85rem; color: #94a3b8;">Per Adult Share</div>
+            <div style="font-size: 1.5rem; font-weight: 700; color: #ffffff;">₹1,10,222</div>
+            <div style="font-size: 0.78rem; color: #4ade80;">Net after ICICI flight discount (-₹7,500)</div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Bifurcated Progress Bars -->
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">📊 High-Level Bifurcation</h3>
+          </div>
+          
+          <div class="budget-bar-group">
+            <div class="budget-bar-header">
+              <span>Transit & Flights (6 segments)</span>
+              <strong>₹83,906 (38.1%)</strong>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" style="width: 38.1%; background: #0284c7;"></div>
+            </div>
+          </div>
+
+
+          <div class="budget-bar-group">
+            <div class="budget-bar-header">
+              <span>Accommodations (3 Hotels / 7 Nights)</span>
+              <strong>₹80,137 (36.4%)</strong>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" style="width: 36.4%; background: #d97706;"></div>
+            </div>
+          </div>
+
+
+          <div class="budget-bar-group">
+            <div class="budget-bar-header">
+              <span>On-Ground Cash Buffer (Food, Cabs, Activities)</span>
+              <strong>₹50,000 (22.7%)</strong>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" style="width: 22.7%; background: #16a34a;"></div>
+            </div>
+          </div>
+
+
+          <div class="budget-bar-group">
+            <div class="budget-bar-header">
+              <span>Pre-Booked Subtotal vs Cash Buffer</span>
+              <strong>₹1,70,443 (77.3%) Pre-Booked</strong>
+            </div>
+            <div class="progress-track" style="display:flex;">
+              <div style="width: 77.3%; background: #475569; height:100%;"></div>
+              <div style="width: 22.7%; background: #22c55e; height:100%;"></div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Live Currency Converter Card -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">💱 Real-Time Currency Calculator</h3>
+          </div>
+          <div class="calc-box">
+            <label style="font-size: 0.8rem; font-weight: 600; color: #475569;">Amount in Indian Rupee (INR ₹):</label>
+            <input type="number" id="calc-inr" class="calc-input" value="1000" oninput="updateCurrency()">
+            
+            <div style="display: flex; gap: 0.75rem; margin-bottom: 0.75rem;">
+              <div style="flex: 1;">
+                <label style="font-size: 0.78rem; color: #64748b;">Rate (1 INR = LKR):</label>
+                <input type="number" id="rate-lkr" class="calc-input" value="3.60" step="0.05" oninput="updateCurrency()">
+              </div>
+              <div style="flex: 1;">
+                <label style="font-size: 0.78rem; color: #64748b;">Rate (1 USD = INR):</label>
+                <input type="number" id="rate-usd" class="calc-input" value="86.5" step="0.1" oninput="updateCurrency()">
+              </div>
+            </div>
+
+
+            <div class="calc-res" id="calc-result">
+              ≈ 3,600 Sri Lankan Rupees (LKR)
+            </div>
+            <div style="font-size: 0.75rem; color: #64748b; text-align: center; margin-top: 0.5rem;">
+              Editable exchange rate for fast conversion on the road
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Master Expense Ledger Table -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">📑 Complete Line-by-Line Financial Ledger</h3>
+          <span style="font-size: 0.82rem; color: #64748b;">All figures in INR (₹) for 2 Adults</span>
+        </div>
+        <div class="data-table-container">
+          <table class="styled-table">
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th>Expense Item & Description</th>
+                <th>Dates</th>
+                <th>Quantity / Pax</th>
+                <th>Original Cost</th>
+                <th>Discounts / Notes</th>
+                <th style="text-align: right;">Net Amount (₹)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="table-badge badge-train">Rail</span></td>
+                <td><strong>Amritsar to Delhi Vande Bharat Express</strong><br><span style="font-size:0.78rem; color:#64748b;">Morning executive/chair car transit</span></td>
+                <td>21 Nov</td>
+                <td>2 Adults</td>
+                <td>₹3,000</td>
+                <td>Direct ticket</td>
+                <td style="text-align: right; font-weight:700;">₹3,000</td>
+              </tr>
+              <tr>
+                <td><span class="table-badge badge-flight">Flight</span></td>
+                <td><strong>SriLankan Airlines Flights (DEL ⇄ CMB)</strong><br><span style="font-size:0.78rem; color:#64748b;">UL 196 (DEL-CMB) & UL 195 (CMB-DEL) Non-stop</span></td>
+                <td>21 & 28 Nov</td>
+                <td>2 Adults (Return)</td>
+                <td>₹71,438</td>
+                <td><span style="color:#16a34a; font-weight:600;">-₹7,500 (ICICI Card Offer)</span></td>
+                <td style="text-align: right; font-weight:700;">₹63,938</td>
+              </tr>
+              <tr>
+                <td><span class="table-badge badge-hotel">Stay 1</span></td>
+                <td><strong>Grand Oriental Hotel, Colombo Fort</strong><br><span style="font-size:0.78rem; color:#64748b;">1 Night, Room Two Beds / Standard</span></td>
+                <td>21 – 22 Nov</td>
+                <td>1 Room (1N)</td>
+                <td>₹5,135</td>
+                <td>Port view historic hotel</td>
+                <td style="text-align: right; font-weight:700;">₹5,135</td>
+              </tr>
+              <tr>
+                <td><span class="table-badge badge-train">Rail</span></td>
+                <td><strong>Scenic Coastal Train: Colombo to Matara / Weligama</strong><br><span style="font-size:0.78rem; color:#64748b;">Reserved coastal train ride along the beach</span></td>
+                <td>22 Nov</td>
+                <td>2 Adults ($32/pax)</td>
+                <td>$64 USD</td>
+                <td>Reserved observation/window class</td>
+                <td style="text-align: right; font-weight:700;">₹6,300</td>
+              </tr>
+              <tr>
+                <td><span class="table-badge badge-hotel">Stay 2</span></td>
+                <td><strong>Outpost Weligama Beachfront</strong><br><span style="font-size:0.78rem; color:#64748b;">4 Nights, Deluxe Double Room Oceanfront</span></td>
+                <td>22 – 26 Nov</td>
+                <td>1 Room (4N)</td>
+                <td>₹57,550</td>
+                <td>₹14,387/night avg, direct beach</td>
+                <td style="text-align: right; font-weight:700;">₹57,550</td>
+              </tr>
+              <tr>
+                <td><span class="table-badge badge-cab">Cab</span></td>
+                <td><strong>Private Uber Cab: Weligama to Colombo</strong><br><span style="font-size:0.78rem; color:#64748b;">Via Southern Expressway E01, door-to-door</span></td>
+                <td>26 Nov</td>
+                <td>1 Private Car</td>
+                <td>₹6,130</td>
+                <td>Comfort highway intercity transit</td>
+                <td style="text-align: right; font-weight:700;">₹6,130</td>
+              </tr>
+              <tr>
+                <td><span class="table-badge badge-hotel">Stay 3</span></td>
+                <td><strong>Granbell Hotel Colombo</strong><br><span style="font-size:0.78rem; color:#64748b;">2 Nights, Superior Double Room Sea View</span></td>
+                <td>26 – 28 Nov</td>
+                <td>1 Room (2N)</td>
+                <td>₹17,452</td>
+                <td>₹8,726/night avg, infinity pool</td>
+                <td style="text-align: right; font-weight:700;">₹17,452</td>
+              </tr>
+              <tr>
+                <td><span class="table-badge badge-cab">Cab</span></td>
+                <td><strong>Colombo Airport Cabs (CMB Transfers)</strong><br><span style="font-size:0.78rem; color:#64748b;">Airport ➔ Grand Oriental & Granbell ➔ Airport</span></td>
+                <td>21 & 28 Nov</td>
+                <td>2 Trips</td>
+                <td>₹1,400</td>
+                <td>₹700 per transfer segment</td>
+                <td style="text-align: right; font-weight:700;">₹1,400</td>
+              </tr>
+              <tr>
+                <td><span class="table-badge badge-flight">Flight</span></td>
+                <td><strong>Air India AI 479 (Delhi to Amritsar)</strong><br><span style="font-size:0.78rem; color:#64748b;">DEL 21:55 ➔ ATQ 23:10 Non-stop</span></td>
+                <td>28 Nov</td>
+                <td>2 Adults</td>
+                <td>₹9,538</td>
+                <td>Economy Value domestic return</td>
+                <td style="text-align: right; font-weight:700;">₹9,538</td>
+              </tr>
+              <tr style="background:#f8fafc; font-weight:700;">
+                <td colspan="6">SUBTOTAL COMMITTED BOOKINGS</td>
+                <td style="text-align: right; color:#0f172a; font-size:1.05rem;">₹1,70,443</td>
+              </tr>
+              <tr>
+                <td><span class="table-badge badge-cash">Buffer</span></td>
+                <td><strong>Extra On-Ground Cash Buffer</strong><br><span style="font-size:0.78rem; color:#64748b;">Meals, beachside seafood dinners, surf lessons, whale safari, tuk-tuks & souvenirs</span></td>
+                <td>21 – 28 Nov</td>
+                <td>8 Days</td>
+                <td>₹50,000</td>
+                <td>~₹6,250 daily allowance for 2 pax</td>
+                <td style="text-align: right; font-weight:700; color:#d97706;">₹50,000</td>
+              </tr>
+              <tr style="background:#f0f9ff; font-weight:800; font-size:1.1rem; border-top: 2px solid #0284c7;">
+                <td colspan="6" style="color:#0369a1;">GRAND TOTAL ESTIMATED OUTLAY</td>
+                <td style="text-align: right; color:#0369a1;">₹2,20,443</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+
+    </div>
+
+
+
+
+    <!-- ==============================================
+         TAB 4: FLIGHTS & TRANSIT HUB
+         ============================================== -->
+    <div id="tab-transit" class="tab-pane">
+      
+      <div class="card-header" style="margin-bottom: 1.5rem;">
+        <div>
+          <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--slate-900);">Multi-Modal Transit Architecture</h2>
+          <p style="font-size: 0.85rem; color: var(--slate-500);">Complete flight, rail, and private vehicle logistics schedule</p>
+        </div>
+      </div>
+
+
+      <!-- Segment 1: Vande Bharat -->
+      <div class="transit-card">
+        <div class="transit-header">
+          <span class="table-badge badge-train">TRAIN • OUTBOUND</span>
+          <span style="font-size:0.85rem; font-weight:700; color:#166534;">₹3,000 Total (2 Adults)</span>
+        </div>
+        <h3 style="font-size: 1.1rem; color: #0f172a;">Vande Bharat Express: Amritsar ➔ New Delhi</h3>
+        <div class="transit-route">
+          <div class="transit-endpoint">
+            <div class="endpoint-code">ASR</div>
+            <div class="endpoint-time">Morning Departure</div>
+            <div class="endpoint-city">Amritsar Junction</div>
+          </div>
+          <div class="transit-divider">
+            <span>High-Speed Rail</span>
+            <div class="transit-line train"></div>
+            <span>~5h 30m</span>
+          </div>
+          <div class="transit-endpoint" style="text-align: right;">
+            <div class="endpoint-code">NDLS</div>
+            <div class="endpoint-time">Midday Arrival</div>
+            <div class="endpoint-city">New Delhi Station</div>
+          </div>
+        </div>
+        <p style="font-size: 0.82rem; color: #64748b;">Smooth connection from NDLS to IGI Airport Terminal 3 via Orange Line Airport Express Metro (20 mins).</p>
+      </div>
+
+
+      <!-- Segment 2: Flight DEL -> CMB -->
+      <div class="transit-card">
+        <div class="transit-header">
+          <span class="table-badge badge-flight">INTERNATIONAL FLIGHT • OUTBOUND</span>
+          <span style="font-size:0.85rem; font-weight:700; color:#1e40af;">SriLankan Airlines UL 196</span>
+        </div>
+        <h3 style="font-size: 1.1rem; color: #0f172a;">New Delhi (DEL T3) ➔ Colombo (CMB)</h3>
+        <div class="transit-route">
+          <div class="transit-endpoint">
+            <div class="endpoint-code">DEL</div>
+            <div class="endpoint-time">18:40 (Sat, 21 Nov)</div>
+            <div class="endpoint-city">Delhi Indira Gandhi T3</div>
+          </div>
+          <div class="transit-divider">
+            <span>Non-stop</span>
+            <div class="transit-line"></div>
+            <span>3h 35m</span>
+          </div>
+          <div class="transit-endpoint" style="text-align: right;">
+            <div class="endpoint-code">CMB</div>
+            <div class="endpoint-time">22:15 (Sat, 21 Nov)</div>
+            <div class="endpoint-city">Colombo Bandaranaike Intl</div>
+          </div>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
+          <span class="amenity-chip">Baggage: 25-30kg check-in + 7kg cabin / adult</span>
+          <span class="amenity-chip">Meal: Complimentary hot dinner onboard</span>
+          <span class="amenity-chip">Aircraft: Airbus A320 / A330</span>
+        </div>
+      </div>
+
+
+      <!-- Segment 3: Scenic Train Colombo to Matara -->
+      <div class="transit-card">
+        <div class="transit-header">
+          <span class="table-badge badge-train">SCENIC TRAIN • COASTAL EXPEDITION</span>
+          <span style="font-size:0.85rem; font-weight:700; color:#166534;">$32/person • ₹6,300 Total</span>
+        </div>
+        <h3 style="font-size: 1.1rem; color: #0f172a;">Sri Lanka Railways: Colombo Fort ➔ Weligama / Matara</h3>
+        <div class="transit-route">
+          <div class="transit-endpoint">
+            <div class="endpoint-code">FOT</div>
+            <div class="endpoint-time">Midday (Sun, 22 Nov)</div>
+            <div class="endpoint-city">Colombo Fort Station</div>
+          </div>
+          <div class="transit-divider">
+            <span>Ocean Coastal Track</span>
+            <div class="transit-line train"></div>
+            <span>~3h 15m</span>
+          </div>
+          <div class="transit-endpoint" style="text-align: right;">
+            <div class="endpoint-code">WLG</div>
+            <div class="endpoint-time">Afternoon Arrival</div>
+            <div class="endpoint-city">Weligama Railway Station</div>
+          </div>
+        </div>
+        <p style="font-size: 0.82rem; color: #64748b;">Seats reserved in 1st Observation or 2nd Class Reserved. Track runs directly beside the breaking surf of the Indian Ocean.</p>
+      </div>
+
+
+      <!-- Segment 4: Weligama to Colombo Uber Cab -->
+      <div class="transit-card">
+        <div class="transit-header">
+          <span class="table-badge badge-cab">PRIVATE CAB • EXPRESSWAY</span>
+          <span style="font-size:0.85rem; font-weight:700; color:#6b21a8;">₹6,130 Total</span>
+        </div>
+        <h3 style="font-size: 1.1rem; color: #0f172a;">Uber / Private Sedan: Outpost Weligama ➔ Granbell Hotel Colombo</h3>
+        <div class="transit-route">
+          <div class="transit-endpoint">
+            <div class="endpoint-code">WLG</div>
+            <div class="endpoint-time">12:30 PM (Thu, 26 Nov)</div>
+            <div class="endpoint-city">Outpost Weligama Beachfront</div>
+          </div>
+          <div class="transit-divider">
+            <span>Southern Expressway (E01)</span>
+            <div class="transit-line car"></div>
+            <span>~2h 30m (150 km)</span>
+          </div>
+          <div class="transit-endpoint" style="text-align: right;">
+            <div class="endpoint-code">CMB</div>
+            <div class="endpoint-time">15:00 PM (Thu, 26 Nov)</div>
+            <div class="endpoint-city">Granbell Hotel Marine Drive</div>
+          </div>
+        </div>
+        <p style="font-size: 0.82rem; color: #64748b;">Fast, air-conditioned intercity transit through the tollway right to the hotel entrance.</p>
+      </div>
+
+
+      <!-- Segment 5: Flight CMB -> DEL -->
+      <div class="transit-card">
+        <div class="transit-header">
+          <span class="table-badge badge-flight">INTERNATIONAL FLIGHT • INBOUND</span>
+          <span style="font-size:0.85rem; font-weight:700; color:#1e40af;">SriLankan Airlines UL 195</span>
+        </div>
+        <h3 style="font-size: 1.1rem; color: #0f172a;">Colombo (CMB) ➔ New Delhi (DEL T3)</h3>
+        <div class="transit-route">
+          <div class="transit-endpoint">
+            <div class="endpoint-code">CMB</div>
+            <div class="endpoint-time">14:00 (Sat, 28 Nov)</div>
+            <div class="endpoint-city">Colombo Bandaranaike Intl</div>
+          </div>
+          <div class="transit-divider">
+            <span>Non-stop</span>
+            <div class="transit-line"></div>
+            <span>3h 35m</span>
+          </div>
+          <div class="transit-endpoint" style="text-align: right;">
+            <div class="endpoint-code">DEL</div>
+            <div class="endpoint-time">17:35 (Sat, 28 Nov)</div>
+            <div class="endpoint-city">Delhi Indira Gandhi T3</div>
+          </div>
+        </div>
+        <p style="font-size: 0.82rem; color: #64748b;">Net international return package (UL 196 + UL 195) = ₹63,938 after ₹7,500 ICICI discount.</p>
+      </div>
+
+
+      <!-- Segment 6: Flight DEL -> ATQ -->
+      <div class="transit-card">
+        <div class="transit-header">
+          <span class="table-badge badge-flight">DOMESTIC FLIGHT • FINAL LEG</span>
+          <span style="font-size:0.85rem; font-weight:700; color:#1e40af;">Air India AI 479 • ₹9,538 (2 Adults)</span>
+        </div>
+        <h3 style="font-size: 1.1rem; color: #0f172a;">New Delhi (DEL) ➔ Amritsar (ATQ)</h3>
+        <div class="transit-route">
+          <div class="transit-endpoint">
+            <div class="endpoint-code">DEL</div>
+            <div class="endpoint-time">21:55 (Sat, 28 Nov)</div>
+            <div class="endpoint-city">Delhi IGI Terminal</div>
+          </div>
+          <div class="transit-divider">
+            <span>Non-stop</span>
+            <div class="transit-line"></div>
+            <span>1h 15m</span>
+          </div>
+          <div class="transit-endpoint" style="text-align: right;">
+            <div class="endpoint-code">ATQ</div>
+            <div class="endpoint-time">23:10 (Sat, 28 Nov)</div>
+            <div class="endpoint-city">Amritsar Sri Guru Ram Dass</div>
+          </div>
+        </div>
+        <p style="font-size: 0.82rem; color: #64748b;">Comfortable 4h 20m layover at DEL T3 allows ample time for international baggage reclaim, customs, and domestic recheck.</p>
+      </div>
+
+
+    </div>
+
+
+
+
+    <!-- ==============================================
+         TAB 5: HOTELS & ACCOMMODATIONS
+         ============================================== -->
+    <div id="tab-hotels" class="tab-pane">
+      
+      <div class="card-header" style="margin-bottom: 1.5rem;">
+        <div>
+          <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--slate-900);">Accommodations Portfolio</h2>
+          <p style="font-size: 0.85rem; color: var(--slate-500);">3 carefully selected handpicked stays tailored for heritage, beachfront surf, and city skyline</p>
+        </div>
+        <div style="font-size: 0.9rem; font-weight: 700; color: var(--slate-800);">Total Stays Cost: ₹80,137</div>
+      </div>
+
+
+      <!-- Hotel 1 -->
+      <div class="hotel-card">
+        <div class="hotel-card-aside">
+          <div>
+            <span class="table-badge badge-hotel">1 NIGHT • COLOMBO FORT</span>
+            <h3 style="font-size: 1.2rem; color: #0f172a; margin-top: 0.5rem;">Grand Oriental Hotel</h3>
+            <p style="font-size: 0.82rem; color: #64748b; margin-top: 0.25rem;">02 York Street, Colombo Fort</p>
+          </div>
+          <div style="margin-top: 1rem;">
+            <div style="font-size: 0.8rem; color: #64748b;">Total Price (1 Night)</div>
+            <div style="font-size: 1.5rem; font-weight: 800; color: #0f172a;">₹5,135</div>
+            <div style="font-size: 0.75rem; color: #16a34a; font-weight: 600;">Includes taxes & fees</div>
+          </div>
+        </div>
+        <div class="hotel-card-main">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+            <span style="font-weight: 700; color: #1e293b; font-size: 1rem;">Room Two Beds / Standard • 2 Adults</span>
+            <span style="font-size: 0.82rem; color: #64748b;">Check-in: Nov 21 (Night) | Checkout: Nov 22 (12 PM)</span>
+          </div>
+          <p style="font-size: 0.88rem; color: #475569; line-height: 1.6;">
+            A legendary 180-year-old British colonial hotel steeped in historical charm. Ideally situated in the historic Fort district overlooking the busy port of Colombo. Selected for its strategic proximity just 5 minutes from Colombo Fort Railway Station, ensuring zero rush before boarding the scenic coastal train the next morning.
+          </p>
+          <div class="hotel-pill-row">
+            <span class="amenity-chip">🏛️ Historic Colonial Landmark</span>
+            <span class="amenity-chip">🚆 5 Mins to Fort Railway Station</span>
+            <span class="amenity-chip">🚢 Harbor Views</span>
+            <span class="amenity-chip">❄️ Air Conditioned</span>
+            <span class="amenity-chip">📶 Free High-Speed WiFi</span>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Hotel 2 -->
+      <div class="hotel-card">
+        <div class="hotel-card-aside" style="background: #f0fdf4;">
+          <div>
+            <span class="table-badge badge-train" style="background:#bbf7d0; color:#14532d;">4 NIGHTS • WELIGAMA BAY</span>
+            <h3 style="font-size: 1.2rem; color: #0f172a; margin-top: 0.5rem;">Outpost Weligama Beachfront</h3>
+            <p style="font-size: 0.82rem; color: #64748b; margin-top: 0.25rem;">Weligama Bay, Mirissa Coast</p>
+          </div>
+          <div style="margin-top: 1rem;">
+            <div style="font-size: 0.8rem; color: #64748b;">Total Price (4 Nights)</div>
+            <div style="font-size: 1.5rem; font-weight: 800; color: #166534;">₹57,550</div>
+            <div style="font-size: 0.75rem; color: #64748b;">~₹14,387 per night</div>
+          </div>
+        </div>
+        <div class="hotel-card-main">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+            <span style="font-weight: 700; color: #1e293b; font-size: 1rem;">Deluxe Double Room, Oceanfront • 2 Adults</span>
+            <span style="font-size: 0.82rem; color: #64748b;">Check-in: Nov 22 (2 PM) | Checkout: Nov 26 (12 PM)</span>
+          </div>
+          <p style="font-size: 0.88rem; color: #475569; line-height: 1.6;">
+            A premier oceanfront lifestyle haven located right on the sands of Weligama Bay. Features direct beach access, an outdoor swimming pool, vibrant cafe culture, and stunning panoramic views of breaking waves. Perfect base for exploring Mirissa, surfing, whale safaris, and day trips to Galle Dutch Fort.
+          </p>
+          <div class="hotel-pill-row">
+            <span class="amenity-chip">🌊 Direct Oceanfront Balcony</span>
+            <span class="amenity-chip">🏄 Steps from Weligama Surf Break</span>
+            <span class="amenity-chip">🏊 Beachside Swimming Pool</span>
+            <span class="amenity-chip">☕ Artisan Cafe & Lounge</span>
+            <span class="amenity-chip">🚗 Free Parking & 24/7 Desk</span>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Hotel 3 -->
+      <div class="hotel-card">
+        <div class="hotel-card-aside" style="background: #fdf4ff;">
+          <div>
+            <span class="table-badge badge-cab" style="background:#f5d0fe; color:#701a75;">2 NIGHTS • MARINE DRIVE</span>
+            <h3 style="font-size: 1.2rem; color: #0f172a; margin-top: 0.5rem;">Granbell Hotel Colombo</h3>
+            <p style="font-size: 0.82rem; color: #64748b; margin-top: 0.25rem;">282/5 Marine Drive, Kollupitiya</p>
+          </div>
+          <div style="margin-top: 1rem;">
+            <div style="font-size: 0.8rem; color: #64748b;">Total Price (2 Nights)</div>
+            <div style="font-size: 1.5rem; font-weight: 800; color: #86198f;">₹17,452</div>
+            <div style="font-size: 0.75rem; color: #64748b;">~₹8,726 per night</div>
+          </div>
+        </div>
+        <div class="hotel-card-main">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+            <span style="font-weight: 700; color: #1e293b; font-size: 1rem;">Superior Double Room, Sea View • 2 Adults</span>
+            <span style="font-size: 0.82rem; color: #64748b;">Check-in: Nov 26 (2 PM) | Checkout: Nov 28 (12 PM)</span>
+          </div>
+          <p style="font-size: 0.88rem; color: #475569; line-height: 1.6;">
+            A sleek 4-star luxury property bringing contemporary Japanese hospitality to Colombo's coast. Boasts a 27th-floor open-air rooftop infinity pool overlooking the ocean and the coastal train tracks, an open-air Japanese onsen bath, and top-rated dining venues (Minori). Unmatched sunset views to conclude the holiday.
+          </p>
+          <div class="hotel-pill-row">
+            <span class="amenity-chip">🏊 27th-Floor Rooftop Infinity Pool</span>
+            <span class="amenity-chip">🌅 Direct Sea View Balcony</span>
+            <span class="amenity-chip">♨️ Japanese Open-Air Onsen</span>
+            <span class="amenity-chip">🍣 Minori Fine Dining</span>
+            <span class="amenity-chip">🚕 40 Mins to CMB Airport via Expressway</span>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+
+
+    <!-- ==============================================
+         TAB 6: TRIP GUIDE & CHECKLIST
+         ============================================== -->
+    <div id="tab-guide" class="tab-pane">
+      
+      <div class="grid-2">
+        
+        <!-- Interactive Packing & Prep Checklist -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">✅ Interactive Travel Preparation Checklist</h3>
+            <span id="checklist-counter" style="font-size: 0.8rem; font-weight: 700; color: var(--primary);">0/8 Completed</span>
+          </div>
+          <div style="margin-bottom: 1rem;">
+            <div class="progress-track">
+              <div id="checklist-progress" class="progress-fill" style="width: 0%; background: var(--primary);"></div>
+            </div>
+          </div>
+          <div id="checklist-items">
+            <label class="check-item">
+              <input type="checkbox" onchange="updateChecklist(this)">
+              <div class="check-text">
+                <strong>Electronic Travel Authorization (ETA / Visa)</strong>
+                Ensure passports have 6+ months validity from Nov 2026 and complete the online Sri Lanka ETA application.
+              </div>
+            </label>
+            <label class="check-item">
+              <input type="checkbox" onchange="updateChecklist(this)">
+              <div class="check-text">
+                <strong>Book Colombo-Matara Coastal Train 30 Days Prior</strong>
+                Seats open 30 days before Nov 22. Book reserved 1st or 2nd class window seats on the right side.
+              </div>
+            </label>
+            <label class="check-item">
+              <input type="checkbox" onchange="updateChecklist(this)">
+              <div class="check-text">
+                <strong>Card Activation & Currency Exchange</strong>
+                Enable international transactions on ICICI Forex / Credit cards. Carry $150–$200 USD cash to exchange at CMB Airport into LKR.
+              </div>
+            </label>
+            <label class="check-item">
+              <input type="checkbox" onchange="updateChecklist(this)">
+              <div class="check-text">
+                <strong>Install PickMe & Uber Apps</strong>
+                PickMe is Sri Lanka's local ride-hailing app (like Ola/Uber). Works seamlessly for tuk-tuks in Colombo and coastal towns.
+              </div>
+            </label>
+            <label class="check-item">
+              <input type="checkbox" onchange="updateChecklist(this)">
+              <div class="check-text">
+                <strong>Temple Attire (Modest White Clothing)</strong>
+                Required for Gangaramaya and Buddhist sites. Shoulders and knees must be fully covered; slip-on shoes recommended.
+              </div>
+            </label>
+            <label class="check-item">
+              <input type="checkbox" onchange="updateChecklist(this)">
+              <div class="check-text">
+                <strong>Beach & Reef Essentials</strong>
+                Pack reef-safe sunscreen SPF 50+, sunglasses, quick-dry microfiber towels, and waterproof dry bag.
+              </div>
+            </label>
+            <label class="check-item">
+              <input type="checkbox" onchange="updateChecklist(this)">
+              <div class="check-text">
+                <strong>Universal Plug Adapter (Type D / G)</strong>
+                Sri Lanka predominantly uses UK-style three-rectangular-pin (Type G) and round three-pin (Type D) sockets.
+              </div>
+            </label>
+            <label class="check-item">
+              <input type="checkbox" onchange="updateChecklist(this)">
+              <div class="check-text">
+                <strong>Web Check-in & Boarding Passes</strong>
+                Check-in opens 48 hours prior for SriLankan Airlines UL 196 and Air India AI 479.
+              </div>
+            </label>
+          </div>
+        </div>
+
+
+        <!-- Essential Travel Tips & Key Contacts -->
+        <div>
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">📞 Critical Emergency & Local Contacts</h3>
+            </div>
+            <table class="styled-table">
+              <tbody>
+                <tr>
+                  <td><strong>Tourist Police Hotline</strong></td>
+                  <td style="font-weight: 700; color: #dc2626;">1912 (Toll Free 24/7)</td>
+                </tr>
+                <tr>
+                  <td><strong>General Emergency & Police</strong></td>
+                  <td style="font-weight: 700;">119 / 118</td>
+                </tr>
+                <tr>
+                  <td><strong>Suwa Seriya Free Ambulance</strong></td>
+                  <td style="font-weight: 700;">1990</td>
+                </tr>
+                <tr>
+                  <td><strong>High Commission of India, Colombo</strong></td>
+                  <td>+94 11 242 1605 / 242 2788</td>
+                </tr>
+                <tr>
+                  <td><strong>Bandaranaike Intl Airport (CMB)</strong></td>
+                  <td>+94 11 225 2861</td>
+                </tr>
+                <tr>
+                  <td><strong>SriLankan Airlines Helpline</strong></td>
+                  <td>+94 11 777 1979</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">🥥 Must-Try Culinary Specialties</h3>
+            </div>
+            <div style="font-size: 0.88rem; color: #475569; display: flex; flex-direction: column; gap: 0.6rem;">
+              <div>• <strong>Egg Hoppers (Appa):</strong> Crispy bowl-shaped coconut-rice pancakes served with spicy lunu miris and seeni sambol.</div>
+              <div>• <strong>Kottu Roti:</strong> Chopped godamba roti stir-fried on a flat iron grill with vegetables, egg, spices, and chicken/cheese.</div>
+              <div>• <strong>Mirissa Jumbo Prawns & Crab:</strong> Freshly grilled on the beach with garlic butter and island chili marinade.</div>
+              <div>• <strong>King Coconut (Thambili):</strong> Sweet golden coconut water freshly cut roadside to stay hydrated in the tropical sun.</div>
+              <div>• <strong>Pol Sambol:</strong> Fresh scraped coconut, chili, shallots, and lime juice — pairs perfectly with rice and dhal.</div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+
+    </div>
+
+
+  </main>
+
+
+  <!-- JavaScript for Tabs, Checklist, and Calculations -->
+  <script>
+    // Tab switching logic
+    function switchTab(tabId) {
+      // Hide all panes
+      document.querySelectorAll('.tab-pane').forEach(pane => {
+        pane.classList.remove('active');
+      });
+      // Deactivate all buttons
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+
+
+      // Show targeted pane
+      const targetPane = document.getElementById('tab-' + tabId);
+      if (targetPane) {
+        targetPane.classList.add('active');
+      }
+
+
+      // Activate matched button
+      const buttons = document.querySelectorAll('.tab-btn');
+      buttons.forEach(btn => {
+        if (btn.getAttribute('onclick').includes(tabId)) {
+          btn.classList.add('active');
+        }
+      });
+
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+
+    // Day filter for Day-by-Day itinerary
+    function filterDay(day) {
+      const cards = document.querySelectorAll('.itinerary-day-card');
+      const chips = document.querySelectorAll('.day-chip');
+
+
+      chips.forEach(c => c.classList.remove('active'));
+      event.target.classList.add('active');
+
+
+      if (day === 'all') {
+        cards.forEach(c => c.style.display = 'block');
+      } else {
+        cards.forEach(c => {
+          if (c.id === 'card-' + day) {
+            c.style.display = 'block';
+            c.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          } else {
+            c.style.display = 'none';
+          }
+        });
+      }
+    }
+
+
+    // Currency Calculator
+    function updateCurrency() {
+      const inr = parseFloat(document.getElementById('calc-inr').value) || 0;
+      const rateLkr = parseFloat(document.getElementById('rate-lkr').value) || 3.60;
+      const rateUsd = parseFloat(document.getElementById('rate-usd').value) || 86.5;
+
+
+      const lkrVal = (inr * rateLkr).toLocaleString('en-IN', { maximumFractionDigits: 0 });
+      const usdVal = (inr / rateUsd).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+
+      document.getElementById('calc-result').innerHTML = 
+        `≈ <strong>${lkrVal} LKR</strong> &nbsp;|&nbsp; <strong>$${usdVal} USD</strong>`;
+    }
+
+
+    // Interactive Checklist
+    function updateChecklist() {
+      const checkboxes = document.querySelectorAll('#checklist-items input[type="checkbox"]');
+      let checkedCount = 0;
+      checkboxes.forEach(cb => {
+        if (cb.checked) {
+          checkedCount++;
+          cb.closest('.check-item').style.opacity = '0.6';
+        } else {
+          cb.closest('.check-item').style.opacity = '1';
+        }
+      });
+      const total = checkboxes.length;
+      const pct = Math.round((checkedCount / total) * 100);
+      document.getElementById('checklist-counter').innerText = `${checkedCount}/${total} Completed (${pct}%)`;
+      document.getElementById('checklist-progress').style.width = pct + '%';
+    }
+  </script>
+</body>
+</html>
