@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sri Lanka 2026 Trip Planner & Budget Dashboard</title>
-  <!-- Tailwind CSS CDN -->
+  <title>Sri Lanka 2026 • Interactive Trip Dashboard & Budget Planner</title>
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Chart.js CDN for visual breakdown -->
+  <!-- Chart.js for data visualization -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- FontAwesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Google Fonts Inter -->
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Fonts (Plus Jakarta Sans) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
   <script>
     tailwind.config = {
@@ -22,22 +22,32 @@
         extend: {
           fontFamily: {
             sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['"Space Grotesk"', 'sans-serif'],
           },
           colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              400: '#34d399',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+              900: '#064e3b',
+            },
             ocean: {
-              50: '#f0fdfa',
-              100: '#ccfbf1',
-              500: '#14b8a6',
-              600: '#0d9488',
-              700: '#0f766e',
-              800: '#115e59',
-              900: '#134e4a',
+              50: '#f0f9ff',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              900: '#0c4a6e',
             },
             sunset: {
-              400: '#fb923c',
+              50: '#fff7ed',
               500: '#f97316',
               600: '#ea580c',
-            }
+            },
+            cardbg: '#ffffff'
           }
         }
       }
@@ -45,453 +55,563 @@
   </script>
 
   <style>
-    /* Custom Scrollbar and Glass Effects */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
+    /* Custom styling & animations */
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
     }
-    ::-webkit-scrollbar-track {
-      background: rgba(0,0,0,0.03);
+    .card-shadow {
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.04), 0 8px 10px -6px rgba(15, 23, 42, 0.03);
     }
-    ::-webkit-scrollbar-thumb {
-      background: rgba(13, 148, 136, 0.3);
-      border-radius: 9999px;
+    .card-hover {
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    ::-webkit-scrollbar-thumb:hover {
-      background: rgba(13, 148, 136, 0.6);
+    .card-hover:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 30px -6px rgba(15, 23, 42, 0.08);
     }
-    .glass-card {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.6);
+    /* Hide scrollbars for slick tab scrolling */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
     }
-    .dark .glass-card {
-      background: rgba(17, 24, 39, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    .badge-glow {
-      box-shadow: 0 0 12px -2px rgba(20, 184, 166, 0.35);
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
     @media print {
-      .no-print {
-        display: none !important;
-      }
-      body {
-        background: white !important;
-        color: black !important;
-      }
+      .no-print { display: none !important; }
+      body { background: white; color: black; }
     }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-screen transition-colors duration-200">
+<body class="bg-slate-50/70 text-slate-800 antialiased min-h-screen flex flex-col font-sans selection:bg-brand-500 selection:text-white">
 
-  <!-- Top Navigation Header -->
-  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-xs">
+  <header class="sticky top-0 z-40 glass-nav border-b border-slate-200/80 no-print transition-all">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-20">
-        <!-- Logo & Title -->
-        <div class="flex items-center gap-3">
-          <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-ocean-700 via-ocean-600 to-amber-500 flex items-center justify-center text-white shadow-md shadow-ocean-600/20">
-            <i class="fa-solid fa-plane-departure text-xl"></i>
+        
+        <!-- Logo & Journey Headline -->
+        <div class="flex items-center gap-3.5">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-ocean-600 via-brand-600 to-amber-500 flex items-center justify-center text-white shadow-lg shadow-brand-500/20 ring-4 ring-white">
+            <i data-lucide="palmtree" class="w-6 h-6 stroke-[2.2]"></i>
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <h1 class="text-xl font-extrabold tracking-tight text-slate-900">Sri Lanka Expedition</h1>
-              <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300">Nov 21 - 28, 2026</span>
+              <h1 class="text-xl sm:text-2xl font-black font-display tracking-tight text-slate-900">Sri Lanka 2026</h1>
+              <span class="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100/90 text-emerald-800 border border-emerald-300">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                Confirmed Notes
+              </span>
             </div>
-            <p class="text-xs text-slate-500 font-medium">Amritsar ⇄ Colombo &bull; South Coast Surf Escape</p>
+            <p class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+              <span>Amritsar (ATQ) ⇄ Colombo (CMB)</span>
+              <span>&bull;</span>
+              <span class="text-brand-700 font-semibold">21 Nov – 28 Nov 2026</span>
+            </p>
           </div>
         </div>
 
-        <!-- Global Dashboard Currency Switcher & Actions -->
+        <!-- Global Currency Toggle & Quick Action Button -->
         <div class="flex items-center gap-3">
-          <!-- Currency selector toggle -->
-          <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
-            <span class="text-xs text-slate-500 font-semibold px-2 hidden sm:inline"><i class="fa-solid fa-coins mr-1"></i>Currency:</span>
-            <button onclick="changeGlobalCurrency('INR')" id="btn-curr-INR" class="px-2.5 py-1 text-xs font-bold rounded-lg transition-all bg-white text-ocean-700 shadow-sm">₹ INR</button>
-            <button onclick="changeGlobalCurrency('LKR')" id="btn-curr-LKR" class="px-2.5 py-1 text-xs font-semibold rounded-lg text-slate-600 transition-all hover:text-slate-900">Rs LKR</button>
-            <button onclick="changeGlobalCurrency('USD')" id="btn-curr-USD" class="px-2.5 py-1 text-xs font-semibold rounded-lg text-slate-600 transition-all hover:text-slate-900">$ USD</button>
+          <!-- Currency selector -->
+          <div class="flex items-center bg-slate-100/90 p-1 rounded-2xl border border-slate-200">
+            <span class="text-xs text-slate-500 font-bold px-2.5 hidden sm:inline flex items-center gap-1">
+              <i data-lucide="coins" class="w-3.5 h-3.5"></i> Cur:
+            </span>
+            <button onclick="setDashboardCurrency('INR')" id="curr-btn-INR" class="px-3 py-1.5 text-xs font-extrabold rounded-xl transition bg-white text-brand-700 shadow-sm">
+              ₹ INR
+            </button>
+            <button onclick="setDashboardCurrency('LKR')" id="curr-btn-LKR" class="px-3 py-1.5 text-xs font-semibold rounded-xl text-slate-600 hover:text-slate-900 transition">
+              Rs LKR
+            </button>
+            <button onclick="setDashboardCurrency('USD')" id="curr-btn-USD" class="px-3 py-1.5 text-xs font-semibold rounded-xl text-slate-600 hover:text-slate-900 transition">
+              $ USD
+            </button>
           </div>
 
-          <!-- Print / Export Action -->
-          <button onclick="window.print()" class="no-print hidden sm:flex items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-100 border border-slate-200 rounded-xl transition shadow-xs">
-            <i class="fa-solid fa-print"></i>
-            <span>Export</span>
-          </button>
-
-          <!-- Add Item Action Modal Trigger -->
-          <button onclick="openModal('addExpenseModal')" class="no-print flex items-center gap-2 px-3.5 py-2 text-xs font-bold text-white bg-gradient-to-r from-ocean-600 to-ocean-700 hover:from-ocean-700 hover:to-ocean-800 rounded-xl shadow-sm transition">
-            <i class="fa-solid fa-plus"></i>
+          <!-- Add Expense Button -->
+          <button onclick="openModal('addExpenseModal')" class="flex items-center gap-2 px-3.5 sm:px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-brand-600 to-ocean-600 hover:from-brand-700 hover:to-ocean-700 rounded-xl shadow-md shadow-brand-600/20 active:scale-95 transition">
+            <i data-lucide="plus" class="w-4 h-4"></i>
             <span class="hidden sm:inline">Add Expense</span>
           </button>
         </div>
       </div>
 
-      <!-- Navigation Tabs Bar -->
-      <nav class="flex space-x-2 sm:space-x-4 border-t border-slate-100 overflow-x-auto no-scrollbar py-2.5 text-sm font-semibold">
-        <button onclick="switchTab('overview')" id="tab-btn-overview" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-ocean-700 bg-ocean-50 border border-ocean-200/60 font-bold whitespace-nowrap transition">
-          <i class="fa-solid fa-chart-pie text-sm"></i>
-          <span>Overview & Budget</span>
+      <!-- Navigation Tabs -->
+      <nav class="flex space-x-2 border-t border-slate-200/60 overflow-x-auto no-scrollbar py-2.5 text-sm font-semibold">
+        <button onclick="switchTab('overview')" id="tab-nav-overview" class="tab-btn active-tab flex items-center gap-2 px-4 py-2 rounded-xl text-brand-700 bg-brand-50 border border-brand-200/80 font-bold whitespace-nowrap transition">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+          <span>Overview & Analytics</span>
         </button>
-        <button onclick="switchTab('itinerary')" id="tab-btn-itinerary" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 whitespace-nowrap transition">
-          <i class="fa-regular fa-calendar-days text-sm"></i>
+        <button onclick="switchTab('itinerary')" id="tab-nav-itinerary" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 whitespace-nowrap transition">
+          <i data-lucide="calendar-days" class="w-4 h-4"></i>
           <span>Day-by-Day Itinerary</span>
         </button>
-        <button onclick="switchTab('bookings')" id="tab-btn-bookings" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 whitespace-nowrap transition">
-          <i class="fa-solid fa-receipt text-sm"></i>
-          <span>Bookings & Expenses</span>
+        <button onclick="switchTab('ledger')" id="tab-nav-ledger" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 whitespace-nowrap transition">
+          <i data-lucide="receipt" class="w-4 h-4"></i>
+          <span>Expense Ledger</span>
         </button>
-        <button onclick="switchTab('converter')" id="tab-btn-converter" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 whitespace-nowrap transition">
-          <i class="fa-solid fa-calculator text-sm"></i>
+        <button onclick="switchTab('converter')" id="tab-nav-converter" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 whitespace-nowrap transition">
+          <i data-lucide="calculator" class="w-4 h-4"></i>
           <span>Currency Converter</span>
         </button>
-        <button onclick="switchTab('tips')" id="tab-btn-tips" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 whitespace-nowrap transition">
-          <i class="fa-solid fa-compass text-sm"></i>
-          <span>Travel Guide & Tips</span>
+        <button onclick="switchTab('checklist')" id="tab-nav-checklist" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 whitespace-nowrap transition">
+          <i data-lucide="check-square" class="w-4 h-4"></i>
+          <span>Travel Guide & Notes</span>
         </button>
       </nav>
     </div>
   </header>
 
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
-    <!-- Notification pill -->
-    <div class="flex flex-col md:flex-row items-start md:items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-ocean-800 via-ocean-900 to-slate-900 text-white shadow-md gap-4">
-      <div class="flex items-center gap-3.5">
-        <div class="w-10 h-10 rounded-xl bg-amber-400/20 text-amber-300 flex items-center justify-center shrink-0 border border-amber-400/30">
-          <i class="fa-solid fa-island-tropical text-lg"></i>
-        </div>
+    <!-- Trip Banner / Quick Route Strip -->
+    <div class="relative overflow-hidden bg-gradient-to-r from-slate-900 via-brand-950 to-ocean-950 text-white rounded-3xl p-5 sm:p-6 shadow-xl border border-slate-800">
+      <div class="absolute -right-12 -bottom-12 w-64 h-64 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      
+      <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative z-10">
         <div>
-          <h2 class="text-sm font-bold tracking-tight flex items-center gap-2">
-            Sri Lanka Holiday Itinerary & Budget Ready
-            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 font-semibold">Confirmed Notes</span>
+          <div class="flex flex-wrap items-center gap-2 mb-2">
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30 flex items-center gap-1">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> 8 Days &bull; 7 Nights Island Getaway
+            </span>
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-white/10 text-slate-300 border border-white/10">
+              South Coast Surfing + Colombo City
+            </span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-extrabold font-display tracking-tight text-white">
+            Amritsar ➔ Delhi ➔ Colombo ➔ Ahangama / South Coast ➔ Colombo ➔ Amritsar
           </h2>
-          <p class="text-xs text-slate-300 mt-0.5">8 Days & 7 Nights &bull; Amritsar - Delhi - Colombo - Ahangama / South Coast - Colombo - Delhi - Amritsar</p>
+          <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-3xl">
+            Featuring 4 nights at <strong class="text-brand-300 font-semibold">Ocean Bliss (Boho Arch Surf View Suite)</strong>, 2 nights at <strong class="text-ocean-300 font-semibold">Granbell Hotel Colombo</strong>, and 1 night colonial stopover at <strong class="text-amber-300 font-semibold">Grand Orient Hotel</strong>.
+          </p>
         </div>
-      </div>
-      <div class="flex items-center gap-3 text-xs">
-        <div class="bg-white/10 px-3 py-1.5 rounded-xl border border-white/15">
-          <span class="text-slate-400">Card Due (ICICI):</span>
-          <span class="font-bold text-amber-300 ml-1" id="banner-cc-due">₹94,982</span>
-        </div>
-        <div class="bg-white/10 px-3 py-1.5 rounded-xl border border-white/15">
-          <span class="text-slate-400">Total Est:</span>
-          <span class="font-bold text-emerald-300 ml-1" id="banner-total-est">₹2,33,448</span>
+
+        <!-- Quick Summary Cards inside Hero -->
+        <div class="flex flex-wrap sm:flex-nowrap gap-3 shrink-0">
+          <div class="bg-white/10 backdrop-blur-md rounded-2xl p-3 sm:p-4 border border-white/15 min-w-[140px]">
+            <span class="text-[11px] text-slate-400 font-medium block">Pre-Booked (Flights+Hotels)</span>
+            <span class="text-lg sm:text-xl font-black text-white" id="hero-booked-val">₹1,69,948</span>
+            <span class="text-[10px] text-emerald-400 block mt-0.5 font-bold">100% Booked</span>
+          </div>
+          <div class="bg-white/10 backdrop-blur-md rounded-2xl p-3 sm:p-4 border border-white/15 min-w-[140px]">
+            <span class="text-[11px] text-slate-400 font-medium block">On-Trip Local & Cafes</span>
+            <span class="text-lg sm:text-xl font-black text-amber-300" id="hero-local-val">₹63,500</span>
+            <span class="text-[10px] text-amber-300/80 block mt-0.5 font-medium">To be paid (Cash/Forex)</span>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- TAB 1: OVERVIEW & BUDGET BREAKDOWN -->
+    <!-- ========================================== -->
+    <!-- TAB 1: OVERVIEW & ANALYTICS                -->
+    <!-- ========================================== -->
     <div id="tab-overview" class="space-y-6">
 
-      <!-- KPI Metrics Cards -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <!-- Grand Total Budget Card -->
-        <div class="glass-card p-5 rounded-2xl shadow-xs border border-slate-200">
-          <div class="flex justify-between items-start">
-            <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Trip Total Estimated</span>
-            <div class="w-8 h-8 rounded-lg bg-ocean-50 text-ocean-600 flex items-center justify-center">
-              <i class="fa-solid fa-wallet text-sm"></i>
+      <!-- 6 Key Performance Metric Cards -->
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5 sm:gap-4">
+        
+        <!-- Metric 1: Grand Total -->
+        <div class="bg-white p-4 rounded-2xl border border-slate-200/80 card-shadow card-hover">
+          <div class="flex items-center justify-between text-slate-400 mb-1.5">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Trip Budget</span>
+            <div class="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+              <i data-lucide="wallet" class="w-4 h-4"></i>
             </div>
           </div>
-          <div class="mt-2">
-            <h3 class="text-2xl font-extrabold text-slate-900" id="kpi-grand-total">₹2,33,448</h3>
-            <p class="text-xs text-slate-500 mt-1 flex items-center gap-1">
-              <span class="text-emerald-600 font-semibold flex items-center"><i class="fa-solid fa-check-circle mr-1"></i>100% Calculated</span>
-              <span>from all items</span>
-            </p>
-          </div>
+          <h3 class="text-xl font-black text-slate-900" id="kpi-grand-total">₹2,33,448</h3>
+          <p class="text-[11px] text-emerald-600 font-semibold mt-1">Full Estimate</p>
         </div>
 
-        <!-- Flights Booked -->
-        <div class="glass-card p-5 rounded-2xl shadow-xs border border-slate-200">
-          <div class="flex justify-between items-start">
-            <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Flights (3 Sectors)</span>
-            <div class="w-8 h-8 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center">
-              <i class="fa-solid fa-plane text-sm"></i>
+        <!-- Metric 2: Flights Total -->
+        <div class="bg-white p-4 rounded-2xl border border-slate-200/80 card-shadow card-hover">
+          <div class="flex items-center justify-between text-slate-400 mb-1.5">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Flights</span>
+            <div class="w-7 h-7 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center">
+              <i data-lucide="plane" class="w-4 h-4"></i>
             </div>
           </div>
-          <div class="mt-2">
-            <h3 class="text-2xl font-extrabold text-slate-900" id="kpi-flights-total">₹94,982</h3>
-            <p class="text-xs text-slate-500 mt-1">Paid on ICICI Amazon CC</p>
-          </div>
+          <h3 class="text-xl font-black text-slate-900" id="kpi-flights">₹94,982</h3>
+          <p class="text-[11px] text-sky-600 font-semibold mt-1">3 Sectors Booked</p>
         </div>
 
-        <!-- Hotels Booked -->
-        <div class="glass-card p-5 rounded-2xl shadow-xs border border-slate-200">
-          <div class="flex justify-between items-start">
-            <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Hotels (7 Nights)</span>
-            <div class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
-              <i class="fa-solid fa-hotel text-sm"></i>
+        <!-- Metric 3: Hotels Total -->
+        <div class="bg-white p-4 rounded-2xl border border-slate-200/80 card-shadow card-hover">
+          <div class="flex items-center justify-between text-slate-400 mb-1.5">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Hotels</span>
+            <div class="w-7 h-7 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
+              <i data-lucide="hotel" class="w-4 h-4"></i>
             </div>
           </div>
-          <div class="mt-2">
-            <h3 class="text-2xl font-extrabold text-slate-900" id="kpi-hotels-total">₹74,966</h3>
-            <p class="text-xs text-slate-500 mt-1">3 Unique Stays Booked</p>
-          </div>
+          <h3 class="text-xl font-black text-slate-900" id="kpi-hotels">₹74,966</h3>
+          <p class="text-[11px] text-amber-600 font-semibold mt-1">7 Nights (3 Stays)</p>
         </div>
 
-        <!-- Local & Food (To Pay) -->
-        <div class="glass-card p-5 rounded-2xl shadow-xs border border-slate-200">
-          <div class="flex justify-between items-start">
-            <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Local Cabs & Cafes</span>
-            <div class="w-8 h-8 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center">
-              <i class="fa-solid fa-utensils text-sm"></i>
+        <!-- Metric 4: ICICI CC Balance Due -->
+        <div class="bg-white p-4 rounded-2xl border border-slate-200/80 card-shadow card-hover">
+          <div class="flex items-center justify-between text-slate-400 mb-1.5">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">ICICI Card</span>
+            <div class="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+              <i data-lucide="credit-card" class="w-4 h-4"></i>
             </div>
           </div>
-          <div class="mt-2">
-            <h3 class="text-2xl font-extrabold text-slate-900" id="kpi-local-total">₹63,500</h3>
-            <p class="text-xs text-amber-600 font-semibold mt-1 flex items-center gap-1">
-              <i class="fa-solid fa-clock"></i> To be spent in Sri Lanka
-            </p>
-          </div>
+          <h3 class="text-xl font-black text-slate-900" id="kpi-icici">₹94,982</h3>
+          <p class="text-[11px] text-blue-600 font-semibold mt-1">Statement Due</p>
         </div>
+
+        <!-- Metric 5: Local Cabs -->
+        <div class="bg-white p-4 rounded-2xl border border-slate-200/80 card-shadow card-hover">
+          <div class="flex items-center justify-between text-slate-400 mb-1.5">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Local Cabs</span>
+            <div class="w-7 h-7 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center">
+              <i data-lucide="car" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <h3 class="text-xl font-black text-slate-900" id="kpi-cabs">₹13,500</h3>
+          <p class="text-[11px] text-purple-600 font-semibold mt-1">4 Cab Legs</p>
+        </div>
+
+        <!-- Metric 6: Food & Exploration -->
+        <div class="bg-white p-4 rounded-2xl border border-slate-200/80 card-shadow card-hover">
+          <div class="flex items-center justify-between text-slate-400 mb-1.5">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Cafes & Beach</span>
+            <div class="w-7 h-7 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center">
+              <i data-lucide="coffee" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <h3 class="text-xl font-black text-slate-900" id="kpi-cafes">₹50,000</h3>
+          <p class="text-[11px] text-rose-600 font-semibold mt-1">Dining & Surf Fund</p>
+        </div>
+
       </div>
 
-      <!-- Charts & Breakdown Section -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Visual Category Distribution -->
-        <div class="glass-card p-6 rounded-2xl border border-slate-200 shadow-xs lg:col-span-1 flex flex-col justify-between">
+        
+        <!-- Chart.js Doughnut: Category Distribution -->
+        <div class="bg-white p-6 rounded-3xl border border-slate-200/80 card-shadow flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between mb-4">
-              <h3 class="text-base font-bold text-slate-900">Budget Distribution</h3>
-              <span class="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded-md font-medium">Categories</span>
+              <div>
+                <h3 class="text-base font-bold text-slate-900">Expense Distribution</h3>
+                <p class="text-xs text-slate-500">By category of expenditure</p>
+              </div>
+              <span class="text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full font-bold">Ratio</span>
             </div>
-            <div class="relative w-48 h-48 mx-auto my-2">
-              <canvas id="budgetDoughnutChart"></canvas>
+            
+            <div class="relative w-48 h-48 mx-auto my-3">
+              <canvas id="categoryDonutChart"></canvas>
             </div>
           </div>
+
           <div class="grid grid-cols-3 gap-2 text-center pt-4 border-t border-slate-100">
             <div>
-              <p class="text-[11px] text-slate-500 font-medium">Flights</p>
-              <p class="text-sm font-bold text-sky-600" id="chart-pct-flight">40.7%</p>
+              <p class="text-[11px] text-slate-400 font-semibold uppercase">Flights</p>
+              <p class="text-sm font-black text-sky-600" id="pct-flights">40.7%</p>
             </div>
             <div>
-              <p class="text-[11px] text-slate-500 font-medium">Hotels</p>
-              <p class="text-sm font-bold text-amber-500" id="chart-pct-hotel">32.1%</p>
+              <p class="text-[11px] text-slate-400 font-semibold uppercase">Hotels</p>
+              <p class="text-sm font-black text-amber-500" id="pct-hotels">32.1%</p>
             </div>
             <div>
-              <p class="text-[11px] text-slate-500 font-medium">Local/Cafes</p>
-              <p class="text-sm font-bold text-teal-600" id="chart-pct-local">27.2%</p>
+              <p class="text-[11px] text-slate-400 font-semibold uppercase">Local/Food</p>
+              <p class="text-sm font-black text-emerald-600" id="pct-local">27.2%</p>
             </div>
           </div>
         </div>
 
-        <!-- Payment Mode Breakdown & Status -->
-        <div class="glass-card p-6 rounded-2xl border border-slate-200 shadow-xs lg:col-span-2 flex flex-col justify-between">
+        <!-- Payment Channel Distribution & Cash Plan -->
+        <div class="bg-white p-6 rounded-3xl border border-slate-200/80 card-shadow lg:col-span-2 flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between mb-4">
-              <h3 class="text-base font-bold text-slate-900">Payment Modes & Financial Readiness</h3>
-              <span class="text-xs px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 font-semibold border border-blue-200">ICICI + UPI + Cash</span>
+              <div>
+                <h3 class="text-base font-bold text-slate-900">Payment Channel Breakdown</h3>
+                <p class="text-xs text-slate-500">ICICI Amazon CC &bull; UPI &bull; Local Cash / Forex</p>
+              </div>
+              <span class="text-xs px-3 py-1 rounded-full font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                Balanced Budget
+              </span>
             </div>
 
             <div class="space-y-4">
-              <!-- ICICI Credit Card -->
-              <div>
-                <div class="flex justify-between items-center text-sm mb-1.5">
+              <!-- Channel 1: ICICI CC -->
+              <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/60">
+                <div class="flex justify-between items-center text-xs mb-1.5">
                   <div class="flex items-center gap-2">
-                    <span class="w-3 h-3 rounded-full bg-blue-600"></span>
-                    <span class="font-bold text-slate-800">ICICI Credit Card (Amazon)</span>
-                    <span class="text-xs text-slate-400">&bull; Flights (Full)</span>
+                    <span class="w-3 h-3 rounded-full bg-blue-600 ring-2 ring-blue-200"></span>
+                    <span class="font-bold text-slate-800 text-sm">ICICI Credit Card (Amazon CC)</span>
+                    <span class="text-[11px] text-slate-500">&bull; Flights (3 sectors)</span>
                   </div>
-                  <span class="font-extrabold text-slate-900" id="val-icici">₹94,982</span>
+                  <span class="text-sm font-black text-slate-900" id="pay-icici">₹94,982</span>
                 </div>
-                <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
-                  <div class="bg-blue-600 h-2.5 rounded-full" style="width: 40.7%"></div>
+                <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                  <div class="bg-blue-600 h-2 rounded-full" style="width: 40.7%"></div>
                 </div>
-                <p class="text-[11px] text-slate-500 mt-1">To pay towards credit card statement before due date</p>
+                <div class="flex justify-between items-center mt-1 text-[11px] text-slate-500">
+                  <span>To pay on credit card due date</span>
+                  <span class="font-semibold text-blue-700">40.7% of total</span>
+                </div>
               </div>
 
-              <!-- Hotels (Booked/UPI/Direct) -->
-              <div>
-                <div class="flex justify-between items-center text-sm mb-1.5">
+              <!-- Channel 2: Hotel Advance / UPI -->
+              <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/60">
+                <div class="flex justify-between items-center text-xs mb-1.5">
                   <div class="flex items-center gap-2">
-                    <span class="w-3 h-3 rounded-full bg-amber-500"></span>
-                    <span class="font-bold text-slate-800">Hotels (UPI & Advance)</span>
-                    <span class="text-xs text-slate-400">&bull; Grand Orient, Ocean Bliss, Granbell</span>
+                    <span class="w-3 h-3 rounded-full bg-amber-500 ring-2 ring-amber-200"></span>
+                    <span class="font-bold text-slate-800 text-sm">Hotels (UPI + Booking Advance)</span>
+                    <span class="text-[11px] text-slate-500">&bull; 3 Stays Booked</span>
                   </div>
-                  <span class="font-extrabold text-slate-900" id="val-hotels-bar">₹74,966</span>
+                  <span class="text-sm font-black text-slate-900" id="pay-hotels">₹74,966</span>
                 </div>
-                <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
-                  <div class="bg-amber-500 h-2.5 rounded-full" style="width: 32.1%"></div>
+                <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                  <div class="bg-amber-500 h-2 rounded-full" style="width: 32.1%"></div>
                 </div>
-                <p class="text-[11px] text-slate-500 mt-1">Includes ₹5,130 Grand Orient paid via UPI</p>
+                <div class="flex justify-between items-center mt-1 text-[11px] text-slate-500">
+                  <span>Grand Orient (₹5,130 UPI) + Ocean Bliss (₹53,411) + Granbell (₹16,425)</span>
+                  <span class="font-semibold text-amber-700">32.1% of total</span>
+                </div>
               </div>
 
-              <!-- Local Cabs & Cafes (To be paid in cash / forex card) -->
-              <div>
-                <div class="flex justify-between items-center text-sm mb-1.5">
+              <!-- Channel 3: Local Cabs & Cafes -->
+              <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/60">
+                <div class="flex justify-between items-center text-xs mb-1.5">
                   <div class="flex items-center gap-2">
-                    <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
-                    <span class="font-bold text-slate-800">Local Sri Lanka Spending (To be paid)</span>
-                    <span class="text-xs text-slate-400">&bull; Cabs (₹13,500) + Beach/Cafes (₹50,000)</span>
+                    <span class="w-3 h-3 rounded-full bg-emerald-500 ring-2 ring-emerald-200"></span>
+                    <span class="font-bold text-slate-800 text-sm">Local Spending (Cash / Forex Card)</span>
+                    <span class="text-[11px] text-slate-500">&bull; Cabs + Cafes + Beach</span>
                   </div>
-                  <span class="font-extrabold text-slate-900" id="val-local-bar">₹63,500</span>
+                  <span class="text-sm font-black text-slate-900" id="pay-local">₹63,500</span>
                 </div>
-                <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
-                  <div class="bg-emerald-500 h-2.5 rounded-full" style="width: 27.2%"></div>
+                <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                  <div class="bg-emerald-500 h-2 rounded-full" style="width: 27.2%"></div>
                 </div>
-                <p class="text-[11px] text-slate-500 mt-1">Carry via Forex Card (Zero forex markup) + LKR Cash for TukTuks & Cabs</p>
+                <div class="flex justify-between items-center mt-1 text-[11px] text-slate-500">
+                  <span>Withdraw LKR at Airport ATM or swipe zero-forex card</span>
+                  <span class="font-semibold text-emerald-700">27.2% of total</span>
+                </div>
               </div>
             </div>
           </div>
 
-          <div class="mt-4 pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between text-xs text-slate-600 gap-2">
-            <div>
-              <span class="font-bold text-slate-800">Pre-booked:</span>
-              <span class="text-ocean-700 font-extrabold" id="val-prebooked">₹1,69,948</span>
-              <span class="text-slate-400">(Flights + Hotels)</span>
+          <!-- Bottom Summary Badge -->
+          <div class="pt-4 mt-2 border-t border-slate-100 flex flex-wrap items-center justify-between text-xs text-slate-600 gap-2">
+            <span class="flex items-center gap-1.5 font-medium text-slate-700">
+              <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i>
+              Pre-booked & Locked: <strong class="text-slate-900 font-bold" id="badge-prebooked">₹1,69,948</strong>
+            </span>
+            <span class="text-slate-500">
+              Remaining to disburse during travel: <strong class="text-amber-600 font-bold" id="badge-remain">₹63,500</strong>
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Quick Flight Segment Timeline Cards -->
+      <div class="bg-white p-6 rounded-3xl border border-slate-200/80 card-shadow">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold">
+              <i data-lucide="plane-takeoff" class="w-4 h-4"></i>
             </div>
             <div>
-              <span class="font-bold text-slate-800">On-trip Expenses:</span>
-              <span class="text-sunset-500 font-extrabold" id="val-ontrip">₹63,500</span>
+              <h3 class="text-base font-bold text-slate-900">Flight Route Corridor Tracker</h3>
+              <p class="text-xs text-slate-500">3 flight connections totaling ₹94,982</p>
+            </div>
+          </div>
+          <span class="text-xs font-semibold px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+            ICICI Amazon CC
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Sector 1 -->
+          <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-200/80 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-sky-100 text-sky-800">Leg 1 &bull; 21st Nov '26</span>
+              <span class="text-xs font-extrabold text-slate-900" data-inr="11298">₹11,298</span>
+            </div>
+            <div class="flex items-center justify-between pt-1">
+              <div>
+                <p class="text-lg font-black text-slate-800">ATQ</p>
+                <p class="text-xs text-slate-500 font-medium">Amritsar &bull; 08:50</p>
+              </div>
+              <div class="flex flex-col items-center px-3">
+                <span class="text-[10px] text-slate-400 font-semibold">1h 15m</span>
+                <i data-lucide="arrow-right" class="w-4 h-4 text-sky-500 my-0.5"></i>
+                <span class="text-[10px] font-bold text-sky-700">IndiGo</span>
+              </div>
+              <div class="text-right">
+                <p class="text-lg font-black text-slate-800">DEL</p>
+                <p class="text-xs text-slate-500 font-medium">Delhi &bull; 10:05</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sector 2 -->
+          <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-200/80 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-brand-100 text-brand-800">Leg 2 &bull; Return Set</span>
+              <span class="text-xs font-extrabold text-slate-900" data-inr="72464">₹72,464</span>
+            </div>
+            <div class="flex items-center justify-between pt-1">
+              <div>
+                <p class="text-lg font-black text-slate-800">DEL</p>
+                <p class="text-xs text-slate-500 font-medium">Delhi (21 Nov)</p>
+              </div>
+              <div class="flex flex-col items-center px-3">
+                <span class="text-[10px] text-slate-400 font-semibold">Round-Trip</span>
+                <i data-lucide="repeat" class="w-4 h-4 text-brand-600 my-0.5"></i>
+                <span class="text-[10px] font-bold text-brand-700">IndiGo (CMB 23:00)</span>
+              </div>
+              <div class="text-right">
+                <p class="text-lg font-black text-slate-800">CMB</p>
+                <p class="text-xs text-slate-500 font-medium">Colombo Airport</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sector 3 -->
+          <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-200/80 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-red-100 text-red-800">Leg 3 &bull; 28th Nov '26</span>
+              <span class="text-xs font-extrabold text-slate-900" data-inr="11220">₹11,220</span>
+            </div>
+            <div class="flex items-center justify-between pt-1">
+              <div>
+                <p class="text-lg font-black text-slate-800">DEL</p>
+                <p class="text-xs text-slate-500 font-medium">Delhi &bull; 04:45 AM</p>
+              </div>
+              <div class="flex flex-col items-center px-3">
+                <span class="text-[10px] text-slate-400 font-semibold">1h 15m</span>
+                <i data-lucide="arrow-right" class="w-4 h-4 text-red-500 my-0.5"></i>
+                <span class="text-[10px] font-bold text-red-700">Air India</span>
+              </div>
+              <div class="text-right">
+                <p class="text-lg font-black text-slate-800">ATQ</p>
+                <p class="text-xs text-slate-500 font-medium">Amritsar &bull; 06:00 AM</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Quick Itinerary Route Flow Ribbon -->
-      <div class="glass-card p-5 rounded-2xl border border-slate-200 shadow-xs">
-        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Travel Geography & Corridor</h3>
-        <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-center">
-          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
-            <span class="text-[10px] font-bold text-sky-600 uppercase">21 Nov &bull; Leg 1</span>
-            <p class="text-sm font-bold text-slate-800 mt-0.5">Amritsar ✈ Delhi</p>
-            <p class="text-xs text-slate-500">Indigo 8:50 - 10:05</p>
-          </div>
-          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
-            <span class="text-[10px] font-bold text-ocean-600 uppercase">21 Nov &bull; Leg 2</span>
-            <p class="text-sm font-bold text-slate-800 mt-0.5">Delhi ✈ Colombo</p>
-            <p class="text-xs text-slate-500">CMB Airport Arrival</p>
-          </div>
-          <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-200">
-            <span class="text-[10px] font-bold text-amber-700 uppercase">22 - 26 Nov &bull; 4 Nights</span>
-            <p class="text-sm font-bold text-amber-900 mt-0.5">Ocean Bliss Beach</p>
-            <p class="text-xs text-amber-700">Ahangama Surf View Hot Tub</p>
-          </div>
-          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
-            <span class="text-[10px] font-bold text-ocean-600 uppercase">26 - 28 Nov &bull; 2 Nights</span>
-            <p class="text-sm font-bold text-slate-800 mt-0.5">Granbell Hotel</p>
-            <p class="text-xs text-slate-500">Colombo City & Ocean Front</p>
-          </div>
-          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 col-span-2 md:col-span-1">
-            <span class="text-[10px] font-bold text-rose-600 uppercase">28 Nov &bull; Return</span>
-            <p class="text-sm font-bold text-slate-800 mt-0.5">Colombo ✈ Amritsar</p>
-            <p class="text-xs text-slate-500">Via Delhi (Air India 4:45 AM)</p>
-          </div>
-        </div>
-      </div>
     </div>
 
-    <!-- TAB 2: DETAILED DAY-BY-DAY ITINERARY -->
+    <!-- ========================================== -->
+    <!-- TAB 2: DAY-BY-DAY ITINERARY TIMELINE      -->
+    <!-- ========================================== -->
     <div id="tab-itinerary" class="hidden space-y-6">
-      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      
+      <!-- Itinerary header -->
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-3xl border border-slate-200/80 card-shadow">
         <div>
-          <h2 class="text-lg font-extrabold text-slate-900">Day-by-Day Trip Itinerary</h2>
-          <p class="text-xs text-slate-500">Complete chronological timeline with flight schedules, hotel transitions, and local activities</p>
+          <h2 class="text-lg font-extrabold text-slate-900 font-display">Chronological Trip Itinerary</h2>
+          <p class="text-xs text-slate-500">Every leg mapped from your handwritten notes & flight schedules</p>
         </div>
         <div class="flex items-center gap-2">
-          <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
-            <i class="fa-solid fa-calendar-check mr-1"></i>21st Nov – 28th Nov 2026
+          <span class="px-3 py-1 rounded-full text-xs font-bold bg-brand-50 text-brand-700 border border-brand-200">
+            <i data-lucide="sun" class="w-3.5 h-3.5 inline mr-1"></i> 8 Days Island Circuit
           </span>
         </div>
       </div>
 
-      <!-- Chronological Timeline -->
-      <div class="relative border-l-2 border-ocean-200 ml-4 md:ml-6 pl-6 md:pl-8 space-y-8">
-        
+      <div class="relative border-l-2 border-brand-200 ml-4 md:ml-8 pl-6 md:pl-8 space-y-8">
+
         <!-- Day 1: 21st Nov -->
         <div class="relative group">
-          <div class="absolute -left-[35px] md:-left-[43px] top-0 w-8 h-8 rounded-full bg-ocean-600 text-white flex items-center justify-center font-bold text-xs ring-4 ring-white shadow">
+          <div class="absolute -left-[35px] md:-left-[43px] top-0 w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center font-black text-xs ring-4 ring-white shadow-md">
             21
           </div>
-          <div class="glass-card p-5 rounded-2xl border border-slate-200 space-y-4">
+          
+          <div class="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/80 card-shadow space-y-4">
             <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
               <div>
-                <span class="text-xs font-extrabold uppercase tracking-wide text-ocean-600">Day 1 &bull; 21st November 2026 (Saturday)</span>
-                <h4 class="text-base font-bold text-slate-900">Departure from Amritsar & Arrival in Colombo</h4>
+                <span class="text-xs font-extrabold uppercase tracking-wide text-brand-600">Day 1 &bull; 21st November 2026 (Saturday)</span>
+                <h3 class="text-base font-bold text-slate-900">Departure Amritsar & Colombo Arrival</h3>
               </div>
-              <span class="px-3 py-1 rounded-full text-xs font-semibold bg-sky-50 text-sky-700 border border-sky-200">2 Flights + Cab Transfer</span>
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-sky-50 text-sky-700 font-semibold border border-sky-200">
+                Transit Day &bull; 2 Flights + Cab
+              </span>
             </div>
 
-            <!-- Leg 1 -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-50 rounded-xl border border-slate-200/80 gap-3">
+            <!-- Leg 1 IndiGo Amritsar -> Delhi -->
+            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
               <div class="flex items-start gap-3">
-                <div class="w-8 h-8 rounded-lg bg-sky-100 text-sky-700 flex items-center justify-center shrink-0 mt-0.5">
-                  <i class="fa-solid fa-plane-departure text-sm"></i>
+                <div class="w-8 h-8 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center shrink-0">
+                  <i data-lucide="plane-departure" class="w-4 h-4"></i>
                 </div>
                 <div>
                   <div class="flex items-center gap-2">
-                    <span class="font-bold text-sm text-slate-900">Amritsar (ATQ) ➔ Delhi (DEL)</span>
-                    <span class="text-[10px] px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-bold">IndiGo</span>
+                    <h4 class="font-bold text-slate-800 text-sm">Amritsar (ATQ) ➔ Delhi (DEL)</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-100 text-sky-800">IndiGo</span>
                   </div>
-                  <p class="text-xs text-slate-500 mt-0.5">Time: <strong class="text-slate-800">08:50 AM – 10:05 AM</strong> (1h 15m duration)</p>
+                  <p class="text-xs text-slate-500 mt-0.5">Time: <strong class="text-slate-800">08:50 – 10:05</strong> (ICICI Amazon Credit Card)</p>
                 </div>
               </div>
               <div class="sm:text-right">
-                <span class="text-xs font-bold text-slate-900" data-cost-inr="11298">₹11,298</span>
-                <p class="text-[10px] text-slate-400">Paid: ICICI Card (Amazon)</p>
+                <span class="text-sm font-black text-slate-900" data-inr="11298">₹11,298</span>
+                <span class="block text-[10px] font-medium text-emerald-600">Paid</span>
               </div>
             </div>
 
-            <!-- Leg 2 -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-50 rounded-xl border border-slate-200/80 gap-3">
+            <!-- Leg 2 IndiGo Delhi -> Colombo -->
+            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
               <div class="flex items-start gap-3">
-                <div class="w-8 h-8 rounded-lg bg-sky-100 text-sky-700 flex items-center justify-center shrink-0 mt-0.5">
-                  <i class="fa-solid fa-plane-arrival text-sm"></i>
+                <div class="w-8 h-8 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center shrink-0">
+                  <i data-lucide="globe" class="w-4 h-4"></i>
                 </div>
                 <div>
                   <div class="flex items-center gap-2">
-                    <span class="font-bold text-sm text-slate-900">Delhi (DEL) ➔ Colombo (Bandaranaike - CMB)</span>
-                    <span class="text-[10px] px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-bold">IndiGo</span>
+                    <h4 class="font-bold text-slate-800 text-sm">Delhi (DEL) ➔ Colombo Bandaranaike (CMB)</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-100 text-sky-800">IndiGo</span>
                   </div>
-                  <p class="text-xs text-slate-500 mt-0.5">International connecting sector &bull; Touchdown in Sri Lanka</p>
+                  <p class="text-xs text-slate-500 mt-0.5">International connecting sector into Sri Lanka</p>
                 </div>
               </div>
               <div class="sm:text-right">
-                <span class="text-xs font-bold text-slate-900">Return Inclusive</span>
-                <p class="text-[10px] text-slate-400">Part of ₹72,464 Indigo booking</p>
+                <span class="text-xs font-bold text-slate-700">Part of Return Booking</span>
+                <span class="block text-[10px] font-medium text-slate-400">₹72,464 overall</span>
               </div>
             </div>
 
-            <!-- Transfer to Grand Orient -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-amber-50/50 rounded-xl border border-amber-200/80 gap-3">
+            <!-- Cab: Airport to Grand Orient -->
+            <div class="p-3.5 rounded-2xl bg-purple-50/60 border border-purple-200/70 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
               <div class="flex items-start gap-3">
-                <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center shrink-0 mt-0.5">
-                  <i class="fa-solid fa-taxi text-sm"></i>
+                <div class="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center shrink-0">
+                  <i data-lucide="car" class="w-4 h-4"></i>
                 </div>
                 <div>
                   <div class="flex items-center gap-2">
-                    <span class="font-bold text-sm text-slate-900">Cab Transfer: CMB Airport ➔ Grand Orient Hotel</span>
-                    <span class="text-[10px] px-2 py-0.5 rounded bg-amber-200 text-amber-900 font-bold">To Pay</span>
+                    <h4 class="font-bold text-slate-800 text-sm">Cab: Airport ➔ Grand Orient Hotel Colombo</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-200 text-purple-900">To Pay</span>
                   </div>
-                  <p class="text-xs text-slate-500 mt-0.5">Airport drop to historic Colombo Fort area</p>
+                  <p class="text-xs text-slate-500 mt-0.5">Direct expressway transfer to historic Colombo Fort harbor district</p>
                 </div>
               </div>
               <div class="sm:text-right">
-                <span class="text-xs font-bold text-amber-900" data-cost-inr="1200">₹1,200</span>
-                <p class="text-[10px] text-slate-400">Estimated Cab Fare</p>
+                <span class="text-sm font-black text-purple-900" data-inr="1200">₹1,200</span>
+                <span class="block text-[10px] font-medium text-purple-700">Local Cab</span>
               </div>
             </div>
 
-            <!-- Night 1 Stay -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-emerald-50/50 rounded-xl border border-emerald-200/80 gap-3">
+            <!-- Night 1 Stay: Grand Orient Hotel -->
+            <div class="p-3.5 rounded-2xl bg-amber-50/60 border border-amber-200/70 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
               <div class="flex items-start gap-3">
-                <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 mt-0.5">
-                  <i class="fa-solid fa-hotel text-sm"></i>
+                <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+                  <i data-lucide="bed" class="w-4 h-4"></i>
                 </div>
                 <div>
                   <div class="flex items-center gap-2">
-                    <span class="font-bold text-sm text-slate-900">Grand Orient Hotel, Colombo (1 Night)</span>
-                    <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-200 text-emerald-900 font-bold">Paid via UPI</span>
+                    <h4 class="font-bold text-slate-800 text-sm">Grand Orient Hotel Colombo (1 Night)</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-200 text-amber-900">Paid via UPI</span>
                   </div>
-                  <p class="text-xs text-slate-500 mt-0.5">Check-in 21st Nov &bull; Colonial architecture overlooking Colombo port</p>
+                  <p class="text-xs text-slate-500 mt-0.5">Check-in: 21st Nov &bull; Check-out: 22nd Nov. Historic heritage vibe near port.</p>
                 </div>
               </div>
               <div class="sm:text-right">
-                <span class="text-xs font-bold text-emerald-900" data-cost-inr="5130">₹5,130</span>
-                <p class="text-[10px] text-slate-400">1 Night Total</p>
+                <span class="text-sm font-black text-amber-900" data-inr="5130">₹5,130</span>
+                <span class="block text-[10px] font-medium text-emerald-600">UPI Paid</span>
               </div>
             </div>
           </div>
@@ -499,53 +619,61 @@
 
         <!-- Day 2: 22nd Nov -->
         <div class="relative group">
-          <div class="absolute -left-[35px] md:-left-[43px] top-0 w-8 h-8 rounded-full bg-ocean-600 text-white flex items-center justify-center font-bold text-xs ring-4 ring-white shadow">
+          <div class="absolute -left-[35px] md:-left-[43px] top-0 w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center font-black text-xs ring-4 ring-white shadow-md">
             22
           </div>
-          <div class="glass-card p-5 rounded-2xl border border-slate-200 space-y-4">
+          
+          <div class="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/80 card-shadow space-y-4">
             <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
               <div>
-                <span class="text-xs font-extrabold uppercase tracking-wide text-ocean-600">Day 2 &bull; 22nd November 2026 (Sunday)</span>
-                <h4 class="text-base font-bold text-slate-900">Scenic Coastal Transfer to South Coast (Ahangama / Weligama)</h4>
+                <span class="text-xs font-extrabold uppercase tracking-wide text-brand-600">Day 2 &bull; 22nd November 2026 (Sunday)</span>
+                <h3 class="text-base font-bold text-slate-900">Southern Expressway Drive & Check-in at Ocean Bliss</h3>
               </div>
-              <span class="px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">Expressway Cab + Check-in</span>
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 font-semibold border border-amber-200">
+                South Coast Transfer &bull; Surf Base
+              </span>
             </div>
 
-            <!-- Cab Transfer -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-amber-50/50 rounded-xl border border-amber-200/80 gap-3">
+            <!-- Inter-city Cab -->
+            <div class="p-3.5 rounded-2xl bg-purple-50/60 border border-purple-200/70 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
               <div class="flex items-start gap-3">
-                <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center shrink-0 mt-0.5">
-                  <i class="fa-solid fa-car-side text-sm"></i>
+                <div class="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center shrink-0">
+                  <i data-lucide="navigation" class="w-4 h-4"></i>
                 </div>
                 <div>
                   <div class="flex items-center gap-2">
-                    <span class="font-bold text-sm text-slate-900">Cab: Grand Orient Hotel ➔ Ocean Bliss by Sugar Coliving</span>
-                    <span class="text-[10px] px-2 py-0.5 rounded bg-amber-200 text-amber-900 font-bold">To Pay</span>
+                    <h4 class="font-bold text-slate-800 text-sm">Cab: Grand Orient Hotel ➔ Ocean Bliss</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-200 text-purple-900">To Pay</span>
                   </div>
-                  <p class="text-xs text-slate-500 mt-0.5">Southern Expressway ride (~2 to 2.5 hrs)</p>
+                  <p class="text-xs text-slate-500 mt-0.5">Scenic drive via Southern Expressway to Ahangama surf belt (~2 hours)</p>
                 </div>
               </div>
               <div class="sm:text-right">
-                <span class="text-xs font-bold text-amber-900" data-cost-inr="5500">₹5,500</span>
-                <p class="text-[10px] text-slate-400">Fixed Cab Fare</p>
+                <span class="text-sm font-black text-purple-900" data-inr="5500">₹5,500</span>
+                <span class="block text-[10px] font-medium text-purple-700">Fixed Cab</span>
               </div>
             </div>
 
-            <!-- Ocean Bliss Check-in -->
-            <div class="p-3.5 bg-ocean-50/70 rounded-xl border border-ocean-200/80">
-              <div class="flex items-start gap-3">
-                <div class="w-8 h-8 rounded-lg bg-ocean-600 text-white flex items-center justify-center shrink-0 mt-0.5">
-                  <i class="fa-solid fa-umbrella-beach text-sm"></i>
+            <!-- Check-in Ocean Bliss -->
+            <div class="p-4 rounded-2xl bg-brand-50/60 border border-brand-200/80 space-y-2">
+              <div class="flex items-start justify-between">
+                <div class="flex items-start gap-3">
+                  <div class="w-8 h-8 rounded-xl bg-brand-600 text-white flex items-center justify-center shrink-0">
+                    <i data-lucide="waves" class="w-4 h-4"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-slate-900 text-sm">Ocean Bliss by Sugar Coliving (4 Nights)</h4>
+                    <span class="inline-block mt-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-teal-100 text-teal-800 border border-teal-300">
+                      Boho Arch Surf View Hot Tub Suite
+                    </span>
+                    <p class="text-xs text-slate-600 mt-1.5">
+                      Dates: <strong>22nd Nov – 26th Nov</strong>. Prime beachside stay, private hot tub overlooking the surf break, sunset yoga & vibrant co-working community.
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <div class="flex items-center gap-2 flex-wrap">
-                    <span class="font-bold text-sm text-slate-900">Check-in: Ocean Bliss by Sugar Coliving</span>
-                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-teal-100 text-teal-800 font-bold border border-teal-300">Boho Arch Surf View Hot Tub Suite</span>
-                  </div>
-                  <p class="text-xs text-slate-600 mt-1">4 Nights stay booked (22nd Nov – 26th Nov). Oceanfront aesthetic, rooftop sunset vibe, surfing spots right outside.</p>
-                  <div class="mt-2 text-xs font-semibold text-ocean-800">
-                    Total Accommodation Cost: <span data-cost-inr="53411" class="font-bold">₹53,411</span>
-                  </div>
+                <div class="text-right">
+                  <span class="text-sm font-black text-brand-900" data-inr="53411">₹53,411</span>
+                  <span class="block text-[10px] font-bold text-emerald-700">Pre-Booked</span>
                 </div>
               </div>
             </div>
@@ -554,42 +682,53 @@
 
         <!-- Day 3 to 5: 23rd - 25th Nov -->
         <div class="relative group">
-          <div class="absolute -left-[35px] md:-left-[43px] top-0 w-8 h-8 rounded-full bg-ocean-600 text-white flex items-center justify-center font-bold text-xs ring-4 ring-white shadow">
+          <div class="absolute -left-[35px] md:-left-[43px] top-0 w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center font-black text-xs ring-4 ring-white shadow-md">
             23-25
           </div>
-          <div class="glass-card p-5 rounded-2xl border border-slate-200 space-y-4">
+          
+          <div class="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/80 card-shadow space-y-4">
             <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
               <div>
-                <span class="text-xs font-extrabold uppercase tracking-wide text-ocean-600">Day 3 to 5 &bull; 23rd – 25th November 2026</span>
-                <h4 class="text-base font-bold text-slate-900">South Beach Surfing, Galle Fort, & Cafe Culture</h4>
+                <span class="text-xs font-extrabold uppercase tracking-wide text-brand-600">Day 3 to 5 &bull; 23rd – 25th November 2026</span>
+                <h3 class="text-base font-bold text-slate-900">South Beach & Cafe Exploration Circuit</h3>
               </div>
-              <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">Leisure & Exploration</span>
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-semibold border border-emerald-200">
+                Surfing, Cafes & Galle Fort
+              </span>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <!-- Beach Exploration Budget Item -->
-              <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
-                <div class="flex items-center gap-2 mb-1.5">
-                  <i class="fa-solid fa-water text-ocean-600"></i>
-                  <span class="font-bold text-sm text-slate-900">South Beach Exploration</span>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Beach Fund -->
+              <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-sm text-slate-800 flex items-center gap-1.5">
+                    <i data-lucide="palmtree" class="w-4 h-4 text-emerald-600"></i>
+                    South Beach Exploration
+                  </span>
+                  <span class="text-sm font-black text-slate-900" data-inr="10000">₹10,000</span>
                 </div>
-                <p class="text-xs text-slate-500 mb-2">Mirissa Secret Beach, Weligama Surf Point, Coconut Tree Hill, Galle Fort walking tour.</p>
-                <div class="flex justify-between items-center text-xs">
-                  <span class="text-slate-500">Estimated Budget:</span>
-                  <span class="font-bold text-slate-900" data-cost-inr="10000">₹10,000</span>
+                <p class="text-xs text-slate-500">
+                  Mirissa Secret Beach, Coconut Tree Hill, Weligama Surf point, and Galle Dutch Fort sunset stroll.
+                </p>
+                <div class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg">
+                  Estimated On-Trip Activity Budget
                 </div>
               </div>
 
-              <!-- Cafe Hopping Budget Item -->
-              <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
-                <div class="flex items-center gap-2 mb-1.5">
-                  <i class="fa-solid fa-mug-saucer text-amber-600"></i>
-                  <span class="font-bold text-sm text-slate-900">Local Cafe Exploration</span>
+              <!-- Cafe Fund -->
+              <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-sm text-slate-800 flex items-center gap-1.5">
+                    <i data-lucide="coffee" class="w-4 h-4 text-amber-600"></i>
+                    Local Cafe Hopping
+                  </span>
+                  <span class="text-sm font-black text-slate-900" data-inr="40000">₹40,000</span>
                 </div>
-                <p class="text-xs text-slate-500 mb-2">Specialty coffees, smoothie bowls, fresh seafood dinners (e.g. Ceylon Sliders, The Kip, Mojo).</p>
-                <div class="flex justify-between items-center text-xs">
-                  <span class="text-slate-500">Estimated Budget:</span>
-                  <span class="font-bold text-slate-900" data-cost-inr="40000">₹40,000</span>
+                <p class="text-xs text-slate-500">
+                  Aesthetic ocean cafes (Ceylon Sliders, The Kip, Lighthouse, Mojo, Secret Spot Cafe) & fresh seafood grills.
+                </p>
+                <div class="text-[11px] font-semibold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-lg">
+                  Estimated Food & Dining Budget
                 </div>
               </div>
             </div>
@@ -598,53 +737,61 @@
 
         <!-- Day 6: 26th Nov -->
         <div class="relative group">
-          <div class="absolute -left-[35px] md:-left-[43px] top-0 w-8 h-8 rounded-full bg-ocean-600 text-white flex items-center justify-center font-bold text-xs ring-4 ring-white shadow">
+          <div class="absolute -left-[35px] md:-left-[43px] top-0 w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center font-black text-xs ring-4 ring-white shadow-md">
             26
           </div>
-          <div class="glass-card p-5 rounded-2xl border border-slate-200 space-y-4">
+          
+          <div class="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/80 card-shadow space-y-4">
             <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
               <div>
-                <span class="text-xs font-extrabold uppercase tracking-wide text-ocean-600">Day 6 &bull; 26th November 2026 (Thursday)</span>
-                <h4 class="text-base font-bold text-slate-900">Transfer back to Colombo & Check-in at Granbell Hotel</h4>
+                <span class="text-xs font-extrabold uppercase tracking-wide text-brand-600">Day 6 &bull; 26th November 2026 (Thursday)</span>
+                <h3 class="text-base font-bold text-slate-900">Return to Colombo & Check-in at Granbell Hotel</h3>
               </div>
-              <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-800 border border-blue-200">Return to City</span>
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 font-semibold border border-blue-200">
+                City Luxury Base &bull; 2 Nights
+              </span>
             </div>
 
-            <!-- Cab back to Colombo -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-amber-50/50 rounded-xl border border-amber-200/80 gap-3">
+            <!-- Return Cab -->
+            <div class="p-3.5 rounded-2xl bg-purple-50/60 border border-purple-200/70 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
               <div class="flex items-start gap-3">
-                <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center shrink-0 mt-0.5">
-                  <i class="fa-solid fa-car-side text-sm"></i>
+                <div class="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center shrink-0">
+                  <i data-lucide="car" class="w-4 h-4"></i>
                 </div>
                 <div>
                   <div class="flex items-center gap-2">
-                    <span class="font-bold text-sm text-slate-900">Cab: Ocean Bliss ➔ Granbell Hotel Colombo</span>
-                    <span class="text-[10px] px-2 py-0.5 rounded bg-amber-200 text-amber-900 font-bold">To Pay</span>
+                    <h4 class="font-bold text-slate-800 text-sm">Cab: Ocean Bliss ➔ Granbell Hotel Colombo</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-200 text-purple-900">To Pay</span>
                   </div>
-                  <p class="text-xs text-slate-500 mt-0.5">Return cab transfer via Southern Expressway</p>
+                  <p class="text-xs text-slate-500 mt-0.5">Return ride up the Southern Expressway straight into Colombo Marine Drive</p>
                 </div>
               </div>
               <div class="sm:text-right">
-                <span class="text-xs font-bold text-amber-900" data-cost-inr="5500">₹5,500</span>
-                <p class="text-[10px] text-slate-400">Fixed Cab Fare</p>
+                <span class="text-sm font-black text-purple-900" data-inr="5500">₹5,500</span>
+                <span class="block text-[10px] font-medium text-purple-700">Fixed Cab</span>
               </div>
             </div>
 
-            <!-- Granbell Hotel Colombo Stay -->
-            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
-              <div class="flex items-start gap-3">
-                <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0 mt-0.5">
-                  <i class="fa-solid fa-building-user text-sm"></i>
+            <!-- Stay Granbell Hotel -->
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+              <div class="flex items-start justify-between">
+                <div class="flex items-start gap-3">
+                  <div class="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0">
+                    <i data-lucide="building" class="w-4 h-4"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-slate-900 text-sm">Granbell Hotel Colombo (2 Nights)</h4>
+                    <span class="inline-block mt-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-800">
+                      26th Nov – 28th Nov
+                    </span>
+                    <p class="text-xs text-slate-600 mt-1.5">
+                      Rooftop infinity pool, Japanese dining, high-floor sea views, and convenient access to shopping at One Galle Face.
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <div class="flex items-center gap-2 flex-wrap">
-                    <span class="font-bold text-sm text-slate-900">Check-in: Granbell Hotel Colombo (2 Nights)</span>
-                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-200 text-slate-800 font-bold">26th Nov – 28th Nov</span>
-                  </div>
-                  <p class="text-xs text-slate-600 mt-1">Japanese hospitality, infinity pool overlooking the Indian Ocean at Marine Drive.</p>
-                  <div class="mt-2 text-xs font-semibold text-slate-900">
-                    Total Accommodation Cost: <span data-cost-inr="16425" class="font-bold">₹16,425</span>
-                  </div>
+                <div class="text-right">
+                  <span class="text-sm font-black text-slate-900" data-inr="16425">₹16,425</span>
+                  <span class="block text-[10px] font-bold text-emerald-700">Pre-Booked</span>
                 </div>
               </div>
             </div>
@@ -653,75 +800,78 @@
 
         <!-- Day 7 & 8: 27th - 28th Nov -->
         <div class="relative group">
-          <div class="absolute -left-[35px] md:-left-[43px] top-0 w-8 h-8 rounded-full bg-rose-600 text-white flex items-center justify-center font-bold text-xs ring-4 ring-white shadow">
+          <div class="absolute -left-[35px] md:-left-[43px] top-0 w-8 h-8 rounded-full bg-rose-600 text-white flex items-center justify-center font-black text-xs ring-4 ring-white shadow-md">
             28
           </div>
-          <div class="glass-card p-5 rounded-2xl border border-slate-200 space-y-4">
+          
+          <div class="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/80 card-shadow space-y-4">
             <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
               <div>
                 <span class="text-xs font-extrabold uppercase tracking-wide text-rose-600">Day 7 & 8 &bull; 27th – 28th November 2026</span>
-                <h4 class="text-base font-bold text-slate-900">Colombo City Exploration & Return Flights Home</h4>
+                <h3 class="text-base font-bold text-slate-900">Colombo City Tour & Midnight Flights Home</h3>
               </div>
-              <span class="px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-800 border border-rose-200">Return Journey</span>
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 font-semibold border border-rose-200">
+                Departure & Return to Amritsar
+              </span>
             </div>
 
-            <!-- Airport Transfer -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-amber-50/50 rounded-xl border border-amber-200/80 gap-3">
+            <!-- Airport Transfer Cab -->
+            <div class="p-3.5 rounded-2xl bg-purple-50/60 border border-purple-200/70 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
               <div class="flex items-start gap-3">
-                <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center shrink-0 mt-0.5">
-                  <i class="fa-solid fa-taxi text-sm"></i>
+                <div class="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center shrink-0">
+                  <i data-lucide="car" class="w-4 h-4"></i>
                 </div>
                 <div>
                   <div class="flex items-center gap-2">
-                    <span class="font-bold text-sm text-slate-900">Cab: Granbell Hotel ➔ Colombo Airport (CMB)</span>
-                    <span class="text-[10px] px-2 py-0.5 rounded bg-amber-200 text-amber-900 font-bold">To Pay</span>
+                    <h4 class="font-bold text-slate-800 text-sm">Cab: Granbell Hotel ➔ Colombo Airport (CMB)</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-200 text-purple-900">To Pay</span>
                   </div>
-                  <p class="text-xs text-slate-500 mt-0.5">Late evening transfer for international departure</p>
+                  <p class="text-xs text-slate-500 mt-0.5">Evening ride to Bandaranaike Airport for check-in before 23:00 flight</p>
                 </div>
               </div>
               <div class="sm:text-right">
-                <span class="text-xs font-bold text-amber-900" data-cost-inr="1300">₹1,300</span>
-                <p class="text-[10px] text-slate-400">Cab Fare</p>
+                <span class="text-sm font-black text-purple-900" data-inr="1300">₹1,300</span>
+                <span class="block text-[10px] font-medium text-purple-700">Cab Fare</span>
               </div>
             </div>
 
-            <!-- Return Flight Leg A -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-50 rounded-xl border border-slate-200 gap-3">
+            <!-- Return Indigo Flight -->
+            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
               <div class="flex items-start gap-3">
-                <div class="w-8 h-8 rounded-lg bg-sky-100 text-sky-700 flex items-center justify-center shrink-0 mt-0.5">
-                  <i class="fa-solid fa-plane-departure text-sm"></i>
+                <div class="w-8 h-8 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center shrink-0">
+                  <i data-lucide="plane" class="w-4 h-4"></i>
                 </div>
                 <div>
                   <div class="flex items-center gap-2">
-                    <span class="font-bold text-sm text-slate-900">Colombo (CMB) ➔ Delhi (DEL)</span>
-                    <span class="text-[10px] px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-bold">IndiGo &bull; 23:00 Departure</span>
+                    <h4 class="font-bold text-slate-800 text-sm">Colombo (CMB) ➔ Delhi (DEL)</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-100 text-sky-800">IndiGo &bull; Departs 23:00</span>
                   </div>
-                  <p class="text-xs text-slate-500 mt-0.5">Departs 28th Nov 23:00 hrs &bull; Arrives Delhi past midnight</p>
+                  <p class="text-xs text-slate-500 mt-0.5">Boarding at Colombo 28th Nov night, arriving Delhi terminal early morning</p>
                 </div>
               </div>
               <div class="sm:text-right">
-                <span class="text-xs font-bold text-slate-900" data-cost-inr="72464">₹72,464</span>
-                <p class="text-[10px] text-slate-400">Total Return Indigo Sector</p>
+                <span class="text-sm font-black text-slate-900" data-inr="72464">₹72,464</span>
+                <span class="block text-[10px] font-medium text-emerald-600">Indigo Return Included</span>
               </div>
             </div>
 
-            <!-- Return Flight Leg B -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-50 rounded-xl border border-slate-200 gap-3">
+            <!-- Final Leg Air India -->
+            <div class="p-3.5 rounded-2xl bg-red-50/50 border border-red-200/70 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
               <div class="flex items-start gap-3">
-                <div class="w-8 h-8 rounded-lg bg-red-100 text-red-700 flex items-center justify-center shrink-0 mt-0.5">
-                  <i class="fa-solid fa-plane-arrival text-sm"></i>
+                <div class="w-8 h-8 rounded-xl bg-red-100 text-red-700 flex items-center justify-center shrink-0">
+                  <i data-lucide="home" class="w-4 h-4"></i>
                 </div>
                 <div>
                   <div class="flex items-center gap-2">
-                    <span class="font-bold text-sm text-slate-900">Delhi (DEL) ➔ Amritsar (ATQ)</span>
-                    <span class="text-[10px] px-2 py-0.5 rounded bg-red-100 text-red-800 font-bold">Air India</span>
+                    <h4 class="font-bold text-slate-800 text-sm">Delhi (DEL) ➔ Amritsar (ATQ)</h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-red-100 text-red-800">Air India</span>
                   </div>
-                  <p class="text-xs text-slate-500 mt-0.5">Time: <strong class="text-slate-800">04:45 AM – 06:00 AM</strong> (Arrival home safe in Amritsar)</p>
+                  <p class="text-xs text-slate-500 mt-0.5">Time: <strong class="text-slate-800">04:45 AM – 06:00 AM</strong> &bull; Touchdown safe at home in Amritsar</p>
                 </div>
               </div>
               <div class="sm:text-right">
-                <span class="text-xs font-bold text-slate-900" data-cost-inr="11220">₹11,220</span>
-                <p class="text-[10px] text-slate-400">Paid: ICICI Card (Amazon)</p>
+                <span class="text-sm font-black text-slate-900" data-inr="11220">₹11,220</span>
+                <span class="block text-[10px] font-medium text-emerald-600">ICICI Amazon CC</span>
               </div>
             </div>
           </div>
@@ -730,614 +880,679 @@
       </div>
     </div>
 
-    <!-- TAB 3: BOOKINGS & EXPENSES TABLE -->
-    <div id="tab-bookings" class="hidden space-y-6">
-      <div class="glass-card p-5 sm:p-6 rounded-2xl border border-slate-200">
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-5">
+    <!-- ========================================== -->
+    <!-- TAB 3: DETAILED EXPENSE LEDGER            -->
+    <!-- ========================================== -->
+    <div id="tab-ledger" class="hidden space-y-6">
+      
+      <div class="bg-white p-6 rounded-3xl border border-slate-200/80 card-shadow space-y-4">
+        
+        <!-- Controls & Filter Toolbar -->
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h3 class="text-lg font-bold text-slate-900">All Trip Bookings & Cost Ledger</h3>
-            <p class="text-xs text-slate-500">Every item from your handwritten notes with status and payment channel</p>
+            <h3 class="text-lg font-bold text-slate-900 font-display">Trip Expense Ledger & Items</h3>
+            <p class="text-xs text-slate-500">Live ledger reflecting handwritten trip notes & dynamic additions</p>
           </div>
 
-          <!-- Category filter buttons -->
-          <div class="flex flex-wrap items-center gap-1.5 bg-slate-100 p-1 rounded-xl">
-            <button onclick="filterExpenses('all')" id="btn-filter-all" class="px-3 py-1.5 text-xs font-bold rounded-lg bg-white text-ocean-700 shadow-xs">All</button>
-            <button onclick="filterExpenses('flight')" id="btn-filter-flight" class="px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900">Flights</button>
-            <button onclick="filterExpenses('hotel')" id="btn-filter-hotel" class="px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900">Hotels</button>
-            <button onclick="filterExpenses('cab')" id="btn-filter-cab" class="px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900">Cabs & Local</button>
+          <div class="flex flex-wrap items-center gap-2">
+            <!-- Search Input -->
+            <div class="relative">
+              <i data-lucide="search" class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+              <input type="text" id="ledger-search" oninput="renderLedgerTable()" placeholder="Search bookings..." class="pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 text-slate-800 w-44">
+            </div>
+
+            <!-- Category Filter Buttons -->
+            <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
+              <button onclick="setLedgerCategory('all')" id="flt-all" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-white text-brand-700 shadow-xs">All</button>
+              <button onclick="setLedgerCategory('flight')" id="flt-flight" class="px-2.5 py-1 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900">Flights</button>
+              <button onclick="setLedgerCategory('hotel')" id="flt-hotel" class="px-2.5 py-1 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900">Hotels</button>
+              <button onclick="setLedgerCategory('cab')" id="flt-cab" class="px-2.5 py-1 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900">Cabs & Local</button>
+            </div>
           </div>
         </div>
 
-        <!-- Table Container -->
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse">
-            <thead>
-              <tr class="border-b border-slate-200 text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                <th class="py-3 px-3">Item / Service Details</th>
+        <!-- Ledger Table -->
+        <div class="overflow-x-auto rounded-2xl border border-slate-200">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead class="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[11px]">
+              <tr>
+                <th class="py-3 px-4">Item & Description</th>
                 <th class="py-3 px-3">Category</th>
-                <th class="py-3 px-3">Dates</th>
+                <th class="py-3 px-3">Date</th>
                 <th class="py-3 px-3">Payment Channel</th>
-                <th class="py-3 px-3 text-right">Amount</th>
+                <th class="py-3 px-4 text-right">Amount</th>
                 <th class="py-3 px-3 text-center">Status</th>
+                <th class="py-3 px-3 text-center no-print">Action</th>
               </tr>
             </thead>
-            <tbody id="expense-tbody" class="text-xs divide-y divide-slate-100">
-              <!-- Dynamically populated via JS -->
+            <tbody id="ledger-tbody" class="divide-y divide-slate-100 text-slate-700 font-medium">
+              <!-- Populated by JavaScript -->
             </tbody>
           </table>
         </div>
 
-        <!-- Subtotal / Summary bar -->
-        <div class="mt-4 pt-4 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-600 gap-2">
-          <span id="filtered-count-text">Showing all 9 booked & estimated items</span>
-          <div class="flex items-center gap-4 text-sm">
-            <span class="text-slate-500 font-medium">Filtered Total:</span>
-            <span class="text-base font-extrabold text-ocean-700" id="filtered-total-amount">₹2,33,448</span>
+        <!-- Table Footer / Subtotal -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 text-xs text-slate-600">
+          <span id="ledger-item-count">Showing all items</span>
+          <div class="flex items-center gap-3">
+            <span class="text-slate-500 font-semibold">Subtotal of current view:</span>
+            <span class="text-base font-black text-brand-800" id="ledger-subtotal-val">₹2,33,448</span>
           </div>
         </div>
+
       </div>
+
     </div>
 
-    <!-- TAB 4: CURRENCY CONVERTER CALCULATOR -->
+    <!-- ========================================== -->
+    <!-- TAB 4: CURRENCY CONVERTER CALCULATOR      -->
+    <!-- ========================================== -->
     <div id="tab-converter" class="hidden space-y-6">
+      
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        <!-- Interactive Converter Widget -->
-        <div class="glass-card p-6 rounded-2xl border border-slate-200 shadow-xs lg:col-span-2 space-y-5">
-          <div>
-            <h3 class="text-lg font-bold text-slate-900">Live Currency Conversion Calculator</h3>
-            <p class="text-xs text-slate-500">Calculate live budget transfers between Indian Rupee (INR), Sri Lankan Rupee (LKR), and USD</p>
-          </div>
-
-          <!-- Quick Preset Buttons -->
-          <div class="flex flex-wrap items-center gap-2 pt-1">
-            <span class="text-xs font-semibold text-slate-500">Quick Loads:</span>
-            <button onclick="loadConverterAmount(233448, 'INR')" class="text-xs px-2.5 py-1 rounded-lg bg-ocean-50 text-ocean-700 border border-ocean-200 hover:bg-ocean-100 font-medium">
-              Entire Trip (₹2,33,448)
-            </button>
-            <button onclick="loadConverterAmount(94982, 'INR')" class="text-xs px-2.5 py-1 rounded-lg bg-sky-50 text-sky-700 border border-sky-200 hover:bg-sky-100 font-medium">
-              Flights Due (₹94,982)
-            </button>
-            <button onclick="loadConverterAmount(74966, 'INR')" class="text-xs px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 font-medium">
-              Hotels (₹74,966)
-            </button>
-            <button onclick="loadConverterAmount(50000, 'INR')" class="text-xs px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 font-medium">
-              Cafe & Beach Cash (₹50k)
-            </button>
-          </div>
-
-          <!-- Conversion Input Grid -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center bg-slate-50 p-4 rounded-2xl border border-slate-200">
+        <!-- Live Converter Card -->
+        <div class="bg-white p-6 rounded-3xl border border-slate-200/80 card-shadow lg:col-span-2 space-y-5">
+          <div class="flex items-center justify-between">
             <div>
-              <label class="block text-xs font-bold text-slate-600 mb-1">Source Amount & Currency</label>
-              <div class="flex">
-                <input type="number" id="calc-source-input" value="1000" oninput="runCurrencyCalculator()" class="w-full text-base font-bold px-3 py-2.5 bg-white border border-slate-300 rounded-l-xl focus:outline-none focus:ring-2 focus:ring-ocean-500 text-slate-900" placeholder="0.00">
-                <select id="calc-source-curr" onchange="runCurrencyCalculator()" class="bg-slate-100 border border-l-0 border-slate-300 rounded-r-xl px-3 font-semibold text-xs text-slate-700 focus:outline-none">
+              <h3 class="text-lg font-bold text-slate-900 font-display">Instant Two-Way Currency Converter</h3>
+              <p class="text-xs text-slate-500">Live conversion between Indian Rupee (INR), Sri Lankan Rupee (LKR), and USD</p>
+            </div>
+            <div class="w-8 h-8 rounded-xl bg-brand-100 text-brand-700 flex items-center justify-center">
+              <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+            </div>
+          </div>
+
+          <!-- Quick Load Amount Pills from Note -->
+          <div class="flex flex-wrap items-center gap-2 pt-1">
+            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wide">Quick Notes Presets:</span>
+            <button onclick="loadConverterPreset(233448)" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100">
+              Trip Total (₹2,33,448)
+            </button>
+            <button onclick="loadConverterPreset(94982)" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-sky-50 text-sky-800 border border-sky-200 hover:bg-sky-100">
+              Flights (₹94,982)
+            </button>
+            <button onclick="loadConverterPreset(5500)" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-purple-50 text-purple-800 border border-purple-200 hover:bg-purple-100">
+              Expressway Cab (₹5,500)
+            </button>
+            <button onclick="loadConverterPreset(40000)" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100">
+              Cafe Fund (₹40,000)
+            </button>
+          </div>
+
+          <!-- Conversion Input Boxes -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50 p-5 rounded-2xl border border-slate-200">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1.5">You Send / Input</label>
+              <div class="flex rounded-xl shadow-xs overflow-hidden border border-slate-300 focus-within:ring-2 focus-within:ring-brand-500">
+                <input type="number" id="calc-in-val" value="1000" oninput="computeConverter()" class="w-full px-3.5 py-2.5 bg-white text-base font-extrabold text-slate-900 focus:outline-none">
+                <select id="calc-in-curr" onchange="computeConverter()" class="bg-slate-100 px-3 text-xs font-bold text-slate-700 border-l border-slate-300 focus:outline-none">
                   <option value="INR" selected>INR (₹)</option>
                   <option value="LKR">LKR (Rs)</option>
                   <option value="USD">USD ($)</option>
-                  <option value="EUR">EUR (€)</option>
                 </select>
               </div>
             </div>
 
             <div>
-              <label class="block text-xs font-bold text-slate-600 mb-1">Converted Target Output</label>
-              <div class="flex">
-                <input type="text" id="calc-target-output" readonly value="3,560.00" class="w-full text-base font-extrabold px-3 py-2.5 bg-emerald-50 border border-emerald-200 rounded-l-xl text-emerald-900 cursor-default">
-                <select id="calc-target-curr" onchange="runCurrencyCalculator()" class="bg-slate-100 border border-l-0 border-slate-300 rounded-r-xl px-3 font-semibold text-xs text-slate-700 focus:outline-none">
+              <label class="block text-xs font-bold text-slate-700 mb-1.5">You Receive / Equivalent</label>
+              <div class="flex rounded-xl shadow-xs overflow-hidden border border-emerald-300">
+                <input type="text" id="calc-out-val" readonly value="3,560.00" class="w-full px-3.5 py-2.5 bg-emerald-50 text-base font-black text-emerald-900 focus:outline-none cursor-default">
+                <select id="calc-out-curr" onchange="computeConverter()" class="bg-emerald-100/70 px-3 text-xs font-bold text-emerald-900 border-l border-emerald-300 focus:outline-none">
                   <option value="LKR" selected>LKR (Rs)</option>
                   <option value="INR">INR (₹)</option>
                   <option value="USD">USD ($)</option>
-                  <option value="EUR">EUR (€)</option>
                 </select>
               </div>
             </div>
           </div>
 
-          <!-- Editable Exchange Rate Settings Box -->
-          <div class="p-4 rounded-xl bg-slate-100/70 border border-slate-200 text-xs space-y-2">
-            <div class="flex items-center justify-between font-bold text-slate-700">
-              <span class="flex items-center gap-1.5"><i class="fa-solid fa-sliders text-ocean-600"></i> Active Exchange Reference Rates:</span>
-              <button onclick="resetExchangeRates()" class="text-ocean-700 hover:underline text-[11px]">Reset Defaults</button>
+          <!-- Editable Exchange Rate Sliders / Setting Box -->
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3">
+            <div class="flex items-center justify-between text-xs font-bold text-slate-700">
+              <span class="flex items-center gap-1.5">
+                <i data-lucide="sliders" class="w-3.5 h-3.5 text-brand-600"></i>
+                Exchange Rate Assumptions (Customizable):
+              </span>
+              <button onclick="resetRates()" class="text-brand-700 hover:underline text-[11px] font-semibold">Reset to Defaults</button>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-              <div>
-                <label class="text-[11px] text-slate-500 font-medium">1 INR = LKR</label>
-                <input type="number" step="0.05" id="rate-inr-lkr" value="3.56" oninput="updateRateFromInputs()" class="w-full mt-1 p-1.5 text-xs font-bold rounded-lg border border-slate-300 bg-white">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div class="bg-white p-2.5 rounded-xl border border-slate-200">
+                <label class="text-[11px] text-slate-500 font-semibold block">1 INR ➔ LKR</label>
+                <input type="number" step="0.05" id="cfg-inr-lkr" value="3.56" oninput="updateRatesFromInput()" class="w-full font-bold text-slate-900 mt-1 focus:outline-none">
               </div>
-              <div>
-                <label class="text-[11px] text-slate-500 font-medium">1 USD = INR</label>
-                <input type="number" step="0.1" id="rate-usd-inr" value="86.50" oninput="updateRateFromInputs()" class="w-full mt-1 p-1.5 text-xs font-bold rounded-lg border border-slate-300 bg-white">
-              </div>
-              <div>
-                <label class="text-[11px] text-slate-500 font-medium">1 USD = LKR</label>
-                <input type="number" step="1" id="rate-usd-lkr" value="308.00" oninput="updateRateFromInputs()" class="w-full mt-1 p-1.5 text-xs font-bold rounded-lg border border-slate-300 bg-white">
+              <div class="bg-white p-2.5 rounded-xl border border-slate-200">
+                <label class="text-[11px] text-slate-500 font-semibold block">1 USD ➔ INR</label>
+                <input type="number" step="0.5" id="cfg-usd-inr" value="86.50" oninput="updateRatesFromInput()" class="w-full font-bold text-slate-900 mt-1 focus:outline-none">
               </div>
             </div>
-            <p class="text-[10px] text-slate-400 italic">Adjusting rates dynamically recalculates the entire dashboard values instantly.</p>
+            <p class="text-[10px] text-slate-400 italic">Adjusting rates dynamically recalculates all converted previews across the entire dashboard.</p>
           </div>
         </div>
 
-        <!-- Handy Cheat-Sheet Table for Daily Spending -->
-        <div class="glass-card p-6 rounded-2xl border border-slate-200 shadow-xs lg:col-span-1 space-y-4">
+        <!-- Pocket Conversion Cheat Sheet -->
+        <div class="bg-white p-6 rounded-3xl border border-slate-200/80 card-shadow space-y-4">
           <div class="flex items-center gap-2">
-            <div class="w-7 h-7 rounded-lg bg-teal-100 text-teal-800 flex items-center justify-center font-bold text-xs">
-              <i class="fa-solid fa-list-check"></i>
+            <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold">
+              <i data-lucide="coins" class="w-4 h-4"></i>
             </div>
-            <h4 class="text-sm font-bold text-slate-900">Sri Lanka Wallet Cheat Sheet</h4>
+            <div>
+              <h4 class="text-sm font-bold text-slate-900">Pocket Cheat Sheet</h4>
+              <p class="text-[11px] text-slate-500">Quick mental guide for Tuk-Tuks & cafes</p>
+            </div>
           </div>
-          <p class="text-xs text-slate-500">Fast mental conversion guide for market shopping, coconut stalls & tuk-tuks:</p>
 
           <div class="divide-y divide-slate-100 text-xs">
-            <div class="py-2 flex justify-between">
-              <span class="font-medium text-slate-600">₹100 INR</span>
-              <span class="font-bold text-ocean-700" id="cheat-100inr">≈ 356 LKR</span>
+            <div class="py-2.5 flex justify-between items-center">
+              <span class="font-semibold text-slate-700">₹100 INR</span>
+              <span class="font-extrabold text-brand-700" id="cs-100inr">≈ 356 LKR</span>
             </div>
-            <div class="py-2 flex justify-between">
-              <span class="font-medium text-slate-600">₹500 INR</span>
-              <span class="font-bold text-ocean-700" id="cheat-500inr">≈ 1,780 LKR</span>
+            <div class="py-2.5 flex justify-between items-center">
+              <span class="font-semibold text-slate-700">₹500 INR</span>
+              <span class="font-extrabold text-brand-700" id="cs-500inr">≈ 1,780 LKR</span>
             </div>
-            <div class="py-2 flex justify-between">
-              <span class="font-medium text-slate-600">₹1,000 INR</span>
-              <span class="font-bold text-ocean-700" id="cheat-1000inr">≈ 3,560 LKR</span>
+            <div class="py-2.5 flex justify-between items-center">
+              <span class="font-semibold text-slate-700">₹1,000 INR</span>
+              <span class="font-extrabold text-brand-700" id="cs-1000inr">≈ 3,560 LKR</span>
             </div>
-            <div class="py-2 flex justify-between">
-              <span class="font-medium text-slate-600">₹2,000 INR</span>
-              <span class="font-bold text-ocean-700" id="cheat-2000inr">≈ 7,120 LKR</span>
+            <div class="py-2.5 flex justify-between items-center">
+              <span class="font-semibold text-slate-700">₹5,000 INR</span>
+              <span class="font-extrabold text-brand-700" id="cs-5000inr">≈ 17,800 LKR</span>
             </div>
-            <div class="py-2 flex justify-between">
-              <span class="font-medium text-slate-600">1,000 LKR (Tuk Tuk)</span>
-              <span class="font-bold text-slate-900" id="cheat-1000lkr">≈ ₹281 INR</span>
+            <div class="py-2.5 flex justify-between items-center">
+              <span class="font-medium text-slate-500">1,000 LKR (Tuk Tuk)</span>
+              <span class="font-extrabold text-slate-900" id="cs-1000lkr">≈ ₹281 INR</span>
             </div>
-            <div class="py-2 flex justify-between">
-              <span class="font-medium text-slate-600">3,500 LKR (Cafe meal)</span>
-              <span class="font-bold text-slate-900" id="cheat-3500lkr">≈ ₹983 INR</span>
+            <div class="py-2.5 flex justify-between items-center">
+              <span class="font-medium text-slate-500">3,500 LKR (Brunch/Cafe)</span>
+              <span class="font-extrabold text-slate-900" id="cs-3500lkr">≈ ₹983 INR</span>
             </div>
-            <div class="py-2 flex justify-between">
-              <span class="font-medium text-slate-600">10,000 LKR (Dinner / Surf)</span>
-              <span class="font-bold text-slate-900" id="cheat-10000lkr">≈ ₹2,809 INR</span>
+            <div class="py-2.5 flex justify-between items-center">
+              <span class="font-medium text-slate-500">10,000 LKR (Dinner / Surf)</span>
+              <span class="font-extrabold text-slate-900" id="cs-10000lkr">≈ ₹2,809 INR</span>
             </div>
           </div>
-          
-          <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 text-[11px] text-amber-900 space-y-1">
-            <span class="font-bold block flex items-center gap-1"><i class="fa-solid fa-lightbulb"></i> Tip:</span>
-            <span>Always ask cab drivers to turn on meter or negotiate with 'PickMe' app rates before onboarding!</span>
+
+          <div class="bg-amber-50 p-3 rounded-2xl border border-amber-200 text-[11px] text-amber-900 space-y-1">
+            <span class="font-bold flex items-center gap-1"><i data-lucide="lightbulb" class="w-3.5 h-3.5 text-amber-700"></i> Pro-Tip:</span>
+            <span>Always ask cab drivers to turn on meter or compare with the local PickMe app rate before boarding!</span>
           </div>
         </div>
 
       </div>
+
     </div>
 
-    <!-- TAB 5: TRAVEL GUIDE & TIPS -->
-    <div id="tab-tips" class="hidden space-y-6">
+    <!-- ========================================== -->
+    <!-- TAB 5: TRAVEL GUIDE & CHECKLIST           -->
+    <!-- ========================================== -->
+    <div id="tab-checklist" class="hidden space-y-6">
       
-      <!-- Top Highlights Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- PickMe & Transport -->
-        <div class="glass-card p-5 rounded-2xl border border-slate-200 space-y-2">
-          <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center text-lg">
-            <i class="fa-solid fa-mobile-screen"></i>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        
+        <!-- Checklist 1: Essential Documents -->
+        <div class="bg-white p-6 rounded-3xl border border-slate-200/80 card-shadow space-y-4">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center">
+              <i data-lucide="file-text" class="w-4 h-4"></i>
+            </div>
+            <h4 class="font-bold text-slate-900 text-sm">Essential Documents</h4>
           </div>
-          <h4 class="text-sm font-bold text-slate-900">Ride-Hailing & Cabs</h4>
-          <p class="text-xs text-slate-600">Download <strong>PickMe</strong> and <strong>Uber</strong> as soon as you land at CMB airport. For highway runs to Ahangama, pre-fixed cabs (₹5,500) are very reliable.</p>
+          <div class="space-y-2 text-xs" id="chk-group-docs">
+            <label class="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 cursor-pointer transition">
+              <input type="checkbox" checked class="rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
+              <span>Sri Lanka ETA Visa (Online approval)</span>
+            </label>
+            <label class="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 cursor-pointer transition">
+              <input type="checkbox" checked class="rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
+              <span>Passports (valid &gt;6 months)</span>
+            </label>
+            <label class="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 cursor-pointer transition">
+              <input type="checkbox" checked class="rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
+              <span>Print flight tickets (IndiGo & Air India)</span>
+            </label>
+            <label class="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 cursor-pointer transition">
+              <input type="checkbox" class="rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
+              <span>Hotel Booking vouchers downloaded</span>
+            </label>
+          </div>
         </div>
 
-        <!-- Forex & Cards -->
-        <div class="glass-card p-5 rounded-2xl border border-slate-200 space-y-2">
-          <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-800 flex items-center justify-center text-lg">
-            <i class="fa-regular fa-credit-card"></i>
+        <!-- Checklist 2: Money & Cards -->
+        <div class="bg-white p-6 rounded-3xl border border-slate-200/80 card-shadow space-y-4">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
+              <i data-lucide="credit-card" class="w-4 h-4"></i>
+            </div>
+            <h4 class="font-bold text-slate-900 text-sm">Money & Forex Setup</h4>
           </div>
-          <h4 class="text-sm font-bold text-slate-900">Money & Cards</h4>
-          <p class="text-xs text-slate-600">Your flights are covered on ICICI. In Sri Lanka, major beach cafes take Visa/Mastercard, but carry ~35,000–50,000 LKR in cash for local drivers, king coconuts, and tips.</p>
+          <div class="space-y-2 text-xs">
+            <label class="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 cursor-pointer transition">
+              <input type="checkbox" checked class="rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
+              <span>ICICI Amazon CC international usage enabled</span>
+            </label>
+            <label class="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 cursor-pointer transition">
+              <input type="checkbox" class="rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
+              <span>Zero-forex card loaded (Niyo/Scapia)</span>
+            </label>
+            <label class="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 cursor-pointer transition">
+              <input type="checkbox" class="rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
+              <span>Carry emergency USD cash ($100-$200)</span>
+            </label>
+            <label class="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 cursor-pointer transition">
+              <input type="checkbox" class="rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
+              <span>Withdraw 35,000 LKR at CMB Airport ATM</span>
+            </label>
+          </div>
         </div>
 
-        <!-- SIM Card & Connectivity -->
-        <div class="glass-card p-5 rounded-2xl border border-slate-200 space-y-2">
-          <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center text-lg">
-            <i class="fa-solid fa-wifi"></i>
+        <!-- Checklist 3: Beach & Packing -->
+        <div class="bg-white p-6 rounded-3xl border border-slate-200/80 card-shadow space-y-4">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center">
+              <i data-lucide="sun" class="w-4 h-4"></i>
+            </div>
+            <h4 class="font-bold text-slate-900 text-sm">South Coast Gear</h4>
           </div>
-          <h4 class="text-sm font-bold text-slate-900">Dialog or Mobitel SIM</h4>
-          <p class="text-xs text-slate-600">Grab an eSIM or physical tourist SIM at the Bandaranaike airport arrival hall (approx $8–$12 USD for 30GB+ data).</p>
+          <div class="space-y-2 text-xs">
+            <label class="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 cursor-pointer transition">
+              <input type="checkbox" class="rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
+              <span>Type D / G universal plug adapter</span>
+            </label>
+            <label class="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 cursor-pointer transition">
+              <input type="checkbox" class="rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
+              <span>Reef-friendly high SPF Sunscreen</span>
+            </label>
+            <label class="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 cursor-pointer transition">
+              <input type="checkbox" class="rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
+              <span>Swimwear & rashguard for surfing</span>
+            </label>
+            <label class="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 cursor-pointer transition">
+              <input type="checkbox" class="rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
+              <span>Waterproof phone pouch for beach trips</span>
+            </label>
+          </div>
         </div>
+
       </div>
 
-      <!-- Stay Specific Highlights: Ocean Bliss & Granbell -->
+      <!-- Hotel Spotlight Information -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="glass-card p-6 rounded-2xl border border-teal-200 bg-teal-50/20 space-y-3">
-          <div class="flex items-center gap-2">
-            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-teal-600 text-white">South Coast Base</span>
-            <h4 class="font-bold text-slate-900">Ocean Bliss by Sugar Coliving</h4>
+        
+        <!-- Ocean Bliss Spotlight -->
+        <div class="bg-gradient-to-br from-teal-500/10 via-white to-white p-6 rounded-3xl border border-teal-200 card-shadow space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-teal-600 text-white">4 Nights South Stay</span>
+            <span class="text-xs font-black text-teal-900" data-inr="53411">₹53,411</span>
           </div>
+          <h4 class="text-base font-black text-slate-900">Ocean Bliss by Sugar Coliving</h4>
           <p class="text-xs text-slate-600 leading-relaxed">
-            Your booked suite: <strong class="text-ocean-800">Boho Arch Surf View Hot Tub Suite</strong> (22–26 Nov). Situated in the vibrant surfing corridor near Ahangama and Weligama.
+            <strong>Room:</strong> Boho Arch Surf View Hot Tub Suite (22nd – 26th Nov). Located directly in Ahangama’s premier surfing belt, walking distance to Kabalana and surf breaks.
           </p>
-          <div class="space-y-1.5 text-xs text-slate-700">
-            <div class="flex items-center gap-2"><i class="fa-solid fa-check text-teal-600"></i> Top cafes nearby: Ceylon Sliders, Mojo Weligama, Lighthouse Ahangama, Soul & Surf</div>
-            <div class="flex items-center gap-2"><i class="fa-solid fa-check text-teal-600"></i> Catch world-class sunsets directly from the Boho rooftop or hot tub</div>
-            <div class="flex items-center gap-2"><i class="fa-solid fa-check text-teal-600"></i> Short 25 min scenic tuk-tuk ride into historic Galle Dutch Fort</div>
+          <div class="space-y-1.5 text-xs text-slate-700 pt-1">
+            <div class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-teal-600"></i> Hot tub on private patio facing the Indian ocean</div>
+            <div class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-teal-600"></i> Close to cafes: Ceylon Sliders, The Kip, Lighthouse</div>
+            <div class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-teal-600"></i> 25 mins tuk-tuk to historic Galle Dutch Fort</div>
           </div>
         </div>
 
-        <div class="glass-card p-6 rounded-2xl border border-slate-200 space-y-3">
-          <div class="flex items-center gap-2">
-            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-600 text-white">City Luxury Base</span>
-            <h4 class="font-bold text-slate-900">Granbell Hotel Colombo</h4>
+        <!-- Granbell Hotel Spotlight -->
+        <div class="bg-gradient-to-br from-indigo-500/10 via-white to-white p-6 rounded-3xl border border-indigo-200 card-shadow space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-indigo-600 text-white">2 Nights City Stay</span>
+            <span class="text-xs font-black text-indigo-900" data-inr="16425">₹16,425</span>
           </div>
+          <h4 class="text-base font-black text-slate-900">Granbell Hotel Colombo</h4>
           <p class="text-xs text-slate-600 leading-relaxed">
-            Your booked stay: 26–28 Nov. Premium Japanese hospitality directly along Colombo’s Marine Drive.
+            <strong>Room:</strong> Luxury Marine Drive stay (26th – 28th Nov). High-end Japanese-style hospitality overlooking Colombo's coast.
           </p>
-          <div class="space-y-1.5 text-xs text-slate-700">
-            <div class="flex items-center gap-2"><i class="fa-solid fa-check text-indigo-600"></i> Rooftop Infinity Pool & Bar overlooking the Indian Ocean</div>
-            <div class="flex items-center gap-2"><i class="fa-solid fa-check text-indigo-600"></i> Close to Galle Face Green for street food and evening ocean breeze</div>
-            <div class="flex items-center gap-2"><i class="fa-solid fa-check text-indigo-600"></i> Effortless highway access for late-night Colombo airport return (23:00 Indigo flight)</div>
+          <div class="space-y-1.5 text-xs text-slate-700 pt-1">
+            <div class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-indigo-600"></i> Rooftop infinity pool overlooking ocean & skyline</div>
+            <div class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-indigo-600"></i> Quick access to One Galle Face mall & Galle Face Green</div>
+            <div class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-indigo-600"></i> Easy highway hop for midnight airport return flight</div>
           </div>
         </div>
-      </div>
 
-      <!-- Interactive Packing & Preparation Checklist -->
-      <div class="glass-card p-6 rounded-2xl border border-slate-200 space-y-4">
-        <h4 class="text-base font-bold text-slate-900 flex items-center gap-2">
-          <i class="fa-solid fa-square-check text-ocean-600"></i>
-          Pre-Departure Preparation Checklist
-        </h4>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs" id="checklist-container">
-          <label class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100 transition">
-            <input type="checkbox" checked class="w-4 h-4 text-ocean-600 rounded focus:ring-ocean-500">
-            <span>Apply online Sri Lanka ETA / eVisa</span>
-          </label>
-          <label class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100 transition">
-            <input type="checkbox" checked class="w-4 h-4 text-ocean-600 rounded focus:ring-ocean-500">
-            <span>Passports with >6 months validity</span>
-          </label>
-          <label class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100 transition">
-            <input type="checkbox" checked class="w-4 h-4 text-ocean-600 rounded focus:ring-ocean-500">
-            <span>Print flight tickets & hotel vouchers</span>
-          </label>
-          <label class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100 transition">
-            <input type="checkbox" class="w-4 h-4 text-ocean-600 rounded focus:ring-ocean-500">
-            <span>Enable International usage on ICICI CC</span>
-          </label>
-          <label class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100 transition">
-            <input type="checkbox" class="w-4 h-4 text-ocean-600 rounded focus:ring-ocean-500">
-            <span>Type D / G universal plug adapter</span>
-          </label>
-          <label class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100 transition">
-            <input type="checkbox" class="w-4 h-4 text-ocean-600 rounded focus:ring-ocean-500">
-            <span>Reef-safe sunscreen & surf rashguard</span>
-          </label>
-        </div>
       </div>
 
     </div>
 
   </main>
 
-  <!-- MODAL: ADD CUSTOM EXPENSE -->
   <div id="addExpenseModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="glass-card max-w-md w-full p-6 rounded-3xl shadow-2xl border border-slate-200 bg-white">
-      <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
-        <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
-          <i class="fa-solid fa-plus-circle text-ocean-600"></i> Add New Trip Expense
-        </h3>
-        <button onclick="closeModal('addExpenseModal')" class="text-slate-400 hover:text-slate-700">
-          <i class="fa-solid fa-xmark text-lg"></i>
+    <div class="bg-white max-w-md w-full p-6 rounded-3xl shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-lg bg-brand-100 text-brand-700 flex items-center justify-center font-bold">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+          </div>
+          <h3 class="font-bold text-slate-900 text-base">Add New Trip Expense</h3>
+        </div>
+        <button onclick="closeModal('addExpenseModal')" class="text-slate-400 hover:text-slate-600">
+          <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
 
-      <form id="new-expense-form" onsubmit="handleAddNewExpense(event)" class="space-y-3.5 text-xs">
+      <form id="new-expense-form" onsubmit="handleNewExpenseSubmit(event)" class="space-y-3.5 text-xs">
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Expense Title / Item</label>
-          <input type="text" id="modal-title" required placeholder="e.g. Scuba Diving at Mirissa" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-slate-800 focus:ring-2 focus:ring-ocean-500 focus:outline-none">
+          <label class="block font-bold text-slate-700 mb-1">Expense Title</label>
+          <input type="text" id="inp-title" required placeholder="e.g. Scuba diving or Souvenir shopping" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:outline-none text-slate-800">
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block font-bold text-slate-700 mb-1">Category</label>
-            <select id="modal-category" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-slate-800 focus:ring-2 focus:ring-ocean-500 focus:outline-none">
+            <select id="inp-category" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:outline-none text-slate-800">
               <option value="flight">Flight</option>
               <option value="hotel">Hotel</option>
-              <option value="cab">Cab / Transfer</option>
+              <option value="cab" selected>Cab / Local Travel</option>
               <option value="cafe">Cafe / Food</option>
-              <option value="activity" selected>Beach & Activity</option>
+              <option value="activity">Beach / Sightseeing</option>
             </select>
           </div>
           <div>
             <label class="block font-bold text-slate-700 mb-1">Amount (₹ INR)</label>
-            <input type="number" id="modal-amount" required placeholder="e.g. 4500" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-slate-800 focus:ring-2 focus:ring-ocean-500 focus:outline-none">
+            <input type="number" id="inp-amount" required placeholder="3500" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:outline-none text-slate-800">
           </div>
         </div>
 
         <div>
           <label class="block font-bold text-slate-700 mb-1">Date</label>
-          <input type="text" id="modal-date" placeholder="e.g. 24th Nov 2026" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-slate-800 focus:ring-2 focus:ring-ocean-500 focus:outline-none">
+          <input type="text" id="inp-date" placeholder="e.g. 24th Nov '26" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:outline-none text-slate-800">
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block font-bold text-slate-700 mb-1">Payment Method</label>
-            <input type="text" id="modal-method" placeholder="e.g. Cash / Forex" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-slate-800 focus:ring-2 focus:ring-ocean-500 focus:outline-none">
+            <input type="text" id="inp-method" placeholder="Cash / Forex Card" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:outline-none text-slate-800">
           </div>
           <div>
             <label class="block font-bold text-slate-700 mb-1">Status</label>
-            <select id="modal-status" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-slate-800 focus:ring-2 focus:ring-ocean-500 focus:outline-none">
+            <select id="inp-status" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:outline-none text-slate-800">
               <option value="To Pay" selected>To Pay</option>
               <option value="Paid">Paid</option>
             </select>
           </div>
         </div>
 
-        <div class="pt-3 flex items-center justify-end gap-2 border-t border-slate-100">
-          <button type="button" onclick="closeModal('addExpenseModal')" class="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-xl font-semibold">Cancel</button>
-          <button type="submit" class="px-4 py-2 bg-ocean-600 hover:bg-ocean-700 text-white rounded-xl font-bold">Add to Dashboard</button>
+        <div class="pt-3 flex justify-end gap-2 border-t border-slate-100">
+          <button type="button" onclick="closeModal('addExpenseModal')" class="px-4 py-2 font-semibold text-slate-600 hover:bg-slate-100 rounded-xl">Cancel</button>
+          <button type="submit" class="px-4 py-2 font-bold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow">Save Expense</button>
         </div>
       </form>
     </div>
   </div>
 
   <script>
-    // State management and Trip Data from handwritten notes
-    let currentCurrency = 'INR';
+    // Master State
+    let activeCurrency = 'INR';
     let exchangeRates = {
       INR_TO_LKR: 3.56,
-      USD_TO_INR: 86.50,
-      USD_TO_LKR: 308.00,
-      EUR_TO_INR: 92.20
+      USD_TO_INR: 86.50
     };
 
-    // Master dataset from both handwritten notes sheets
+    // Ledger Items initialized from the two handwritten notes
     let tripExpenses = [
       {
-        id: 1,
-        title: "Flight: Amritsar (ATQ) ➔ Delhi (DEL)",
-        subtitle: "Indigo 08:50 – 10:05",
+        id: 'exp-1',
+        title: "Flight: Amritsar ➔ Delhi",
+        desc: "IndiGo (08:50 – 10:05)",
         category: "flight",
-        date: "21st Nov 2026",
-        costINR: 11298,
-        method: "ICICI Credit Card (Amazon)",
+        date: "21st Nov '26",
+        inr: 11298,
+        method: "ICICI Amazon CC",
         status: "Paid"
       },
       {
-        id: 2,
-        title: "Flight: Delhi ➔ Colombo (CMB) & Return to Delhi",
-        subtitle: "Indigo Return (28th Nov 23:00 Colombo)",
+        id: 'exp-2',
+        title: "Flight: Delhi ➔ Colombo & Return",
+        desc: "IndiGo (Colombo ➔ Delhi @ 23:00 on 28th Nov)",
         category: "flight",
         date: "21st - 28th Nov",
-        costINR: 72464,
+        inr: 72464,
         method: "ICICI Credit Card",
         status: "Paid"
       },
       {
-        id: 3,
-        title: "Flight: Delhi (DEL) ➔ Amritsar (ATQ)",
-        subtitle: "Air India 04:45 AM – 06:00 AM",
+        id: 'exp-3',
+        title: "Flight: Delhi ➔ Amritsar",
+        desc: "Air India (04:45 AM – 06:00 AM)",
         category: "flight",
-        date: "28th Nov 2026",
-        costINR: 11220,
-        method: "ICICI Credit Card (Amazon)",
+        date: "28th Nov '26",
+        inr: 11220,
+        method: "ICICI Amazon CC",
         status: "Paid"
       },
       {
-        id: 4,
+        id: 'exp-4',
         title: "Hotel: Grand Orient Hotel (Colombo)",
-        subtitle: "Colonial hotel near Colombo Port & Fort",
+        desc: "1 Night colonial harbor hotel stay",
         category: "hotel",
         date: "21st - 22nd Nov",
-        costINR: 5130,
-        method: "UPI",
+        inr: 5130,
+        method: "Paid via UPI",
         status: "Paid"
       },
       {
-        id: 5,
-        title: "Hotel: Ocean Bliss by Sugar Coliving (4 Nights)",
-        subtitle: "Boho Arch Surf View Hot Tub suite (Ahangama)",
+        id: 'exp-5',
+        title: "Hotel: Ocean Bliss by Sugar Coliving",
+        desc: "Boho Arch Surf View Hot Tub suite (4 Nights)",
         category: "hotel",
         date: "22nd - 26th Nov",
-        costINR: 53411,
+        inr: 53411,
         method: "Advance Booking",
         status: "Paid"
       },
       {
-        id: 6,
-        title: "Hotel: Granbell Hotel Colombo (2 Nights)",
-        subtitle: "Luxury Japanese sea-view Marine Drive",
+        id: 'exp-6',
+        title: "Hotel: Granbell Hotel Colombo",
+        desc: "2 Nights luxury Japanese sea-view Marine Drive",
         category: "hotel",
         date: "26th - 28th Nov",
-        costINR: 16425,
-        method: "Booking",
+        inr: 16425,
+        method: "Booking Advance",
         status: "Paid"
       },
       {
-        id: 7,
-        title: "Cab: Airport (CMB) ➔ Grand Orient Hotel",
-        subtitle: "Initial arrival airport transfer",
+        id: 'exp-7',
+        title: "Cab: Airport ➔ Grand Orient Hotel",
+        desc: "Initial arrival airport transfer",
         category: "cab",
-        date: "21st Nov 2026",
-        costINR: 1200,
+        date: "21st Nov '26",
+        inr: 1200,
         method: "Cash / Cab",
         status: "To Pay"
       },
       {
-        id: 8,
+        id: 'exp-8',
         title: "Cab: Grand Orient Hotel ➔ Ocean Bliss",
-        subtitle: "Southern Expressway south trip to Ahangama",
+        desc: "Southern Expressway south trip to Ahangama",
         category: "cab",
-        date: "22nd Nov 2026",
-        costINR: 5500,
+        date: "22nd Nov '26",
+        inr: 5500,
         method: "Cash / Cab",
         status: "To Pay"
       },
       {
-        id: 9,
+        id: 'exp-9',
         title: "Cab: Ocean Bliss ➔ Granbell Hotel Colombo",
-        subtitle: "South Coast return transfer to Colombo",
+        desc: "Return ride north via Expressway",
         category: "cab",
-        date: "26th Nov 2026",
-        costINR: 5500,
+        date: "26th Nov '26",
+        inr: 5500,
         method: "Cash / Cab",
         status: "To Pay"
       },
       {
-        id: 10,
+        id: 'exp-10',
         title: "Cab: Granbell Hotel ➔ Airport (CMB)",
-        subtitle: "Return transfer for 23:00 flight",
+        desc: "Late-night airport transfer for 23:00 flight",
         category: "cab",
-        date: "28th Nov 2026",
-        costINR: 1300,
+        date: "28th Nov '26",
+        inr: 1300,
         method: "Cash / Cab",
         status: "To Pay"
       },
       {
-        id: 11,
+        id: 'exp-11',
         title: "Local South Beach Exploration (Estimate)",
-        subtitle: "Weligama surfing, Mirissa, Galle Fort, Tuk-Tuks",
+        desc: "Weligama surfing, Mirissa, Galle Fort, Tuk-Tuks",
         category: "cab",
         date: "22nd - 26th Nov",
-        costINR: 10000,
-        method: "To be paid (Cash/Forex)",
+        inr: 10000,
+        method: "Cash / Forex",
         status: "To Pay"
       },
       {
-        id: 12,
+        id: 'exp-12',
         title: "Estimate Local Cafe Exploration",
-        subtitle: "Brunches, seafood, smoothies & specialty coffee",
+        desc: "Brunches, seafood, smoothies & specialty coffee",
         category: "cab",
         date: "Throughout trip",
-        costINR: 40000,
-        method: "To be paid (Cash/Card)",
+        inr: 40000,
+        method: "Cash / Card",
         status: "To Pay"
       }
     ];
 
-    let budgetChartInstance = null;
-    let currentFilter = 'all';
+    let categoryFilter = 'all';
+    let chartInstance = null;
 
-    function formatCurrency(amountInINR, targetCurrency = currentCurrency) {
-      if (targetCurrency === 'INR') {
+    // Currency Formatting Utility
+    function formatVal(amountInINR, currency = activeCurrency) {
+      if (currency === 'INR') {
         return '₹' + Math.round(amountInINR).toLocaleString('en-IN');
-      } else if (targetCurrency === 'LKR') {
-        const lkrVal = Math.round(amountInINR * exchangeRates.INR_TO_LKR);
-        return 'Rs ' + lkrVal.toLocaleString('en-LK');
-      } else if (targetCurrency === 'USD') {
-        const usdVal = (amountInINR / exchangeRates.USD_TO_INR).toFixed(1);
-        return '$' + parseFloat(usdVal).toLocaleString();
+      } else if (currency === 'LKR') {
+        const lkr = Math.round(amountInINR * exchangeRates.INR_TO_LKR);
+        return 'Rs ' + lkr.toLocaleString('en-LK');
+      } else if (currency === 'USD') {
+        const usd = (amountInINR / exchangeRates.USD_TO_INR).toFixed(1);
+        return '$' + parseFloat(usd).toLocaleString();
       }
-      return '₹' + amountInINR.toLocaleString();
+      return '₹' + amountInINR.toLocaleString('en-IN');
     }
 
-    function changeGlobalCurrency(newCurr) {
-      currentCurrency = newCurr;
-      
-      // Update toggle buttons styling
+    // Set Dashboard Currency globally
+    function setDashboardCurrency(curr) {
+      activeCurrency = curr;
       ['INR', 'LKR', 'USD'].forEach(c => {
-        const btn = document.getElementById(`btn-curr-${c}`);
-        if (c === newCurr) {
-          btn.className = "px-2.5 py-1 text-xs font-bold rounded-lg transition-all bg-white text-ocean-700 shadow-sm";
-        } else {
-          btn.className = "px-2.5 py-1 text-xs font-semibold rounded-lg text-slate-600 transition-all hover:text-slate-900";
+        const btn = document.getElementById(`curr-btn-${c}`);
+        if (btn) {
+          if (c === curr) {
+            btn.className = "px-3 py-1.5 text-xs font-extrabold rounded-xl transition bg-white text-brand-700 shadow-sm";
+          } else {
+            btn.className = "px-3 py-1.5 text-xs font-semibold rounded-xl text-slate-600 hover:text-slate-900 transition";
+          }
         }
       });
-
-      renderDashboard();
+      refreshDashboard();
     }
 
-    function renderDashboard() {
-      // Calculate totals
-      let totalFlights = 0;
-      let totalHotels = 0;
-      let totalLocal = 0;
-      let totalOverall = 0;
-      let iciciDue = 0;
+    // Master Refresh Function
+    function refreshDashboard() {
+      let flightsTotal = 0;
+      let hotelsTotal = 0;
+      let cabsTotal = 0;
+      let cafesTotal = 0;
+      let grandTotal = 0;
+      let iciciTotal = 0;
 
       tripExpenses.forEach(item => {
-        totalOverall += item.costINR;
+        grandTotal += item.inr;
         if (item.category === 'flight') {
-          totalFlights += item.costINR;
+          flightsTotal += item.inr;
           if (item.method.includes('ICICI')) {
-            iciciDue += item.costINR;
+            iciciTotal += item.inr;
           }
         } else if (item.category === 'hotel') {
-          totalHotels += item.costINR;
+          hotelsTotal += item.inr;
+        } else if (item.title.includes('Cab')) {
+          cabsTotal += item.inr;
         } else {
-          totalLocal += item.costINR;
+          cafesTotal += item.inr;
         }
       });
 
-      // Update KPI text values
-      document.getElementById('kpi-grand-total').textContent = formatCurrency(totalOverall);
-      document.getElementById('kpi-flights-total').textContent = formatCurrency(totalFlights);
-      document.getElementById('kpi-hotels-total').textContent = formatCurrency(totalHotels);
-      document.getElementById('kpi-local-total').textContent = formatCurrency(totalLocal);
+      const onTripTotal = cabsTotal + cafesTotal;
+      const preBookedTotal = flightsTotal + hotelsTotal;
 
-      // Top banner
-      document.getElementById('banner-cc-due').textContent = formatCurrency(iciciDue);
-      document.getElementById('banner-total-est').textContent = formatCurrency(totalOverall);
+      // Update KPI Cards
+      document.getElementById('kpi-grand-total').textContent = formatVal(grandTotal);
+      document.getElementById('kpi-flights').textContent = formatVal(flightsTotal);
+      document.getElementById('kpi-hotels').textContent = formatVal(hotelsTotal);
+      document.getElementById('kpi-icici').textContent = formatVal(iciciTotal);
+      document.getElementById('kpi-cabs').textContent = formatVal(cabsTotal);
+      document.getElementById('kpi-cafes').textContent = formatVal(cafesTotal);
 
-      // Breakdown bars & metrics
-      document.getElementById('val-icici').textContent = formatCurrency(iciciDue);
-      document.getElementById('val-hotels-bar').textContent = formatCurrency(totalHotels);
-      document.getElementById('val-local-bar').textContent = formatCurrency(totalLocal);
-      document.getElementById('val-prebooked').textContent = formatCurrency(totalFlights + totalHotels);
-      document.getElementById('val-ontrip').textContent = formatCurrency(totalLocal);
+      // Hero
+      document.getElementById('hero-booked-val').textContent = formatVal(preBookedTotal);
+      document.getElementById('hero-local-val').textContent = formatVal(onTripTotal);
+
+      // Channel bars
+      document.getElementById('pay-icici').textContent = formatVal(iciciTotal);
+      document.getElementById('pay-hotels').textContent = formatVal(hotelsTotal);
+      document.getElementById('pay-local').textContent = formatVal(onTripTotal);
+      document.getElementById('badge-prebooked').textContent = formatVal(preBookedTotal);
+      document.getElementById('badge-remain').textContent = formatVal(onTripTotal);
 
       // Percentages
-      const flightPct = ((totalFlights / totalOverall) * 100).toFixed(1);
-      const hotelPct = ((totalHotels / totalOverall) * 100).toFixed(1);
-      const localPct = ((totalLocal / totalOverall) * 100).toFixed(1);
+      const fPct = ((flightsTotal / grandTotal) * 100).toFixed(1);
+      const hPct = ((hotelsTotal / grandTotal) * 100).toFixed(1);
+      const lPct = ((onTripTotal / grandTotal) * 100).toFixed(1);
 
-      document.getElementById('chart-pct-flight').textContent = `${flightPct}%`;
-      document.getElementById('chart-pct-hotel').textContent = `${hotelPct}%`;
-      document.getElementById('chart-pct-local').textContent = `${localPct}%`;
+      document.getElementById('pct-flights').textContent = fPct + '%';
+      document.getElementById('pct-hotels').textContent = hPct + '%';
+      document.getElementById('pct-local').textContent = lPct + '%';
 
-      // Update dynamic inline costs in itinerary tab
-      document.querySelectorAll('[data-cost-inr]').forEach(elem => {
-        const inr = parseFloat(elem.getAttribute('data-cost-inr'));
-        if (!isNaN(inr)) {
-          elem.textContent = formatCurrency(inr);
+      // Inline data tags
+      document.querySelectorAll('[data-inr]').forEach(el => {
+        const val = parseFloat(el.getAttribute('data-inr'));
+        if (!isNaN(val)) {
+          el.textContent = formatVal(val);
         }
       });
 
-      // Update Doughnut Chart
-      updateDoughnutChart(totalFlights, totalHotels, totalLocal);
+      // Update Chart
+      renderChart(flightsTotal, hotelsTotal, onTripTotal);
 
-      // Render table
-      renderExpenseTable();
+      // Update Ledger Table
+      renderLedgerTable();
 
-      // Update cheat sheet
+      // Update Converter Cheat Sheet
       updateCheatSheet();
     }
 
-    function updateDoughnutChart(flights, hotels, local) {
-      const ctx = document.getElementById('budgetDoughnutChart');
-      if (!ctx) return;
+    // Chart.js Category Renderer
+    function renderChart(flights, hotels, local) {
+      const canvas = document.getElementById('categoryDonutChart');
+      if (!canvas) return;
 
-      if (budgetChartInstance) {
-        budgetChartInstance.destroy();
+      if (chartInstance) {
+        chartInstance.destroy();
       }
 
-      budgetChartInstance = new Chart(ctx, {
+      chartInstance = new Chart(canvas, {
         type: 'doughnut',
         data: {
           labels: ['Flights', 'Hotels', 'Local / Cafes'],
           datasets: [{
             data: [flights, hotels, local],
-            backgroundColor: ['#0284c7', '#f59e0b', '#0d9488'],
-            borderWidth: 2,
+            backgroundColor: ['#0284c7', '#f59e0b', '#10b981'],
+            borderWidth: 3,
             borderColor: '#ffffff',
-            hoverOffset: 4
+            hoverOffset: 6
           }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: {
-              display: false
-            },
+            legend: { display: false },
             tooltip: {
               callbacks: {
-                label: function(context) {
-                  return ` ${context.label}: ${formatCurrency(context.raw)}`;
+                label: function(ctx) {
+                  return ` ${ctx.label}: ${formatVal(ctx.raw)}`;
                 }
               }
             }
@@ -1347,203 +1562,219 @@
       });
     }
 
-    function renderExpenseTable() {
-      const tbody = document.getElementById('expense-tbody');
+    // Ledger table generator
+    function renderLedgerTable() {
+      const tbody = document.getElementById('ledger-tbody');
+      const searchQuery = (document.getElementById('ledger-search')?.value || '').toLowerCase();
       if (!tbody) return;
 
       tbody.innerHTML = '';
-
-      let filteredItems = tripExpenses;
-      if (currentFilter !== 'all') {
-        filteredItems = tripExpenses.filter(item => {
-          if (currentFilter === 'cab') {
-            return item.category === 'cab' || item.category === 'cafe' || item.category === 'activity';
-          }
-          return item.category === currentFilter;
-        });
-      }
-
       let subtotal = 0;
+      let count = 0;
 
-      filteredItems.forEach(item => {
-        subtotal += item.costINR;
-        const row = document.createElement('tr');
-        row.className = "hover:bg-slate-50 transition border-b border-slate-100";
+      tripExpenses.forEach(item => {
+        // Filter by category
+        if (categoryFilter !== 'all') {
+          if (categoryFilter === 'cab' && (item.category !== 'cab' && item.category !== 'cafe' && item.category !== 'activity')) {
+            return;
+          }
+          if (categoryFilter !== 'cab' && item.category !== categoryFilter) {
+            return;
+          }
+        }
 
-        // Badges
+        // Search match
+        if (searchQuery) {
+          const matchTitle = item.title.toLowerCase().includes(searchQuery);
+          const matchDesc = item.desc.toLowerCase().includes(searchQuery);
+          const matchMethod = item.method.toLowerCase().includes(searchQuery);
+          if (!matchTitle && !matchDesc && !matchMethod) return;
+        }
+
+        subtotal += item.inr;
+        count++;
+
+        // Category Tag
         let catBadge = '';
         if (item.category === 'flight') {
-          catBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-100 text-sky-800"><i class="fa-solid fa-plane mr-1"></i>Flight</span>`;
+          catBadge = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-sky-100 text-sky-800">Flight</span>`;
         } else if (item.category === 'hotel') {
-          catBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800"><i class="fa-solid fa-hotel mr-1"></i>Hotel</span>`;
+          catBadge = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">Hotel</span>`;
         } else {
-          catBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-teal-100 text-teal-800"><i class="fa-solid fa-car mr-1"></i>Cab / Local</span>`;
+          catBadge = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Local / Cab</span>`;
         }
 
+        // Status Tag
         let statusBadge = item.status === 'Paid'
-          ? `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300">Paid</span>`
-          : `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-800 border border-amber-300">To Pay</span>`;
+          ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300">Paid</span>`
+          : `<span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-800 border border-amber-300">To Pay</span>`;
 
-        row.innerHTML = `
-          <td class="py-3 px-3">
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-50/80 transition";
+        tr.innerHTML = `
+          <td class="py-3 px-4">
             <p class="font-bold text-slate-800">${item.title}</p>
-            <p class="text-[10px] text-slate-400">${item.subtitle}</p>
+            <p class="text-[11px] text-slate-400">${item.desc}</p>
           </td>
           <td class="py-3 px-3">${catBadge}</td>
-          <td class="py-3 px-3 font-medium text-slate-600">${item.date}</td>
+          <td class="py-3 px-3 text-slate-500 whitespace-nowrap">${item.date}</td>
           <td class="py-3 px-3 text-slate-600">
-            <span class="inline-flex items-center gap-1 font-medium">
-              <i class="fa-regular fa-credit-card text-[10px] text-slate-400"></i> ${item.method}
-            </span>
+            <span class="font-semibold text-slate-700">${item.method}</span>
           </td>
-          <td class="py-3 px-3 text-right font-extrabold text-slate-900">${formatCurrency(item.costINR)}</td>
+          <td class="py-3 px-4 text-right font-black text-slate-900">${formatVal(item.inr)}</td>
           <td class="py-3 px-3 text-center">${statusBadge}</td>
+          <td class="py-3 px-3 text-center no-print">
+            <button onclick="deleteExpense('${item.id}')" class="text-slate-400 hover:text-rose-600 transition p-1" title="Delete entry">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+            </button>
+          </td>
         `;
-        tbody.appendChild(row);
+        tbody.appendChild(tr);
       });
 
-      // Update counters
-      document.getElementById('filtered-count-text').textContent = `Showing ${filteredItems.length} of ${tripExpenses.length} items`;
-      document.getElementById('filtered-total-amount').textContent = formatCurrency(subtotal);
+      document.getElementById('ledger-item-count').textContent = `Showing ${count} of ${tripExpenses.length} entries`;
+      document.getElementById('ledger-subtotal-val').textContent = formatVal(subtotal);
+      lucide.createIcons();
     }
 
-    function filterExpenses(category) {
-      currentFilter = category;
+    function setLedgerCategory(cat) {
+      categoryFilter = cat;
       ['all', 'flight', 'hotel', 'cab'].forEach(c => {
-        const btn = document.getElementById(`btn-filter-${c}`);
-        if (c === category) {
-          btn.className = "px-3 py-1.5 text-xs font-bold rounded-lg bg-white text-ocean-700 shadow-xs";
-        } else {
-          btn.className = "px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900";
+        const btn = document.getElementById(`flt-${c}`);
+        if (btn) {
+          if (c === cat) {
+            btn.className = "px-2.5 py-1 text-xs font-bold rounded-lg bg-white text-brand-700 shadow-xs";
+          } else {
+            btn.className = "px-2.5 py-1 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900";
+          }
         }
       });
-      renderExpenseTable();
+      renderLedgerTable();
     }
 
-    function runCurrencyCalculator() {
-      const srcAmount = parseFloat(document.getElementById('calc-source-input').value) || 0;
-      const srcCurr = document.getElementById('calc-source-curr').value;
-      const targetCurr = document.getElementById('calc-target-curr').value;
+    function deleteExpense(id) {
+      tripExpenses = tripExpenses.filter(e => e.id !== id);
+      refreshDashboard();
+    }
 
-      // Convert source to INR first
-      let inrAmount = 0;
-      if (srcCurr === 'INR') inrAmount = srcAmount;
-      else if (srcCurr === 'LKR') inrAmount = srcAmount / exchangeRates.INR_TO_LKR;
-      else if (srcCurr === 'USD') inrAmount = srcAmount * exchangeRates.USD_TO_INR;
-      else if (srcCurr === 'EUR') inrAmount = srcAmount * exchangeRates.EUR_TO_INR;
+    // Modal Controller
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
 
-      // Convert INR to target
-      let targetVal = 0;
-      if (targetCurr === 'INR') targetVal = inrAmount;
-      else if (targetCurr === 'LKR') targetVal = inrAmount * exchangeRates.INR_TO_LKR;
-      else if (targetCurr === 'USD') targetVal = inrAmount / exchangeRates.USD_TO_INR;
-      else if (targetCurr === 'EUR') targetVal = inrAmount / exchangeRates.EUR_TO_INR;
+    function handleNewExpenseSubmit(e) {
+      e.preventDefault();
+      const title = document.getElementById('inp-title').value;
+      const category = document.getElementById('inp-category').value;
+      const amount = parseFloat(document.getElementById('inp-amount').value);
+      const date = document.getElementById('inp-date').value || "Nov '26";
+      const method = document.getElementById('inp-method').value || "Forex / Cash";
+      const status = document.getElementById('inp-status').value;
 
-      document.getElementById('calc-target-output').value = targetVal.toLocaleString('en-US', {
+      if (!title || isNaN(amount) || amount <= 0) return;
+
+      const newExp = {
+        id: 'exp-' + Date.now(),
+        title: title,
+        desc: "User added custom expense",
+        category: category,
+        date: date,
+        inr: amount,
+        method: method,
+        status: status
+      };
+
+      tripExpenses.push(newExp);
+      closeModal('addExpenseModal');
+      document.getElementById('new-expense-form').reset();
+      refreshDashboard();
+    }
+
+    // Tab Navigation Switcher
+    function switchTab(tabKey) {
+      const allTabs = ['overview', 'itinerary', 'ledger', 'converter', 'checklist'];
+      allTabs.forEach(t => {
+        const page = document.getElementById(`tab-${t}`);
+        const nav = document.getElementById(`tab-nav-${t}`);
+        if (t === tabKey) {
+          page.classList.remove('hidden');
+          nav.className = "tab-btn active-tab flex items-center gap-2 px-4 py-2 rounded-xl text-brand-700 bg-brand-50 border border-brand-200/80 font-bold whitespace-nowrap transition";
+        } else {
+          page.classList.add('hidden');
+          nav.className = "tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 whitespace-nowrap transition";
+        }
+      });
+    }
+
+    // Live Currency Converter Calculator Logic
+    function computeConverter() {
+      const inVal = parseFloat(document.getElementById('calc-in-val').value) || 0;
+      const inCurr = document.getElementById('calc-in-curr').value;
+      const outCurr = document.getElementById('calc-out-curr').value;
+
+      // Base: convert into INR
+      let inr = 0;
+      if (inCurr === 'INR') inr = inVal;
+      else if (inCurr === 'LKR') inr = inVal / exchangeRates.INR_TO_LKR;
+      else if (inCurr === 'USD') inr = inVal * exchangeRates.USD_TO_INR;
+
+      // Now convert into target
+      let target = 0;
+      if (outCurr === 'INR') target = inr;
+      else if (outCurr === 'LKR') target = inr * exchangeRates.INR_TO_LKR;
+      else if (outCurr === 'USD') target = inr / exchangeRates.USD_TO_INR;
+
+      document.getElementById('calc-out-val').value = target.toLocaleString('en-US', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
       });
     }
 
-    function loadConverterAmount(amount, curr) {
-      document.getElementById('calc-source-input').value = amount;
-      document.getElementById('calc-source-curr').value = curr;
-      document.getElementById('calc-target-curr').value = curr === 'INR' ? 'LKR' : 'INR';
-      runCurrencyCalculator();
+    function loadConverterPreset(inrAmount) {
+      document.getElementById('calc-in-val').value = inrAmount;
+      document.getElementById('calc-in-curr').value = 'INR';
+      document.getElementById('calc-out-curr').value = 'LKR';
+      computeConverter();
     }
 
-    function updateRateFromInputs() {
-      const inrToLkr = parseFloat(document.getElementById('rate-inr-lkr').value);
-      const usdToInr = parseFloat(document.getElementById('rate-usd-inr').value);
-      const usdToLkr = parseFloat(document.getElementById('rate-usd-lkr').value);
+    function updateRatesFromInput() {
+      const inrToLkr = parseFloat(document.getElementById('cfg-inr-lkr').value);
+      const usdToInr = parseFloat(document.getElementById('cfg-usd-inr').value);
 
       if (inrToLkr > 0) exchangeRates.INR_TO_LKR = inrToLkr;
       if (usdToInr > 0) exchangeRates.USD_TO_INR = usdToInr;
-      if (usdToLkr > 0) exchangeRates.USD_TO_LKR = usdToLkr;
 
-      runCurrencyCalculator();
-      renderDashboard();
+      computeConverter();
+      refreshDashboard();
     }
 
-    function resetExchangeRates() {
-      exchangeRates = {
-        INR_TO_LKR: 3.56,
-        USD_TO_INR: 86.50,
-        USD_TO_LKR: 308.00,
-        EUR_TO_INR: 92.20
-      };
-      document.getElementById('rate-inr-lkr').value = 3.56;
-      document.getElementById('rate-usd-inr').value = 86.50;
-      document.getElementById('rate-usd-lkr').value = 308.00;
-      updateRateFromInputs();
+    function resetRates() {
+      exchangeRates.INR_TO_LKR = 3.56;
+      exchangeRates.USD_TO_INR = 86.50;
+      document.getElementById('cfg-inr-lkr').value = 3.56;
+      document.getElementById('cfg-usd-inr').value = 86.50;
+      updateRatesFromInput();
     }
 
     function updateCheatSheet() {
       const r = exchangeRates.INR_TO_LKR;
-      document.getElementById('cheat-100inr').textContent = `≈ ${Math.round(100 * r).toLocaleString()} LKR`;
-      document.getElementById('cheat-500inr').textContent = `≈ ${Math.round(500 * r).toLocaleString()} LKR`;
-      document.getElementById('cheat-1000inr').textContent = `≈ ${Math.round(1000 * r).toLocaleString()} LKR`;
-      document.getElementById('cheat-2000inr').textContent = `≈ ${Math.round(2000 * r).toLocaleString()} LKR`;
-      document.getElementById('cheat-1000lkr').textContent = `≈ ₹${Math.round(1000 / r).toLocaleString()} INR`;
-      document.getElementById('cheat-3500lkr').textContent = `≈ ₹${Math.round(3500 / r).toLocaleString()} INR`;
-      document.getElementById('cheat-10000lkr').textContent = `≈ ₹${Math.round(10000 / r).toLocaleString()} INR`;
+      document.getElementById('cs-100inr').textContent = `≈ ${Math.round(100 * r).toLocaleString()} LKR`;
+      document.getElementById('cs-500inr').textContent = `≈ ${Math.round(500 * r).toLocaleString()} LKR`;
+      document.getElementById('cs-1000inr').textContent = `≈ ${Math.round(1000 * r).toLocaleString()} LKR`;
+      document.getElementById('cs-5000inr').textContent = `≈ ${Math.round(5000 * r).toLocaleString()} LKR`;
+      document.getElementById('cs-1000lkr').textContent = `≈ ₹${Math.round(1000 / r).toLocaleString()} INR`;
+      document.getElementById('cs-3500lkr').textContent = `≈ ₹${Math.round(3500 / r).toLocaleString()} INR`;
+      document.getElementById('cs-10000lkr').textContent = `≈ ₹${Math.round(10000 / r).toLocaleString()} INR`;
     }
 
-    function switchTab(tabId) {
-      const tabs = ['overview', 'itinerary', 'bookings', 'converter', 'tips'];
-      tabs.forEach(t => {
-        const content = document.getElementById(`tab-${t}`);
-        const btn = document.getElementById(`tab-btn-${t}`);
-        if (t === tabId) {
-          content.classList.remove('hidden');
-          btn.className = "tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-ocean-700 bg-ocean-50 border border-ocean-200/60 font-bold whitespace-nowrap transition";
-        } else {
-          content.classList.add('hidden');
-          btn.className = "tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 whitespace-nowrap transition";
-        }
-      });
-    }
-
-    function openModal(id) {
-      document.getElementById(id).classList.remove('hidden');
-    }
-
-    function closeModal(id) {
-      document.getElementById(id).classList.add('hidden');
-    }
-
-    function handleAddNewExpense(event) {
-      event.preventDefault();
-      const title = document.getElementById('modal-title').value;
-      const category = document.getElementById('modal-category').value;
-      const amount = parseFloat(document.getElementById('modal-amount').value);
-      const date = document.getElementById('modal-date').value || 'Nov 2026';
-      const method = document.getElementById('modal-method').value || 'Self Expense';
-      const status = document.getElementById('modal-status').value;
-
-      if (!title || isNaN(amount) || amount <= 0) return;
-
-      const newExpense = {
-        id: Date.now(),
-        title: title,
-        subtitle: "Custom added expenditure",
-        category: category,
-        date: date,
-        costINR: amount,
-        method: method,
-        status: status
-      };
-
-      tripExpenses.push(newExpense);
-      closeModal('addExpenseModal');
-      document.getElementById('new-expense-form').reset();
-      renderDashboard();
-    }
-
-    // Initialize on page load
+    // Startup
     window.addEventListener('DOMContentLoaded', () => {
-      renderDashboard();
-      runCurrencyCalculator();
+      lucide.createIcons();
+      refreshDashboard();
+      computeConverter();
     });
   </script>
 </body>
