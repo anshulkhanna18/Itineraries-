@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CCTV Analytics Blueprint - CP Plus Ezykam + Frigate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef2f5;--surface:#fff;--ink:#0f1b2d;--muted:#52627a;--line:#cbd5df;--blue:#1f56c4;--blue-soft:#e3ecfb;--green:#1e7f5c;--green-soft:#dcf2e9;--amber:#9a5b0a;--amber-soft:#fbefd5;--code:#0f1b2d;--r:6px;
+--sans:"Schibsted Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace}
+*{box-sizing:border-box}
+html{scroll-padding-top:12px}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.app{display:grid;grid-template-columns:290px minmax(0,1fr);min-height:100vh}
+aside{background:var(--surface);border-right:1px solid var(--line);padding:22px 14px;position:sticky;top:0;height:100vh;overflow:auto}
+aside h1{font-size:18px;line-height:1.25;margin:0 8px 4px;font-weight:700}
+aside p{margin:0 8px 18px;color:var(--muted);font-size:14px}
+nav button{display:flex;width:100%;align-items:center;gap:10px;text-align:left;background:none;border:0;border-radius:var(--r);padding:9px 10px;cursor:pointer;font-size:15px}
+nav button:hover{background:var(--bg)}
+nav button[aria-current=true]{background:var(--blue-soft);font-weight:500}
+nav .dot{flex:none;width:22px;height:22px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--muted)}
+nav .dot.part{border-color:var(--blue);color:var(--blue)}
+nav .dot.done{background:var(--green);border-color:var(--green);color:#fff}
+nav .sep{height:1px;background:var(--line);margin:10px 6px}
+main{padding:28px clamp(16px,4vw,48px) 64px;max-width:1040px;width:100%}
+.hero{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:26px;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:28px 28px;background-position:-1px -1px;position:relative}
+.hero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#fff 40%,rgba(255,255,255,.55));border-radius:var(--r)}
+.hero>*{position:relative}
+h2{font-size:clamp(26px,4vw,36px);line-height:1.12;margin:0 0 8px;font-weight:700;letter-spacing:-.01em}
+h3{font-size:19px;margin:0 0 10px;font-weight:700}
+.lead{color:var(--muted);max-width:62ch;margin:0 0 18px}
+.strip{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin:18px 0 8px}
+.strip i{display:block;height:14px;border-radius:2px;background:#dbe3ec;position:relative;overflow:hidden}
+.strip i b{position:absolute;inset:0 auto 0 0;background:var(--green);width:0;transition:width .4s}
+.strip-cap{display:flex;justify-content:space-between;font-size:14px;color:var(--muted);flex-wrap:wrap;gap:6px}
+.strip-cap strong{color:var(--ink)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-top:18px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+label{display:block;font-size:14px;font-weight:500}
+label span{display:block;color:var(--muted);font-weight:400;font-size:13px}
+input,textarea{width:100%;margin-top:4px;padding:9px 10px;border:1px solid var(--line);border-radius:var(--r);background:#fff}
+textarea{min-height:110px;resize:vertical}
+.phase-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.chip{display:inline-block;padding:3px 10px;border-radius:99px;font-size:13px;background:var(--blue-soft);color:var(--blue);font-weight:500}
+.chip.g{background:var(--green-soft);color:var(--green)}
+.chip.a{background:var(--amber-soft);color:var(--amber)}
+.task{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);margin-top:10px}
+.task>.row{display:flex;gap:12px;align-items:flex-start;padding:12px 14px}
+.task input[type=checkbox]{width:22px;height:22px;margin:2px 0 0;flex:none;accent-color:var(--green)}
+.task.done{background:#f6fbf8;border-color:#b7dfcc}
+.task.done .ttl{color:var(--muted);text-decoration:line-through;text-decoration-color:#9bb}
+.ttl{font-weight:500;cursor:pointer}
+details{padding:0 14px 12px 48px}
+summary{cursor:pointer;color:var(--blue);font-size:14px;width:max-content}
+details p,details ul{margin:8px 0 0;color:var(--muted);font-size:15px}
+details ul{padding-left:20px}
+.code{position:relative;margin:10px 0 0}
+.code pre{margin:0;background:var(--code);color:#e6edf7;border-radius:var(--r);padding:14px 14px;overflow:auto;font:400 13px/1.55 var(--mono);max-width:100%}
+.code button,.copy{position:absolute;top:8px;right:8px;background:#26364f;color:#fff;border:0;border-radius:4px;padding:4px 10px;font-size:12px;cursor:pointer}
+.code button:hover{background:var(--blue)}
+.check{margin-top:18px;border-left:4px solid var(--green);background:var(--green-soft);padding:12px 16px;border-radius:0 var(--r) var(--r) 0}
+.check strong{display:block}
+.warn{margin-top:18px;border-left:4px solid var(--amber);background:var(--amber-soft);padding:12px 16px;border-radius:0 var(--r) var(--r) 0;font-size:15px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:700;background:var(--bg)}
+.tblwrap{overflow-x:auto}
+.pager{display:flex;justify-content:space-between;margin-top:26px;gap:10px}
+.btn{background:var(--blue);color:#fff;border:0;border-radius:var(--r);padding:10px 18px;cursor:pointer;font-weight:500}
+.btn.ghost{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.4;cursor:default}
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+ul.plain{margin:6px 0 0;padding-left:20px}
+@media(max-width:860px){
+.app{grid-template-columns:1fr}
+aside{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line);padding:14px 10px}
+aside p{display:none}
+nav{display:flex;gap:4px;overflow-x:auto;padding-bottom:4px}
+nav button{width:auto;white-space:nowrap}
+nav .sep{display:none}
+details{padding-left:14px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{aside,.pager,.tools,.copy,.code button{display:none}.app{display:block}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside>
+<h1>CCTV analytics blueprint</h1>
+<p>CP Plus Ezykam camera with Frigate for people, vehicle and face detection.</p>
+<nav id="nav" aria-label="Plan sections"></nav>
+</aside>
+<main id="main" tabindex="-1"></main>
+</div>
+
+<script>
+var KEY="cctv-blueprint-v1";
+var S={view:"overview",done:{},set:{name:"front_cam",ip:"192.168.1.50",user:"admin",pass:"",main:"/stream1",sub:"/stream2",model:"",notes:""}};
+try{var sv=JSON.parse(localStorage.getItem(KEY)||"null");if(sv){S.done=sv.done||{};Object.assign(S.set,sv.set||{});S.set.pass=""}}catch(e){}
+function save(){try{var c=Object.assign({},S.set);c.pass="";localStorage.setItem(KEY,JSON.stringify({done:S.done,set:c}))}catch(e){}}
+
+function url(p,hide){var s=S.set;return "rtsp://"+(s.user||"USER")+":"+(s.pass||"PASS")+"@"+(s.ip||"192.168.1.50")+":554"+p}
+var GEN={
+urls:function(){var s=S.set;return [
+"# Try each in VLC: Media > Open Network Stream",
+url("/stream1"),
+url("/cam/realmonitor?channel=1&subtype=0"),
+url("/live/ch00_0"),
+"",
+"# Sub-stream versions (lower quality, used for detection)",
+url("/stream2"),
+url("/cam/realmonitor?channel=1&subtype=1")].join("\n")},
+compose:function(){return ["services:","  frigate:","    container_name: frigate","    image: ghcr.io/blakeblackshear/frigate:stable","    restart: unless-stopped",'    shm_size: "256mb"',"    volumes:","      - ./config:/config","      - ./storage:/media/frigate","    ports:",'      - "8971:8971"','      - "8554:8554"'].join("\n")},
+config:function(){var s=S.set,n=(s.name||"front_cam").replace(/[^a-zA-Z0-9_]/g,"_");return [
+"mqtt:","  enabled: false","","detectors:","  cpu1:","    type: cpu","","cameras:","  "+n+":","    ffmpeg:","      inputs:",
+"        - path: "+url(s.sub||"/stream2"),"          roles:","            - detect",
+"        - path: "+url(s.main||"/stream1"),"          roles:","            - record",
+"    detect:","      width: 640","      height: 360","      fps: 5","    objects:","      track:","        - person","        - car","        - motorcycle","        - cat","        - dog",
+"    record:","      enabled: true","    snapshots:","      enabled: true","","face_recognition:","  enabled: true"].join("\n")},
+docker_win:function(){return "wsl --install\n# restart, then install Docker Desktop and confirm:\ndocker --version"},
+docker_lin:function(){return "curl -fsSL https://get.docker.com | sh\nsudo usermod -aG docker $USER\n# log out and back in, then confirm:\ndocker --version"},
+run:function(){return "cd frigate\ndocker compose up -d\ndocker logs frigate"},
+zone:function(){return ["# Added under your camera in config.yml (adjust points after drawing in the UI)","    zones:","      gate:","        coordinates: 0.1,0.5,0.9,0.5,0.9,0.95,0.1,0.95","        objects:","          - person","        loitering_time: 10"].join("\n")}
+};
+
+var P=[
+{n:"Hardware and network",time:"30 min",goal:"Have a computer that runs 24/7 and a camera on the same network.",tasks:[
+["Pick the always-on computer","An old laptop or mini PC works. For 1 or 2 cameras you need 8 GB RAM and an Intel CPU from 6th generation or newer. Add 500 GB or more of storage if you want to keep recordings."],
+["Put the computer and camera on one network","Both must connect to the same router. Use Ethernet for the computer if you can, because Wi-Fi on both ends makes streams stutter."],
+["Install the Ezykam+ app on your phone","You will use it to open camera settings in the next phase. Confirm you can see live video in it."],
+["Note the camera model number","Print it from the sticker or the app. The model decides which stream address works. Add it in the Your setup panel on the Overview page."]],
+check:"The computer is on, the camera shows live video in the app, and both are on the same router."},
+{n:"Prepare the camera",time:"20 min",goal:"Lock the camera address and turn on the standard video interface (ONVIF).",tasks:[
+["Give the camera a fixed IP address","Open your router admin page and find the camera in the connected devices list. Use DHCP reservation or Static IP binding to lock its address, for example 192.168.1.50. If the address changes later, Frigate loses the camera.","","Enter the final IP in Your setup on the Overview page."],
+["Turn on ONVIF","In Ezykam+, open camera settings and look under Network or Advanced for ONVIF. Enable it and set a username and password. Some models use a separate ONVIF password, so write it down."],
+["Set the main stream to 1080p and H.264","Faces need pixels. If you can choose between H.264 and H.265, pick H.264 because more software supports it."],
+["Keep the SD card recording on","This is your backup if the computer goes down. Frigate records separately and does not replace it."]],
+check:"The camera keeps the same IP after a router restart and ONVIF is enabled with a username and password."},
+{n:"Find and test the video stream",time:"30 min",goal:"Get a stream address (RTSP URL) that plays in VLC.",tasks:[
+["Install ONVIF Device Manager on Windows","It is free and discovers the camera automatically. After you log in, the stream URL appears under Live video or Media. Use this URL first if it works."],
+["Install VLC and test the common URLs","Open Media, then Open Network Stream, and paste each URL below. Replace the username and password in Your setup first. If your password has symbols like @ or #, replace them with %40 or %23.",
+ "urls"],
+["Test the sub-stream too","Detection uses the smaller second stream so the computer is not overloaded. It is usually stream2 or subtype=1. Update the paths in Your setup when you find the ones that work."],
+["Write down both working URLs","You will paste them into the Frigate config in Phase 5."]],
+check:"A main stream and a sub-stream both play in VLC. Do not continue until they do."},
+{n:"Install Docker",time:"20 min",goal:"Install the tool that runs Frigate.",tasks:[
+["Windows: install Docker Desktop","It needs WSL2 and the installer guides you through it. Run the commands below in PowerShell as administrator.","docker_win"],
+["Linux (Ubuntu or Debian): run the install script","Linux is more stable for 24/7 use. If the computer is dedicated, Ubuntu Server is a good choice.","docker_lin"],
+["Confirm Docker works","The version command should print a version number without an error."]],
+check:"docker --version prints a version number."},
+{n:"Deploy Frigate",time:"45 min",goal:"Run Frigate and see the camera in its web page.",tasks:[
+["Create the folders","Make a folder named frigate. Inside it create a folder named config and another named storage."],
+["Create docker-compose.yml in the frigate folder","The text below is generated for you.","compose"],
+["Create config/config.yml","This uses your values from Your setup. The detect role uses the sub-stream and the record role uses the main stream. Frigate versions change some keys, so check docs.frigate.video if it reports an unknown key.","config"],
+["Start Frigate and read the logs","The first start downloads about 1 GB. The logs contain the automatic admin password on first launch.","run"],
+["Open the Frigate page","Go to https://YOUR-COMPUTER-IP:8971 and sign in as admin. Accept the browser certificate warning."]],
+check:"The camera appears live in Frigate and a person walking past is boxed and labelled."},
+{n:"Face recognition",time:"1 hour",goal:"Name the people the camera sees.",tasks:[
+["Check camera position","Place it at about face height, angled slightly down, 2 to 4 metres from where people walk. High ceiling mounts and wide angles give small, tilted faces and poor results."],
+["Improve lighting","Light on faces matters more than software. Avoid backlight from a window or the sun behind the person."],
+["Open the Face Library in Frigate","Find it under Settings or Library, depending on your version. Face recognition needs face_recognition enabled in the config, which is already in the file above."],
+["Add each person","Create a person, such as Mom, then upload several clear photos or train from faces Frigate already detected. Use different angles."],
+["Walk past the camera and review the result","Check the event list for the right name. Add more photos for anyone who is missed."]],
+check:"Two or more known people are named correctly in at least 8 of 10 walk-throughs.",
+warn:"A 1080p Wi-Fi camera recognises people at doorway distance but not across a large room or yard."},
+{n:"Zones and activity rules",time:"1 hour",goal:"Turn detections into alerts for the situations you care about.",tasks:[
+["Draw zones","Create areas such as gate, driveway or cash counter, then alert only when a person enters one. A sample is below.","zone"],
+["Set loitering time","A time in zone of 10 seconds or more ignores people just passing by."],
+["Add object filters and masks","Mask trees, roads and the camera timestamp so they stop causing false alerts."],
+["Connect notifications","Send alerts to your phone through Home Assistant, or MQTT with Telegram. Do this after detection works well."],
+["Handle complex activities with an AI vision model","Falls, fights or someone picking up an item are not built in. Newer Frigate versions can send an event snapshot to Gemini or a local model through Ollama, which describes what happened. Describe the activity you want and test it with saved clips first."]],
+check:"An alert reaches your phone only when someone enters the gate zone and stays 10 seconds."},
+{n:"Storage, security and privacy",time:"45 min",goal:"Make the system safe to leave running.",tasks:[
+["Set recording retention","Keep about 7 days of recordings so the disk does not fill. The retention setting names differ between Frigate versions, so follow the docs for yours."],
+["Reduce Wi-Fi load","Detect on the sub-stream and record the main stream only. If video drops, move the camera closer to the router or add an access point."],
+["Keep Frigate off the public internet","Do not forward port 8971 on your router. For remote viewing use a VPN such as Tailscale."],
+["Change default passwords","Replace the camera password and the Frigate admin password with strong, unique ones."],
+["Put up a CCTV sign if you record staff, customers or public areas","India's DPDP Act 2023 covers personal data such as face images. Store recordings securely and keep them only as long as needed."]],
+check:"Frigate is reachable only from your own network or VPN, and old recordings delete themselves."}
+];
+
+var TROUBLE=[
+["VLC will not play the stream","Wrong path, username or password, or ONVIF is off.","Try each URL in Phase 3. Use ONVIF Device Manager to read the exact URL. Confirm the camera IP with a ping."],
+["Frigate shows a black or green picture","The camera sends H.265 or the URL is wrong.","Switch the camera to H.264 and retest the URL in VLC."],
+["High CPU usage","Detection runs on a large stream.","Detect on the sub-stream at 640x360 and 5 fps. Add a Coral USB accelerator later if you add more cameras."],
+["Faces are not recognised","Faces are too small, tilted or dark.","Lower the camera, add front lighting and train with more photos."],
+["Too many false alerts","Trees, shadows or the timestamp trigger detection.","Add motion masks and object filters, and raise the minimum score."],
+["Camera disconnects often","Weak Wi-Fi or the IP changed.","Check the DHCP reservation and signal strength. Use a wired connection if the camera supports it."],
+["Config shows an unknown key","Your Frigate version names the setting differently.","Open docs.frigate.video for your version and update the key."]
+];
+
+var main=document.getElementById("main"),nav=document.getElementById("nav");
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+function tid(p,i){return "p"+p+"t"+i}
+function prog(p){var t=P[p].tasks.length,d=0;for(var i=0;i<t;i++)if(S.done[tid(p,i)])d++;return {t:t,d:d}}
+function total(){var t=0,d=0;P.forEach(function(_,p){var r=prog(p);t+=r.t;d+=r.d});return {t:t,d:d}}
+
+function renderNav(){
+var h='<button data-v="overview" aria-current="'+(S.view==="overview")+'"><span class="dot">&#9632;</span>Overview and setup</button><div class="sep"></div>';
+P.forEach(function(ph,p){var r=prog(p),c=r.d===r.t?"done":r.d?"part":"";
+h+='<button data-v="'+p+'" aria-current="'+(S.view===String(p))+'"><span class="dot '+c+'">'+(r.d===r.t?"&#10003;":(p+1))+'</span>'+ph.n+'</button>'});
+h+='<div class="sep"></div><button data-v="trouble" aria-current="'+(S.view==="trouble")+'"><span class="dot">?</span>Troubleshooting</button>';
+nav.innerHTML=h}
+
+function strip(){var h='<div class="sw"><div class="strip" role="img" aria-label="Phase progress">';
+P.forEach(function(_,p){var r=prog(p);h+='<i title="'+esc(P[p].n)+'"><b style="width:'+Math.round(r.d/r.t*100)+'%"></b></i>'});
+var t=total();return h+'</div><div class="strip-cap"><span><strong>'+t.d+' of '+t.t+'</strong> tasks done</span><span>Estimated total about 5 hours</span></div></div>'}
+
+function codeBlock(g){return '<div class="code"><pre data-gen="'+g+'">'+esc(GEN[g]())+'</pre><button type="button" data-copy="'+g+'">Copy</button></div>'}
+
+function overview(){
+var s=S.set;
+return '<section class="hero"><h2>Add face and activity detection to your CP Plus camera</h2><p class="lead">Your camera stays as it is. A computer on your network reads its video, runs Frigate, and recognises people, vehicles and faces. Follow the eight phases in order and tick each task as you finish it.</p>'+strip()+'</section>'+
+'<div class="grid2"><section class="panel"><h3>Your setup</h3><p class="lead" style="margin-bottom:12px">These values fill the stream addresses and config files in later phases. The password is never saved.</p><div class="fields">'+
+fld("model","Camera model","e.g. CP-E21Q")+fld("ip","Camera IP address","192.168.1.50")+fld("name","Camera name in Frigate","front_cam")+fld("user","Username","admin")+fld("pass","Password","Stays on this page only","password")+fld("main","Main stream path","/stream1")+fld("sub","Sub-stream path","/stream2")+
+'</div></section><section class="panel"><h3>What you will have at the end</h3><ul class="plain"><li>Live view of the camera in Frigate with person, car and animal detection</li><li>Named faces for the people you add</li><li>Alerts when someone enters or lingers in a zone</li><li>Recordings on the computer, plus the SD card as backup</li></ul><div class="warn">The camera cannot do faces on its own. Its built-in motion, sound and tracking features keep working as before.</div></section></div>'+
+'<section class="panel"><h3>Plan at a glance</h3><div class="tblwrap"><table><thead><tr><th>Phase</th><th>Goal</th><th>Time</th></tr></thead><tbody>'+
+P.map(function(ph,p){return '<tr><td><a href="#" data-v="'+p+'">'+(p+1)+'. '+ph.n+'</a></td><td>'+ph.goal+'</td><td>'+ph.time+'</td></tr>'}).join("")+'</tbody></table></div></section>'+
+'<section class="panel"><h3>Notes</h3><label>Decisions, working URLs, problems<textarea id="notes">'+esc(s.notes||"")+'</textarea></label><div class="tools"><button class="btn ghost" data-act="reset">Reset all progress</button><button class="btn ghost" data-act="print">Print or save as PDF</button></div></section>'+
+'<div class="pager"><span></span><button class="btn" data-v="0">Start Phase 1</button></div>'}
+function fld(k,l,ph,t){return '<label>'+l+'<input data-set="'+k+'" type="'+(t||"text")+'" placeholder="'+ph+'" value="'+esc(S.set[k]||"")+'" autocomplete="off"></label>'}
+
+function phase(p){
+var ph=P[p],r=prog(p),h='<div class="phase-head"><div><h2>Phase '+(p+1)+': '+ph.n+'</h2><p class="lead">'+ph.goal+'</p></div><div><span class="chip">'+ph.time+'</span> <span class="chip '+(r.d===r.t?"g":"")+'" id="pc">'+r.d+' of '+r.t+' done</span></div></div>'+strip();
+ph.tasks.forEach(function(t,i){var id=tid(p,i),d=!!S.done[id],g=(t[2]&&GEN[t[2]])?t[2]:null;
+h+='<div class="task'+(d?" done":"")+'" id="'+id+'"><div class="row"><input type="checkbox" id="c'+id+'" data-task="'+id+'"'+(d?" checked":"")+'><label for="c'+id+'" class="ttl">'+esc(t[0])+'</label></div><details><summary>Show details</summary><p>'+esc(t[1])+'</p>'+(g?codeBlock(g):"")+'</details></div>'});
+if(ph.warn)h+='<div class="warn">'+ph.warn+'</div>';
+h+='<div class="check"><strong>Checkpoint</strong>'+ph.check+'</div>';
+h+='<div class="pager"><button class="btn ghost" data-v="'+(p?p-1:"overview")+'">Back</button><button class="btn" data-v="'+(p<P.length-1?p+1:"trouble")+'">'+(p<P.length-1?"Next phase":"Troubleshooting")+'</button></div>';
+return h}
+
+function trouble(){return '<h2>Troubleshooting</h2><p class="lead">Find the symptom, then try the fix.</p><div class="panel tblwrap"><table><thead><tr><th>Symptom</th><th>Likely cause</th><th>Fix</th></tr></thead><tbody>'+TROUBLE.map(function(r){return '<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td></tr>'}).join("")+'</tbody></table></div><div class="pager"><button class="btn ghost" data-v="7">Back</button><button class="btn" data-v="overview">Overview</button></div>'}
+
+function render(open){
+renderNav();
+main.innerHTML=S.view==="overview"?overview():S.view==="trouble"?trouble():phase(+S.view);
+if(open){main.focus({preventScroll:true});window.scrollTo(0,0)}}
+
+function refreshGen(){document.querySelectorAll("[data-gen]").forEach(function(e){e.textContent=GEN[e.dataset.gen]()})}
+function copy(txt,btn){var ok=function(){btn.textContent="Copied";setTimeout(function(){btn.textContent="Copy"},1400)};
+try{navigator.clipboard.writeText(txt).then(ok,function(){fb()})}catch(e){fb()}
+function fb(){var a=document.createElement("textarea");a.value=txt;document.body.appendChild(a);a.select();try{document.execCommand("copy");ok()}catch(e){btn.textContent="Select and copy manually"}a.remove()}}
+
+document.addEventListener("click",function(e){
+var v=e.target.closest("[data-v]");if(v){e.preventDefault();S.view=String(v.dataset.v);render(true);return}
+var c=e.target.closest("[data-copy]");if(c){copy(GEN[c.dataset.copy](),c);return}
+var a=e.target.closest("[data-act]");if(a){if(a.dataset.act==="print")window.print();
+if(a.dataset.act==="reset"&&confirm("Clear all ticked tasks?")){S.done={};save();render()}}});
+document.addEventListener("change",function(e){var t=e.target.dataset.task;if(!t)return;
+if(e.target.checked)S.done[t]=1;else delete S.done[t];save();
+var el=document.getElementById(t);if(el)el.classList.toggle("done",e.target.checked);
+var p=+S.view;renderNav();main.querySelectorAll('.sw').forEach(function(w){w.outerHTML=strip()});
+var r=prog(p),pc=document.getElementById("pc");if(pc){pc.textContent=r.d+" of "+r.t+" done";pc.className="chip"+(r.d===r.t?" g":"")}});
+document.addEventListener("input",function(e){var k=e.target.dataset.set;if(k){S.set[k]=e.target.value;save();refreshGen()}
+if(e.target.id==="notes"){S.set.notes=e.target.value;save()}});
+render();
+</script>
+</body>
+</html>
