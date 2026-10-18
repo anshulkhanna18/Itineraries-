@@ -149,6 +149,11 @@
           <i data-lucide="calendar-days" class="w-4 h-4"></i>
           <span>Day-by-Day Itinerary</span>
         </button>
+        <button onclick="switchTab('places')" id="tab-nav-places" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 whitespace-nowrap transition">
+          <i data-lucide="map-pin" class="w-4 h-4"></i>
+          <span>Places &amp; Distances</span>
+          <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-brand-100 text-brand-800 font-extrabold">24</span>
+        </button>
         <button onclick="switchTab('ledger')" id="tab-nav-ledger" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 whitespace-nowrap transition">
           <i data-lucide="receipt" class="w-4 h-4"></i>
           <span>Expense Ledger</span>
@@ -162,10 +167,10 @@
           <span>Travel Guide & Notes</span>
         </button>
         
-      <!-- Inside your navigation, list, or grid of cards -->
-<a href="CCTV_Video_Analytics.html" class="nav-link">
-  CCTV Video Analytics Blueprint
-</a>
+        <!-- Blueprint Link -->
+        <a href="CCTV_Video_Analytics.html" class="nav-link px-3 py-2 text-slate-400 hover:text-slate-600 whitespace-nowrap text-xs flex items-center">
+          CCTV Blueprint
+        </a>
       </nav>
     </div>
   </header>
@@ -513,7 +518,7 @@
       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-3xl border border-slate-200/80 card-shadow">
         <div>
           <h2 class="text-lg font-extrabold text-slate-900 font-display">Chronological Trip Itinerary</h2>
-          <p class="text-xs text-slate-500">Every leg mapped from your handwritten notes & flight schedules</p>
+          <p class="text-xs text-slate-500">Every leg mapped from your confirmed travel notes & flight schedules</p>
         </div>
         <div class="flex items-center gap-2">
           <span class="px-3 py-1 rounded-full text-xs font-bold bg-brand-50 text-brand-700 border border-brand-200">
@@ -651,7 +656,7 @@
                     <h4 class="font-bold text-slate-800 text-sm">Cab: Grand Orient Hotel ➔ Ocean Bliss</h4>
                     <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-200 text-purple-900">To Pay</span>
                   </div>
-                  <p class="text-xs text-slate-500 mt-0.5">Scenic drive via Southern Expressway to Ahangama surf belt (~2 hours)</p>
+                  <p class="text-xs text-slate-500 mt-0.5">Scenic drive via Southern Expressway to Weligama / Ahangama surf belt (~2 hours)</p>
                 </div>
               </div>
               <div class="sm:text-right">
@@ -673,7 +678,7 @@
                       Boho Arch Surf View Hot Tub Suite
                     </span>
                     <p class="text-xs text-slate-600 mt-1.5">
-                      Dates: <strong>22nd Nov – 26th Nov</strong>. Prime beachside stay, private hot tub overlooking the surf break, sunset yoga & vibrant co-working community.
+                      Dates: <strong>22nd Nov – 26th Nov</strong>. Prime beachfront hideaway on Kapparathota cove, Weligama. Hot tub overlooking the waves, direct ocean breeze & sunset yoga.
                     </p>
                   </div>
                 </div>
@@ -731,7 +736,7 @@
                   <span class="text-sm font-black text-slate-900" data-inr="40000">₹40,000</span>
                 </div>
                 <p class="text-xs text-slate-500">
-                  Aesthetic ocean cafes (Ceylon Sliders, The Kip, Lighthouse, Mojo, Secret Spot Cafe) & fresh seafood grills.
+                  Cactus, Nomad Café, Kai Beach Club, Smoke & Bitters, Shady Lane, The Cliff, & local curry pots.
                 </p>
                 <div class="text-[11px] font-semibold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-lg">
                   Estimated Food & Dining Budget
@@ -791,7 +796,7 @@
                       26th Nov – 28th Nov
                     </span>
                     <p class="text-xs text-slate-600 mt-1.5">
-                      Rooftop infinity pool, Japanese dining, high-floor sea views, and convenient access to shopping at One Galle Face.
+                      Rooftop infinity pool, Japanese dining, high-floor sea views, and home to The Bar On The Top! Convenient access to One Galle Face mall and Colombo 07 cafes.
                     </p>
                   </div>
                 </div>
@@ -886,8 +891,118 @@
       </div>
     </div>
 
+    <!-- ======================================================== -->
+    <!-- TAB 3: PLACES TO VISIT & DISTANCES FROM OCEAN BLISS STAY -->
+    <!-- ======================================================== -->
+    <div id="tab-places" class="hidden space-y-6">
+      
+      <!-- Top Anchor Banner -->
+      <div class="bg-gradient-to-r from-teal-900 via-emerald-950 to-slate-900 text-white p-6 rounded-3xl border border-teal-800/80 shadow-xl relative overflow-hidden">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 relative z-10">
+          <div>
+            <div class="flex items-center gap-2 mb-2">
+              <span class="px-3 py-0.5 rounded-full text-[11px] font-extrabold bg-teal-500/20 text-teal-300 border border-teal-400/30 flex items-center gap-1.5">
+                <i data-lucide="compass" class="w-3.5 h-3.5 text-teal-400"></i> Baseline Anchor
+              </span>
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                Ocean Bliss by Sugar Coliving
+              </span>
+            </div>
+            <h2 class="text-xl sm:text-2xl font-black font-display tracking-tight text-white">
+              Curated Sri Lanka Hotspots & Distance Matrix
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl">
+              Distances and transit estimates measured directly from <strong class="text-teal-300 font-semibold">Ocean Bliss (Kapparathota, Weligama)</strong>. Easily plan beach hops, fine dining reservations, and day trips.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-3 bg-white/10 backdrop-blur-md px-4 py-3 rounded-2xl border border-white/15 shrink-0">
+            <div class="text-right">
+              <span class="text-[10px] text-slate-300 font-bold uppercase tracking-wider block">Total Tracked Spots</span>
+              <span class="text-xl font-black text-white">24 Places</span>
+            </div>
+            <div class="w-9 h-9 rounded-xl bg-teal-500 text-white flex items-center justify-center font-bold">
+              <i data-lucide="map" class="w-5 h-5"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls: Search & Zone Filters -->
+      <div class="bg-white p-5 rounded-3xl border border-slate-200/80 card-shadow space-y-4">
+        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+          
+          <!-- Search Bar -->
+          <div class="relative w-full lg:w-72">
+            <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            <input type="text" id="places-search" oninput="filterPlaces()" placeholder="Search place, food, or vibe..." class="w-full pl-9 pr-3.5 py-2 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 text-slate-800">
+          </div>
+
+          <!-- Quick Filter Pills -->
+          <div class="flex flex-wrap items-center gap-1.5 text-xs">
+            <button onclick="setPlaceZone('all')" id="zone-btn-all" class="px-3 py-1.5 rounded-xl font-bold bg-brand-600 text-white shadow-xs transition">All (24)</button>
+            <button onclick="setPlaceZone('Weligama')" id="zone-btn-Weligama" class="px-3 py-1.5 rounded-xl font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Weligama (< 4km)</button>
+            <button onclick="setPlaceZone('Ahangama')" id="zone-btn-Ahangama" class="px-3 py-1.5 rounded-xl font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Ahangama (4-7km)</button>
+            <button onclick="setPlaceZone('Mirissa')" id="zone-btn-Mirissa" class="px-3 py-1.5 rounded-xl font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Mirissa (7-10km)</button>
+            <button onclick="setPlaceZone('Galle')" id="zone-btn-Galle" class="px-3 py-1.5 rounded-xl font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Galle & Fort (~21km)</button>
+            <button onclick="setPlaceZone('Dickwella')" id="zone-btn-Dickwella" class="px-3 py-1.5 rounded-xl font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Dickwella (~38km)</button>
+            <button onclick="setPlaceZone('Colombo')" id="zone-btn-Colombo" class="px-3 py-1.5 rounded-xl font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Colombo (~144km)</button>
+            <button onclick="setPlaceZone('Booking')" id="zone-btn-Booking" class="px-3 py-1.5 rounded-xl font-bold bg-amber-100 text-amber-800 hover:bg-amber-200 transition flex items-center gap-1">
+              <i data-lucide="calendar-check" class="w-3.5 h-3.5"></i> Needs Booking
+            </button>
+          </div>
+        </div>
+
+        <!-- Places Cards Grid -->
+        <div id="places-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
+          <!-- Dynamically populated by JavaScript -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="places-empty" class="hidden text-center py-12 text-slate-400">
+          <i data-lucide="map-pin-off" class="w-8 h-8 mx-auto mb-2 opacity-50"></i>
+          <p class="text-sm font-semibold text-slate-600">No places found matching your filter</p>
+          <p class="text-xs">Try searching a different keyword or reset filters.</p>
+        </div>
+      </div>
+
+      <!-- Distance Pro-Tips Box -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white p-4 rounded-2xl border border-slate-200/80 card-shadow space-y-1.5">
+          <div class="flex items-center gap-2 text-brand-700 font-bold text-xs">
+            <i data-lucide="navigation" class="w-4 h-4"></i>
+            <span>Local Tuk-Tuk Range (< 10 km)</span>
+          </div>
+          <p class="text-xs text-slate-600">
+            The Cliff, Kai Beach Club, Nomad, Shady Lane, and Coconut Tree Hill are a 2–18 min hop away via local metered tuk-tuks or PickMe app.
+          </p>
+        </div>
+
+        <div class="bg-white p-4 rounded-2xl border border-slate-200/80 card-shadow space-y-1.5">
+          <div class="flex items-center gap-2 text-amber-700 font-bold text-xs">
+            <i data-lucide="bookmark-check" class="w-4 h-4"></i>
+            <span>Reserve Days in Advance</span>
+          </div>
+          <p class="text-xs text-slate-600">
+            <strong>Smoke & Bitters</strong> (Asia's #29 bar in Dickwella) and <strong>The Cliff Weligama</strong> mandate online table reservations well before peak sunset slots.
+          </p>
+        </div>
+
+        <div class="bg-white p-4 rounded-2xl border border-slate-200/80 card-shadow space-y-1.5">
+          <div class="flex items-center gap-2 text-sky-700 font-bold text-xs">
+            <i data-lucide="building-2" class="w-4 h-4"></i>
+            <span>Colombo Spots Timing</span>
+          </div>
+          <p class="text-xs text-slate-600">
+            ITC Ratnadipa, Seed Café, & Lakarcade are best visited on Nov 26–28 when you stay at <strong>Granbell Hotel Colombo</strong> (The Bar On The Top is inside your hotel!).
+          </p>
+        </div>
+      </div>
+
+    </div>
+
     <!-- ========================================== -->
-    <!-- TAB 3: DETAILED EXPENSE LEDGER            -->
+    <!-- TAB 4: DETAILED EXPENSE LEDGER            -->
     <!-- ========================================== -->
     <div id="tab-ledger" class="hidden space-y-6">
       
@@ -951,7 +1066,7 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- TAB 4: CURRENCY CONVERTER CALCULATOR      -->
+    <!-- TAB 5: CURRENCY CONVERTER CALCULATOR      -->
     <!-- ========================================== -->
     <div id="tab-converter" class="hidden space-y-6">
       
@@ -1091,7 +1206,7 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- TAB 5: TRAVEL GUIDE & CHECKLIST           -->
+    <!-- TAB 6: TRAVEL GUIDE & CHECKLIST           -->
     <!-- ========================================== -->
     <div id="tab-checklist" class="hidden space-y-6">
       
@@ -1194,12 +1309,12 @@
           </div>
           <h4 class="text-base font-black text-slate-900">Ocean Bliss by Sugar Coliving</h4>
           <p class="text-xs text-slate-600 leading-relaxed">
-            <strong>Room:</strong> Boho Arch Surf View Hot Tub Suite (22nd – 26th Nov). Located directly in Ahangama’s premier surfing belt, walking distance to Kabalana and surf breaks.
+            <strong>Room:</strong> Boho Arch Surf View Hot Tub Suite (22nd – 26th Nov). Located at Kapparathota, Weligama. Unrivaled direct ocean panoramas, peaceful cove setting, and minutes to Kabalana and Midigama surf breaks.
           </p>
           <div class="space-y-1.5 text-xs text-slate-700 pt-1">
             <div class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-teal-600"></i> Hot tub on private patio facing the Indian ocean</div>
-            <div class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-teal-600"></i> Close to cafes: Ceylon Sliders, The Kip, Lighthouse</div>
-            <div class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-teal-600"></i> 25 mins tuk-tuk to historic Galle Dutch Fort</div>
+            <div class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-teal-600"></i> 2 min walk to The Cliff, 5 mins tuk-tuk to Weligama surf break</div>
+            <div class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-teal-600"></i> Easy highway hop for coastal exploration to Galle Fort & Mirissa</div>
           </div>
         </div>
 
@@ -1215,8 +1330,8 @@
           </p>
           <div class="space-y-1.5 text-xs text-slate-700 pt-1">
             <div class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-indigo-600"></i> Rooftop infinity pool overlooking ocean & skyline</div>
-            <div class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-indigo-600"></i> Quick access to One Galle Face mall & Galle Face Green</div>
-            <div class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-indigo-600"></i> Easy highway hop for midnight airport return flight</div>
+            <div class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-indigo-600"></i> Home to The Bar On The Top & minutes from ITC Ratnadipa</div>
+            <div class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-indigo-600"></i> Direct expressway hop for midnight airport return flight</div>
           </div>
         </div>
 
@@ -1226,6 +1341,7 @@
 
   </main>
 
+  <!-- Add Expense Modal -->
   <div id="addExpenseModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-white max-w-md w-full p-6 rounded-3xl shadow-2xl border border-slate-200 space-y-4">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -1298,7 +1414,451 @@
       USD_TO_INR: 86.50
     };
 
-    // Ledger Items initialized from the two handwritten notes
+    // Curated Places Data with Distances from Ocean Bliss by Sugar Coliving (Kapparathota, Weligama)
+    const placesData = [
+      // 1. Weligama Zone (Immediate Vicinity)
+      {
+        id: 'pl-1',
+        name: "The Cliff Weligama",
+        location: "Weligama (Bandarawatta, Kapparathota)",
+        zone: "Weligama",
+        distanceKm: 0.8,
+        distanceText: "0.8 km",
+        timeText: "2 min tuk-tuk / 8 min walk",
+        bookingRequired: true,
+        type: "Fine Dining & Sunset Bar",
+        icon: "utensils",
+        desc: "Spectacular oceanfront cliff dining & crafted cocktails with panoramic sunset views. Located right in your neighborhood!"
+      },
+      {
+        id: 'pl-2',
+        name: "Kai Beach Pool Club",
+        location: "Weligama Bay",
+        zone: "Weligama",
+        distanceKm: 2.5,
+        distanceText: "2.5 km",
+        timeText: "5 - 7 mins drive",
+        bookingRequired: false,
+        type: "Beach & Pool Club",
+        icon: "waves",
+        desc: "Vibrant beach club with a pool, sunbeds, beachside DJ beats, sushi, and tropical cocktails."
+      },
+      {
+        id: 'pl-3',
+        name: "Nomad Café",
+        location: "Weligama",
+        zone: "Weligama",
+        distanceKm: 3.0,
+        distanceText: "3.0 km",
+        timeText: "7 mins drive",
+        bookingRequired: false,
+        type: "Organic Cafe & Brunch",
+        icon: "coffee",
+        desc: "Famous for artisan sourdough bowls, avocado toasts, iced matcha, and wholesome plant-forward breakfast."
+      },
+      {
+        id: 'pl-4',
+        name: "Hangtime (Hangten) Rooftop",
+        location: "Weligama Beach",
+        zone: "Weligama",
+        distanceKm: 3.2,
+        distanceText: "3.2 km",
+        timeText: "8 mins drive",
+        bookingRequired: false,
+        type: "Rooftop Restaurant & Surf View",
+        icon: "compass",
+        desc: "Elevated rooftop hangout overlooking the main Weligama surf break. Pizzas, burgers, and cold brews."
+      },
+
+      // 2. Ahangama Zone (West of Ocean Bliss)
+      {
+        id: 'pl-5',
+        name: "Cactus Ahangama",
+        location: "Ahangama",
+        zone: "Ahangama",
+        distanceKm: 4.8,
+        distanceText: "4.8 km",
+        timeText: "10 mins drive",
+        bookingRequired: false,
+        type: "Aesthetic Coastal Cafe",
+        icon: "coffee",
+        desc: "Chic pastel-toned cafe with specialty coffee, decadent cinnamon buns, bagels, and relaxed surf crowd."
+      },
+      {
+        id: 'pl-6',
+        name: "Mermaid’s Kitchen",
+        location: "Ahangama",
+        zone: "Ahangama",
+        distanceKm: 5.5,
+        distanceText: "5.5 km",
+        timeText: "12 mins drive",
+        bookingRequired: false,
+        type: "Fresh Seafood & Local Bistro",
+        icon: "fish",
+        desc: "Known for fresh ocean catches, grilled jumbo prawns, Sri Lankan curries, and warm hospitality."
+      },
+      {
+        id: 'pl-7',
+        name: "Manori’s Kitchen",
+        location: "Ahangama",
+        zone: "Ahangama",
+        distanceKm: 6.5,
+        distanceText: "6.5 km",
+        timeText: "14 mins drive",
+        bookingRequired: false,
+        type: "Authentic Local Kitchen & Cooking",
+        icon: "sparkles",
+        desc: "Legendary home-style Sri Lankan rice & curry buffet. Wholesome, intensely flavorful, and budget-friendly."
+      },
+
+      // 3. Mirissa Zone (East of Ocean Bliss)
+      {
+        id: 'pl-8',
+        name: "Shady Lane Mirissa",
+        location: "Mirissa",
+        zone: "Mirissa",
+        distanceKm: 7.5,
+        distanceText: "7.5 km",
+        timeText: "15 mins drive",
+        bookingRequired: false,
+        type: "Falafel Wraps & Smoothie Bowls",
+        icon: "salad",
+        desc: "Top-rated daytime spot renowned for its signature falafel wraps, loaded smoothie bowls, and specialty cold coffee."
+      },
+      {
+        id: 'pl-9',
+        name: "Dhana’s Curry Pot",
+        location: "Mirissa",
+        zone: "Mirissa",
+        distanceKm: 7.8,
+        distanceText: "7.8 km",
+        timeText: "15 mins drive",
+        bookingRequired: false,
+        type: "Authentic Curry Pot Buffet",
+        icon: "flame",
+        desc: "Clay-pot authentic Sri Lankan buffet with 10+ aromatic vegetable, chicken, and fish curries with fresh papadam."
+      },
+      {
+        id: 'pl-10',
+        name: "ODIN’S Mirissa",
+        location: "Mirissa",
+        zone: "Mirissa",
+        distanceKm: 8.0,
+        distanceText: "8.0 km",
+        timeText: "16 mins drive",
+        bookingRequired: false,
+        type: "Nordic Coastal Bistro",
+        icon: "utensils",
+        desc: "Scandinavian design meets tropical beach dining with craft sandwiches, eggs benedict, and pour-over coffee."
+      },
+      {
+        id: 'pl-11',
+        name: "Lava Mirissa",
+        location: "Mirissa Beach",
+        zone: "Mirissa",
+        distanceKm: 8.2,
+        distanceText: "8.2 km",
+        timeText: "16 mins drive",
+        bookingRequired: false,
+        type: "Beach Bar & Sunset Lounge",
+        icon: "glass-water",
+        desc: "Vibrant beach club on the sand. Perfect for sunset beers, grilled skewers, shisha, and live evening beats."
+      },
+      {
+        id: 'pl-12',
+        name: "Zouk Mirissa",
+        location: "Mirissa Beach Strip",
+        zone: "Mirissa",
+        distanceKm: 8.5,
+        distanceText: "8.5 km",
+        timeText: "17 mins drive",
+        bookingRequired: false,
+        type: "Nightlife, Cocktails & Beats",
+        icon: "music",
+        desc: "Energetic beachside bar popular for cocktail pitchers, late-night dancing, and beach party energy."
+      },
+      {
+        id: 'pl-13',
+        name: "Coconut Tree Hill",
+        location: "Mirissa",
+        zone: "Mirissa",
+        distanceKm: 9.5,
+        distanceText: "9.5 km",
+        timeText: "18 - 20 mins drive",
+        bookingRequired: false,
+        type: "Scenic Landmark & Sunset Spot",
+        icon: "palmtree",
+        desc: "The world-famous promontory with palm trees swaying above red dirt cliffs and crashing turquoise waves."
+      },
+
+      // 4. Galle Zone (North-West)
+      {
+        id: 'pl-14',
+        name: "Galle Dutch Fort",
+        location: "Galle",
+        zone: "Galle",
+        distanceKm: 20.5,
+        distanceText: "20.5 km",
+        timeText: "35 mins drive",
+        bookingRequired: false,
+        type: "UNESCO Heritage Ramparts",
+        icon: "landmark",
+        desc: "16th-century fortress city filled with cobbled lanes, colonial architecture, boutiques, and rampart sunset walks."
+      },
+      {
+        id: 'pl-15',
+        name: "The Bungalow Galle Fort",
+        location: "Galle Fort",
+        zone: "Galle",
+        distanceKm: 20.8,
+        distanceText: "20.8 km",
+        timeText: "35 mins drive",
+        bookingRequired: false,
+        type: "Restaurant & Cocktail Bar",
+        icon: "wine",
+        desc: "Chic colonial-era interior serving bespoke botanical cocktails, gourmet tapas, and fine wine inside the Fort."
+      },
+      {
+        id: 'pl-16',
+        name: "AQUA Forte",
+        location: "Galle Fort",
+        zone: "Galle",
+        distanceKm: 20.8,
+        distanceText: "20.8 km",
+        timeText: "35 mins drive",
+        bookingRequired: false,
+        type: "Fine Italian Dining",
+        icon: "utensils",
+        desc: "Upscale authentic Italian cuisine featuring handmade fresh pastas, premium wines, and impeccable service."
+      },
+      {
+        id: 'pl-17',
+        name: "Galle Lighthouse",
+        location: "Galle Fort Point",
+        zone: "Galle",
+        distanceKm: 21.0,
+        distanceText: "21.0 km",
+        timeText: "35 mins drive",
+        bookingRequired: false,
+        type: "Historic Coastal Landmark",
+        icon: "sun",
+        desc: "Sri Lanka's oldest light station, standing tall beside Point Utrecht Bastion overlooking picturesque sandy swimming bays."
+      },
+      {
+        id: 'pl-18',
+        name: "Yazu at the Beach",
+        location: "Radisson Blu Resort, Galle",
+        zone: "Galle",
+        distanceKm: 24.5,
+        distanceText: "24.5 km",
+        timeText: "38 - 40 mins drive",
+        bookingRequired: false,
+        type: "Pan-Asian Luxury Dining",
+        icon: "sparkles",
+        desc: "Acclaimed Pan-Asian beachfront oasis at Radisson Blu with dim sums, robata grills, sushi, and coastal flair."
+      },
+
+      // 5. Dickwella (Deep South)
+      {
+        id: 'pl-19',
+        name: "Smoke & Bitters",
+        location: "Dickwella (Pehebiya Beach, Hiriketiya)",
+        zone: "Dickwella",
+        distanceKm: 38.0,
+        distanceText: "38.0 km",
+        timeText: "50 - 55 mins drive",
+        bookingRequired: true,
+        type: "Asia's 50 Best Bars (#29 in Asia)",
+        icon: "flame",
+        desc: "Internationally celebrated smokehouse and cocktail bar set in a beachfront coconut grove. Unmissable smoked pork ribs and Ceylon arrack cocktails."
+      },
+
+      // 6. Colombo Zone (City Leg)
+      {
+        id: 'pl-20',
+        name: "Seed Café",
+        location: "Colombo 07 (Cinnamon Gardens)",
+        zone: "Colombo",
+        distanceKm: 142.0,
+        distanceText: "142 km",
+        timeText: "2h 10m (Expressway)",
+        bookingRequired: false,
+        type: "Specialty Coffee & Brunch",
+        icon: "coffee",
+        desc: "Colombo's premier minimalist cafe for third-wave pour-overs, flaky artisanal pastries, and creative brunch plates."
+      },
+      {
+        id: 'pl-21',
+        name: "Lakarcade",
+        location: "Colombo 07",
+        zone: "Colombo",
+        distanceKm: 143.0,
+        distanceText: "143 km",
+        timeText: "2h 15m (Expressway)",
+        bookingRequired: false,
+        type: "Artisan Shopping & Souvenirs",
+        icon: "shopping-bag",
+        desc: "Huge multi-level novelty & handicraft emporium. Perfect for Ceylon teas, handloom batiks, spices, gems, and woodwork gifts."
+      },
+      {
+        id: 'pl-22',
+        name: "The Bar On The Top (Granbell Hotel)",
+        location: "Marine Drive, Colombo 03",
+        zone: "Colombo",
+        distanceKm: 144.0,
+        distanceText: "144 km (0 km from Hotel)",
+        timeText: "On-site at Granbell Hotel",
+        bookingRequired: false,
+        type: "Rooftop Skyline Bar",
+        icon: "glass-water",
+        desc: "Perched atop the 27th floor of Granbell Hotel Colombo (where you stay on Nov 26-28!). Unmatched skyline & ocean night vistas."
+      },
+      {
+        id: 'pl-23',
+        name: "ITC Ratnadipa, Luxury Collection",
+        location: "Galle Face, Colombo 01",
+        zone: "Colombo",
+        distanceKm: 146.0,
+        distanceText: "146 km",
+        timeText: "5 mins from Granbell Hotel",
+        bookingRequired: false,
+        type: "Iconic Luxury Landmark & Dining",
+        icon: "building",
+        desc: "Colombo's newest architectural marvel connected by the sky-bridge 'Ahasa'. World-class high tea and lavish cocktails."
+      },
+
+      // 7. Comfort Pick
+      {
+        id: 'pl-24',
+        name: "Kottu Mee Noodles",
+        location: "Nationwide / Local Shops",
+        zone: "Weligama",
+        distanceKm: 0.2,
+        distanceText: "0.2 km",
+        timeText: "2 min walk",
+        bookingRequired: false,
+        type: "Iconic Local Comfort Snack",
+        icon: "utensils",
+        desc: "The quintessential spicy Sri Lankan instant ramen! Grab packets at grocery shops in Kapparathota for late-night cravings."
+      }
+    ];
+
+    let currentZoneFilter = 'all';
+
+    function renderPlacesCards() {
+      const grid = document.getElementById('places-grid');
+      const empty = document.getElementById('places-empty');
+      const searchVal = (document.getElementById('places-search')?.value || '').toLowerCase();
+      if (!grid) return;
+
+      grid.innerHTML = '';
+      let matchCount = 0;
+
+      placesData.forEach(p => {
+        // Filter by zone
+        if (currentZoneFilter === 'Booking' && !p.bookingRequired) return;
+        if (currentZoneFilter !== 'all' && currentZoneFilter !== 'Booking' && p.zone !== currentZoneFilter) return;
+
+        // Search filter
+        if (searchVal) {
+          const mName = p.name.toLowerCase().includes(searchVal);
+          const mLoc = p.location.toLowerCase().includes(searchVal);
+          const mType = p.type.toLowerCase().includes(searchVal);
+          const mDesc = p.desc.toLowerCase().includes(searchVal);
+          if (!mName && !mLoc && !mType && !mDesc) return;
+        }
+
+        matchCount++;
+
+        // Badges
+        const bookingBadge = p.bookingRequired
+          ? `<span class="inline-flex items-center gap-1 text-[10px] font-black px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 border border-rose-300">
+               <i data-lucide="alert-circle" class="w-3 h-3"></i> Pre-booking Required
+             </span>`
+          : `<span class="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
+               Walk-in OK
+             </span>`;
+
+        // Card rendering
+        const card = document.createElement('div');
+        card.className = "bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/90 card-shadow card-hover flex flex-col justify-between space-y-3.5";
+        card.innerHTML = `
+          <div class="space-y-2">
+            <div class="flex items-start justify-between gap-2">
+              <span class="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-lg bg-teal-50 text-teal-800 border border-teal-200">
+                ${p.zone}
+              </span>
+              ${bookingBadge}
+            </div>
+
+            <div>
+              <h4 class="text-base font-extrabold text-slate-900 group-hover:text-brand-600 transition flex items-center gap-1.5">
+                ${p.name}
+              </h4>
+              <p class="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-slate-400 shrink-0"></i>
+                <span>${p.location}</span>
+              </p>
+            </div>
+
+            <p class="text-xs text-slate-600 leading-relaxed pt-1">
+              ${p.desc}
+            </p>
+          </div>
+
+          <!-- Bottom Distance Strip -->
+          <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-lg bg-brand-50 text-brand-700 flex items-center justify-center font-bold shrink-0">
+                <i data-lucide="navigation" class="w-3.5 h-3.5"></i>
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-400 block font-semibold uppercase leading-tight">From Ocean Bliss</span>
+                <span class="font-black text-slate-900 text-sm">${p.distanceText}</span>
+              </div>
+            </div>
+
+            <div class="text-right">
+              <span class="text-[10px] text-slate-400 block font-semibold uppercase leading-tight">Transit Time</span>
+              <span class="font-extrabold text-brand-700">${p.timeText}</span>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      if (matchCount === 0) {
+        empty.classList.remove('hidden');
+      } else {
+        empty.classList.add('hidden');
+      }
+
+      lucide.createIcons();
+    }
+
+    function setPlaceZone(zone) {
+      currentZoneFilter = zone;
+      const zones = ['all', 'Weligama', 'Ahangama', 'Mirissa', 'Galle', 'Dickwella', 'Colombo', 'Booking'];
+      zones.forEach(z => {
+        const btn = document.getElementById(`zone-btn-${z}`);
+        if (btn) {
+          if (z === zone) {
+            btn.className = "px-3 py-1.5 rounded-xl font-bold bg-brand-600 text-white shadow-xs transition";
+          } else if (z === 'Booking') {
+            btn.className = "px-3 py-1.5 rounded-xl font-bold bg-amber-100 text-amber-800 hover:bg-amber-200 transition flex items-center gap-1";
+          } else {
+            btn.className = "px-3 py-1.5 rounded-xl font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition";
+          }
+        }
+      });
+      renderPlacesCards();
+    }
+
+    function filterPlaces() {
+      renderPlacesCards();
+    }
+
+    // Ledger Items initialized from the two confirmed notes
     let tripExpenses = [
       {
         id: 'exp-1',
@@ -1373,7 +1933,7 @@
       {
         id: 'exp-8',
         title: "Cab: Grand Orient Hotel ➔ Ocean Bliss",
-        desc: "Southern Expressway south trip to Ahangama",
+        desc: "Southern Expressway south trip to Weligama",
         category: "cab",
         date: "22nd Nov '26",
         inr: 5500,
@@ -1579,7 +2139,6 @@
       let count = 0;
 
       tripExpenses.forEach(item => {
-        // Filter by category
         if (categoryFilter !== 'all') {
           if (categoryFilter === 'cab' && (item.category !== 'cab' && item.category !== 'cafe' && item.category !== 'activity')) {
             return;
@@ -1589,7 +2148,6 @@
           }
         }
 
-        // Search match
         if (searchQuery) {
           const matchTitle = item.title.toLowerCase().includes(searchQuery);
           const matchDesc = item.desc.toLowerCase().includes(searchQuery);
@@ -1600,7 +2158,6 @@
         subtotal += item.inr;
         count++;
 
-        // Category Tag
         let catBadge = '';
         if (item.category === 'flight') {
           catBadge = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-sky-100 text-sky-800">Flight</span>`;
@@ -1610,7 +2167,6 @@
           catBadge = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Local / Cab</span>`;
         }
 
-        // Status Tag
         let statusBadge = item.status === 'Paid'
           ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300">Paid</span>`
           : `<span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-800 border border-amber-300">To Pay</span>`;
@@ -1701,18 +2257,19 @@
 
     // Tab Navigation Switcher
     function switchTab(tabKey) {
-      const allTabs = ['overview', 'itinerary', 'ledger', 'converter', 'checklist'];
+      const allTabs = ['overview', 'itinerary', 'places', 'ledger', 'converter', 'checklist'];
       allTabs.forEach(t => {
         const page = document.getElementById(`tab-${t}`);
         const nav = document.getElementById(`tab-nav-${t}`);
         if (t === tabKey) {
-          page.classList.remove('hidden');
-          nav.className = "tab-btn active-tab flex items-center gap-2 px-4 py-2 rounded-xl text-brand-700 bg-brand-50 border border-brand-200/80 font-bold whitespace-nowrap transition";
+          if (page) page.classList.remove('hidden');
+          if (nav) nav.className = "tab-btn active-tab flex items-center gap-2 px-4 py-2 rounded-xl text-brand-700 bg-brand-50 border border-brand-200/80 font-bold whitespace-nowrap transition";
         } else {
-          page.classList.add('hidden');
-          nav.className = "tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 whitespace-nowrap transition";
+          if (page) page.classList.add('hidden');
+          if (nav) nav.className = "tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 whitespace-nowrap transition";
         }
       });
+      lucide.createIcons();
     }
 
     // Live Currency Converter Calculator Logic
@@ -1721,13 +2278,11 @@
       const inCurr = document.getElementById('calc-in-curr').value;
       const outCurr = document.getElementById('calc-out-curr').value;
 
-      // Base: convert into INR
       let inr = 0;
       if (inCurr === 'INR') inr = inVal;
       else if (inCurr === 'LKR') inr = inVal / exchangeRates.INR_TO_LKR;
       else if (inCurr === 'USD') inr = inVal * exchangeRates.USD_TO_INR;
 
-      // Now convert into target
       let target = 0;
       if (outCurr === 'INR') target = inr;
       else if (outCurr === 'LKR') target = inr * exchangeRates.INR_TO_LKR;
@@ -1776,11 +2331,12 @@
       document.getElementById('cs-10000lkr').textContent = `≈ ₹${Math.round(10000 / r).toLocaleString()} INR`;
     }
 
-    // Startup
+    // Startup Initialization
     window.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
       refreshDashboard();
       computeConverter();
+      renderPlacesCards();
     });
   </script>
 </body>
